@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+	<!-- $Id: poll.xml -->
+<form>
+	<fields
+		group="config"
+		label="aPoll_Config"
+		description="aPoll_Config_Desc"
+		hidden="false">
+
+		<field
+			name="drop"
+			type="radio"
+			label="Dopr_DB"
+			description="Dopr_DB"
+			default="0">
+           
+		   <option value="1">Yes</option>
+           <option value="0">No</option>
+		</field> 
+	</fields>	
+</form>

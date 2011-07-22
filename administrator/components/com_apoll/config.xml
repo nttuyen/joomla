@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+	<fieldset name="params" label="Apoll_Config_Poll_Label" description="Apoll_Config_Poll_Label_Desc">
+		
+		<field name="only_registered" type="radio" default="0" label="Only_Registered_Label" description="Only_Registered_Desc">
+			<option value="1">JYes</option>
+			<option value="0">JNo</option>
+		</field>
+        		
+		<field name="one_vote_per_user" type="radio" default="1" label="ONE VOTE PER USER" description="ONE VOTE PER USER DESC">
+		  <option value="1">JYes</option>
+		  <option value="0">JNo</option>
+		</field>
+
+		<field name="ip_check" type="radio" default="0" label="ONE VOTE PER IP" description="ONE VOTE PER IP DESC">
+			  <option value="1">JYes</option>
+			  <option value="0">JNo</option>
+		</field>
+	
+		<field name="show_component_msg" type="radio" default="1" label="SHOW MSG" description="SHOW MSG DESC">
+			<option value="1">JYes</option>
+			<option value="0">JNo</option>
+		</field>
+		
+            <field name="show_form" type="radio" default="1" label="SHOW_FORM" description="SHOW_FORM_DESC">
+                <option value="1">JYes</option>
+                <option value="0">JNo</option>
+            </field>
+				
+		<field name="show_hits" type="radio" default="1" label="SHOW HITS" description="SHOW HITS DESC">
+		  <option value="1">JYes</option>
+		  <option value="0">JNo</option>
+		</field>	
+		
+		<field name="show_title" type="radio" default="1" label="SHOW TITLE" description="SHOW TITLE DESC">
+			<option value="1">JYes</option>
+			<option value="0">JNo</option>
+		</field>		
+		
+		<field name="show_dropdown" type="radio" default="1" label="SHOW DROPDOWN" description="SHOW DROPDOWN DESC">
+		  <option value="1">JYes</option>
+		  <option value="0">JNo</option>
+		</field>
+		
+		<field name="show_voters" type="radio" default="1" label="SHOW VOTERS" description="SHOW VOTERS DESC">
+		  <option value="1">JYes</option>
+		  <option value="0">JNo</option>
+		</field>
+		
+		<field name="show_times" type="radio" default="1" label="SHOW TIMES" description="SHOW TIMES DESC">
+		  <option value="1">JYes</option>
+		  <option value="0">JNo</option>
+		</field>
+		
+		<field
+			id="type"
+			name="type"
+			type="list"
+			label="Show_Results_As_Label"
+			description="Show_Results_As_Desc"
+			default="0"
+			class="inputbox">
+			<option value="0">Default_Chart</option>
+			<option value="1">Google_Pie</option>
+			<option value="2">Simple_Flash_Pie</option>
+			<option value="3">Ofc_Flash_Pie</option>
+		</field>	
+	</fieldset>
+	
+	<fieldset 
+		name="ofc_pie_options"		
+		label="Apoll_Config_Ofc_Pie_Options"
+		description="Apoll_Config_Ofc_Pie_Options_Desc">
+		
+		<field name="opacity" type="text" default="90" label="PIE TRANSPARANCY" description="PIE TRANSPARANCY DESC" size="2" />
+		<field name="bg_color" type="text" default="ffffff" label="BACKGROUND COLOR" description="BACKGROUND COLOR DESC" size="6" />
+		<field name="circle_color" type="text" default="505050" label="CIRCLE COLOR" description="CIRCLE COLOR DESC" size="6" />
+		<field name="pieX" type="text" default="100%" label="PIE WIDTH" description="PIE WIDTH DESC" size="3" />
+		<field name="pieY" type="text" default="400" label="PIE HEIGHT" description="PIE HEIGHT DESC" size="3" />
+		<field name="start_angle" type="text" default="55" label="START ANGLE" description="START ANGLE DESC" size="3" />
+		<field name="radius" type="text" default="150" label="RADIUS" description="RADIUS DESC" size="3" />
+		<field name="gradient" type="radio" default="1" label="GRADIENT" description="GRADIENT DESC" size="3">
+			<option value="1">JYes</option>
+			<option value="0">JNo</option>
+		</field>		
+		<field name="JNo_labels" type="radio" default="0" label="SHOW LABELS" description="SHOW LABELS DESC" size="3">
+			<option value="0">JYes</option>
+			<option value="1">JNo</option>
+		</field>		
+		<field name="show_zero_votes" type="radio" default="1" label="SHOW ZERO VOTES" description="SHOW ZERO VOTES DESC" size="3">
+			<option value="1">JYes</option>
+			<option value="0">JNo</option>
+		</field>
+		
+		<field 
+			name="animation_type" 
+			id="animation_type" 
+			type="list" 
+			default="bounce" 
+			label="ANIMATION" 
+			description="ANIMATION DESC" 
+			class="inputbox">
+			<option value="bounce">BOUNCE</option>
+			<option value="fade">FADE</option>
+		</field>
+		
+		<field 
+			id="bounce_dinstance" 
+			name="bounce_dinstance" 
+			type="text" 
+			default="30" 
+			label="BOUNCE DINSTANCE" 
+			description="BOUNCE DINSTANCE DESC" 
+			size="3" />
+
+		<field name="font_size" type="text" default="11" label="FONT SIZE OF LABELS" description="FONT SIZE LABELS DESC" size="3" />
+		<field name="font_color" type="text" default="404040" label="FONT COLOR OF LABELS" description="FONT COLOR DESC" size="6" />
+		<field name="title_lenght" type="text" default="30" label="OPTIONS LENGHT" description="OPTIONS LENGHT DESC" size="3" />
+	</fieldset>
+	
+	
+	<fieldset 
+		name="google_pie_options"		
+		label="Apoll_Config_Google_Pie_Options"
+		description="Apoll_Config_Google_Pie_Options_Desc">	
+			
+        <field name="show_gtitle" type="radio" default="1" label="SHOW GTITLE" description="SHOW GTITLE DESC" size="3">
+            <option value="1">JYes</option>
+            <option value="0">JNo</option>
+        </field>   
+		
+        <field name="gtitle_color" type="text" default="000000" label="GTITLE COLOR" description="GTITLE COLOR DESC" size="6" />
+        <field name="gtitleFontSize" type="text" default="12" label="GTITLE FONT SIZE" description="GTITLE FONT SIZE DESC" size="2" />
+        <field name="gpie_width" type="text" default="500" label="GPIE WIDTH" description="GPIE WIDTH DESC" size="3" />
+        <field name="gpie_height" type="text" default="400" label="GPIE HEIGHT" description="GPIE HEIGHT DESC" size="3" />
+        <field name="is3D" type="radio" default="1" label="IS3D" description="IS3D DESC" size="3">
+            <option value="1">JYes</option>
+            <option value="0">JNo</option>
+        </field>  
+        <field name="gbackgroundColor" type="text" default="ffffff" label="GBACKGROUND COLOR" description="GBACKGROUND COLOR DESC" size="7" />
+        <field name="bg_image" type="imagelist" default="0" label="BACKGROUND IMAGE" description="BACKGROUND IMAGE DESC" directory="images/" hide_default ="true" />
+        <field id="bg_image_repeat" name="bg_image_repeat" type="list" default="left" label="IMAGE REPEAT" description="IMAGE REPEAT DESC">
+            <option value="repeat">REPEAT</option>
+            <option value="JNo-repeat">JNo-REPEAT</option>
+            <option value="repeat-x">REPEAT-X</option>
+            <option value="repeat-y">REPEAT-Y</option>
+        </field>          
+        <field name="bg_image_x" type="list" default="left" label="X POSITION" description="X POSITION DESC">
+            <option value="left">LEFT</option>
+            <option value="center">CENTER</option>
+            <option value="right">RIGHT</option>
+        </field>    
+        <field name="bg_image_y" type="list" default="top" label="Y POSITION" description="Y POSITION DESC">
+            <option value="top">TOP</option>
+            <option value="middle">MIDDLE</option>
+            <option value="bottom">BOTTOM</option>
+        </field>    
+        <field name="gborderColor" type="text" default="ffffff" label="GBORDER COLOR" description="GBORDER COLOR DESC" size="7" />
+        <field name="gstrokeSize" type="text" default="2" label="GSTROKE SIZE" description="GSTROKE SIZE DESC" size="3" />
+        <field name="gfocusBorderColor" type="text" default="cccccc" label="GFOCUS BORDER COLOR" description="GFOCUS BORDER COLOR DESC" size="7" />
+        <field name="gfocusBorderStrokeSize" type="text" default="2" label="GFOCUS STROKE SIZE" description="GFOCUS STROKE SIZE DESC" size="3" />
+
+        <field name="enableTooltip" type="radio" default="1" label="TOOLTIP" description="TOOLTIP DESC" size="3">
+            <option value="1">JYes</option>
+            <option value="0">JNo</option>
+        </field>  
+        <field name="tooltipFontSize" type="text" default="11" label="TOOLTIP FONT SIZE" description="TOOLTIP FONT SIZE DESC" size="3" />
+        <field name="tooltipHeight" type="text" default="60" label="TOOLTIP HEIGHT" description="TOOLTIP HEIGHT DESC" size="3" />
+        <field name="tooltipWidth" type="text" default="120" label="TOOLTIP WIDTH" description="TOOLTIP WIDTH DESC" size="3" />
+        <field name="legend" type="list" default="label" label="LEGEND POSITION" description="LEGEND POSITION DESC">
+            <option value="label">LABEL</option>
+            <option value="right">RIGHT</option>
+            <option value="top">TOP</option>
+            <option value="left">LEFT</option>
+            <option value="bottom">BOTTOM</option>
+            <option value="JNone">JNoNE</option>
+        </field>  
+        <field name="legendBackgroundColor" type="text" default="transparent" label="LEGEND BCG COLOR" description="LEGEND BCG COLOR DESC" size="10" />
+        <field name="legendFontSize" type="text" default="10" label="LEGEND FONT SIZE" description="LEGEND FONT SIZE DESC" size="3" />
+        <field name="legendTextColor" type="text" default="000000" label="LEGEND TEXT COLOR" description="LEGEND TEXT COLOR DESC" size="7" />
+        <field name="gpieJoinAngle" type="text" default="0" label="PIE JOIN ANGLE" description="PIE JOIN ANGLE DESC" size="3" />
+        <field name="gpieMinimalAngle" type="text" default="0" label="PIE MIN ANGLE" description="PIE MIN ANGLE DESC" size="3" />
+     </fieldset>     
+
+
+	<fieldset 
+		name="moo_chart"		
+		label="Apoll_Config_Moo_Chart_Options"
+		description="Apoll_Config_Moo_Chart_Options_Desc">	
+		
+        <field name="moo_width" type="text" default="400" label="MOO CHART WIDTH" description="MOO CHART WIDTH DESC" size="3">        
+        <field name="moo_animate" type="radio" default="1" label="MOO_CHART_ANIMATE" description="MOO CHART ANIMATE DESC" />
+              <option value="1">JYes</option>
+              <option value="0">JNo</option>
+        </field>         
+        
+        <field name="mooOptionsFontSize" type="text" default="12" label="OPTIONS FONT SIZE" description="OPTION FONT SIZE DESC" size="3" />        
+        <field name="mooOptionsPadding" type="text" default="2" label="OPTIONS PADDING" description="OPTIONS PADDING DESC" size="3" />
+        <field name="mooBarHeight" type="text" default="15" label="HEIGHT OF BARS" description="BAR HEIGHT DESC" size="3" />
+        
+		<field name="moochart_one_color" type="radio" default="0" label="ONLY ONE COLOR" description="ONLY ONE COLOR DESC">
+			  <option value="1">JYes</option>
+			  <option value="0">JNo</option>
+		</field>        
+        <field name="barColor" type="text" default="f5f5f5" label="BARCOLOR #" description="BARCOLOR DESC" size="6" />
+        
+        <field type="spacer" default="BAR BORDER" />
+        
+        
+        <field name="mooBarBorderThicknes" type="text" default="0" label="BARBORDER THICK" description="BARBORDER THICK DESC" size="2" />
+
+        <field name="mooBarBorderStyle" type="list" default="solid" label="BARBORDER STYLE" description="BARBORDER STYLE DESC">
+            <option value="dotted">DOTTED</option>
+            <option value="dashed">DASHED</option>
+            <option value="solid">SOLID</option>
+            <option value="double">DOUBLE</option>
+            <option value="groove">GROOVE</option>
+            <option value="ridge">RIDGE</option>
+            <option value="inset">INSET</option>
+            <option value="outset">OUTSET</option>
+            <option value="inherit">INHERIT</option>
+        </field>         
+        <field name="mooBarBorderColor" type="text" default="000000" label="BARBORDER COLOR" description="BARBORDER THICK COLOR" size="7" />          
+        
+        <field name="mooBgBarBorderThicknes" type="text" default="1" label="BG BARBORDER THICK" description="BARBORDER THICK DESC" size="2" />
+
+        <field name="mooBgBarBorderStyle" type="list" default="solid" label="BG BARBORDER STYLE" description="BARBORDER STYLE DESC">
+            <option value="dotted">DOTTED</option>
+            <option value="dashed">DASHED</option>
+            <option value="solid">SOLID</option>
+            <option value="double">DOUBLE</option>
+            <option value="groove">GROOVE</option>
+            <option value="ridge">RIDGE</option>
+            <option value="inset">INSET</option>
+            <option value="outset">OUTSET</option>
+            <option value="inherit">INHERIT</option>
+        </field>         
+        <field name="mooBgBarBorderColor" type="text" default="f5f5f5" label="BARBORDER COLOR" description="BARBORDER THICK COLOR" size="7" /> 
+        
+        <field name="bgBarColor" type="text" default="f5f5f5" label="BGBARCOLOR #" description="BGBARCOLOR DESC" size="6" />        
+        <field name="bgBarPadding" type="text" default="3" label="BGBARPDDING" description="BGBARPDDING DESC" size="2" />
+    </fieldset> 
+        
+    <fieldset
+		name="config"
+		label="Config_Apoll_Config"
+		description="Config_Apoll_Config_Desc">
+
+		<field
+			name="drop"
+			type="radio"
+            label="Drop_db"
+			description="When_uninstall_drop_com_apoll_database?"
+            default="0">
+                <option value="1">JYes</option>
+                <option value="0">JNo</option>
+        </field>
+	</fieldset>	
+
+	<fieldset
+		name="permissions"
+		label="JConfig_Permissions_Label"
+		description="JConfig_Permissions_Desc">
+
+		<field
+			name="rules"
+			type="rules"
+			label="JConfig_Permissions_Label"
+			class="inputbox"
+			filter="rules"
+			component="com_apoll"
+			section="component" />
+	</fieldset>
+	
+</config>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset name="credentials"
+		label="Business promotion"	>
+
+        <field name="id" type="hidden"
+			filter="integer"
+		/>
+        
+        <field name="business_id" type="hidden"
+			filter="integer"
+		/>
+        
+        <field 
+            name = "category" type = "category"
+            extension = "com_jnt_hanhphuc"
+            required = "true"
+            label= "Loại dịch vụ"
+            description = "Chọn loại dịch vụ"
+        />
+        
+		<field
+			name = "state" type = "list"
+			default = "1"
+			required = "false"
+			label = "Trạng thái"
+            description = "Trạng thái: hiện bạn có đang cung cấp dịch vụ này không?"
+		>
+			<option value = "1">Hoạt động</option>
+			<option value = "0">Không hoạt động</option>
+		</field>
+		
+		<field
+			name="name"
+			required = "true"
+			type="text" size = "50"
+			label = "Tên chương trình khuyến mại"
+            description = "Nhập tên chương trình khuyến mại"
+		/>
+		
+		<field name="from_date" type="calendar"
+			required = "true"
+			label="Ngày bắt đầu" description="Ngày bắt đầu"
+			class="inputbox" size="22" format="%Y-%m-%d" />
+			
+		<field name="to_date" type="calendar"
+			required = "true"
+			label="Ngày kết thúc" description="Ngày kết thúc"
+			class="inputbox" size="22" format="%Y-%m-%d" />
+		
+		<field
+			name="discount_percent"
+			type="text" size = "20"
+			label = "% Giảm giá"
+            description = "Giảm giá theo %"
+		/>
+		
+		<field
+			name="discount_absolute"
+			type="text" size = "20"
+			label = "Số tiền giảm trực tiếp"
+            description = "Giảm theo số tiền"
+		/>
+		
+		<field name="content" type="editor"
+			required = "true"
+			filter = "SAFEHTML"
+			label="Nội dung"
+            description = "Nội dung chương trình khuyến mại"
+		/>
+	</fieldset>
+</form>

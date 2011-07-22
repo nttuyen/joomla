@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+	<!-- $Id: login.xml 19713 2010-12-01 17:01:50Z infograf768 $ -->
+<form>
+	<fieldset name="credentials"
+		label="COM_USERS_LOGIN_DEFAULT_LABEL"	>
+
+        <field name="id" type="hidden"
+			filter="integer"
+		/>
+        
+        <field name="business_id" type="hidden"
+			filter="integer"
+		/>
+        
+        <field 
+            name = "category" type = "category"
+            extension = "com_jnt_hanhphuc"
+            required = "true"
+            label= "Loại dịch vụ"
+            description = "Chọn loại dịch vụ"
+        />
+        
+		<field
+			name = "state" type = "list"
+			default = "1"
+			required = "false"
+			label = "Trạng thái"
+            description = "Trạng thái: hiện bạn có đang cung cấp dịch vụ này không?"
+		>
+			<option value = "1">Hoạt động</option>
+			<option value = "0">Không hoạt động</option>
+		</field>
+		
+		<field
+			name="name"
+			type="text" size = "50"
+			label = "Tên dịch vụ"
+            description = "Nhập tên dịch vụ của bạn"
+		/>
+		
+		<field
+			name="number"
+			type="text" size = "50"
+			label = "Số lượng"
+            description = "Số lượng"
+		/>
+		
+		<field
+			name="price"
+			type="text" size = "20"
+			label = "Giá/chi phí"
+            description = "Giá của dịch vụ"
+		/>
+		
+		<field
+			name="current_price"
+			type="text" size = "20"
+			label = "Giá mới"
+            description = "Giá hiện tại của dịch vụ sau khi trừ giá khuyến mại"
+		/>
+		
+        <field
+			name="promotion"
+			type="text" size = "50"
+			label = "Khuyến mại"
+            description = "Chính sách khuyến mại: khuyến mại thêm cái gì?"
+		/>
+        
+		<field name="image" type="file"
+            multiple = "true"
+			label="Ảnh dịch vụ"
+            description = "Upload các ảnh giới thiệu về dịch vụ"
+			required = "false"
+			size="25"
+		/>
+		
+		<field name="description" type="editor"
+			filter = "SAFEHTML"
+			label="Miêu tả"
+            description = "Miêu tả về dịch vụ bạn cung cấp"
+			required = "false"
+		/>
+        
+        <field id="payment_type"
+			name="payment_type"
+			type="checkboxes"
+			label="Hình thức thanh toán"
+			description="chọn các hình thức thanh toán"
+			class="inputbox"
+			size="1"
+			default="1"
+		>
+			<option value="1">
+				Thanh toán qua tài khoản ngân hàng</option>
+			<option value="2">
+				Thanh toán qua địa chỉ bưu điện</option>
+			<option value="3">
+				Thanh toán qua website nganluong.vn</option>
+		</field>
+	</fieldset>
+</form>

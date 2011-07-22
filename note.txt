@@ -1,0 +1,5 @@
+1. Trường cho phép upload nhiều ảnh sẽ phải làm thế nào?
+2. Trong trang chi tiết dịch vụ người dùng sẽ thấy các thông tin gì? có cần form gửi mail đặt hàng luôn ở đây không
+3. Đặt hàng kiểu gì
+4. Phần thanh toán chưa hiểu lắm
+5. Tin khuyến mại chỉ để hiển thị hay có sử dụng gì không?

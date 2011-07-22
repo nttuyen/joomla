@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+	<!-- $Id: banner.xml 20740 2011-02-17 10:28:57Z infograf768 $ -->
+<form>
+	<fieldset name="details"
+		addfieldpath="/administrator/components/com_banners/models/fields"
+	>
+		<field name="id" type="text" default="0" 
+			readonly="true" class="readonly"
+			label="ID" 	description ="ID" />
+        
+        <field name="user_id" type="text" default="0" 
+			readonly="true" class="readonly"
+			label="User ID" 	description ="User ID" />
+			
+		<field name="username" type="text" default="0" 
+			readonly="true" class="readonly"
+			label="Username" 	description ="Username" />
+        
+        <field name="total_price" type="text" default="0" 
+			readonly="true" class="readonly"
+			label="Total price" 	description ="Total price" />
+
+        <field name="price" type="text" default="0" 
+			readonly="true" class="readonly"
+			label="Price" 	description ="Price" />
+			
+		<field name="payment_method" type="list" default="0" 
+			readonly="true" class="readonly"
+			label="Payment method" 	description ="Payment method">
+            	<option value="1">Chuyển tiền qua bưu điện</option>
+				<option value="2">Chuyển khoản ngân hàng</option>
+		</field>
+		
+		<field name="payment_method_name" type="text" default="0" 
+			readonly="true" class="readonly"
+			label="Payment method name" 	description ="Payment method name" />
+			
+		<field name="payment_info" type="text" default="0" 
+			readonly="true" class="readonly"
+			label="payment info" 	description ="Payment info" />
+			
+		<field name="order_note" type="text" default="0" 
+			readonly="true" class="readonly"
+			label="Order note" 	description ="Order note" />
+			
+		<field name="ipaddress" type="text" default="" 
+			readonly="true" class="readonly"
+			label="IP address" 	description ="IP Address" />
+            
+        <field name="address" type="text" default="0" 
+			readonly="true" class="readonly"
+			label="Address" 	description ="Address" />
+            
+        <field name="city" type="text" default="0" 
+			readonly="true" class="readonly"
+			label="City" 	description ="City" />
+            
+        <field name="district" type="text" default="0" 
+			readonly="true" class="readonly"
+			label="District" 	description ="District" />
+			
+		<field name="email" type="text" default="0" 
+			readonly="true" class="readonly"
+			label="Email" 	description ="Email" />
+			
+		<field name="phone" type="text" default="0" 
+			readonly="true" class="readonly"
+			label="Phone" 	description ="Phone" />
+			
+		<field name="state" type="list"
+			label="Order State" description="Order State"
+			class="inputbox" size="1" default="1" >
+			<option value="0">Confirmed</option>
+            <option value="1">Invoiced</option>
+			<option value="2">Cancel</option>
+		</field>
+        
+	</fieldset>
+
+	<fieldset name="publish"
+		label="COM_BANNERS_GROUP_LABEL_PUBLISHING_DETAILS"
+	>
+
+		<field name="created" type="calendar"
+            readonly = "true"
+			label="Created" description="Created"
+			class="readonly" size="22" format="%Y-%m-%d %H:%M:%S"
+			filter="user_utc" />
+	</fieldset>
+</form>

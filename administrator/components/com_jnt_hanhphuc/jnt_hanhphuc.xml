@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+	<!-- $Id: banners.xml 21024 2011-03-29 09:57:24Z infograf768 $ -->
+<extension type="component" version="1.6.0" method="upgrade">
+	<name>com_jnt_hanhphuc</name>
+	<author>nttuyen</author>
+	<creationDate>May 2011</creationDate>
+	<copyright>(C) 2005 - 2011 Open Source Matters. All rights reserved.
+	</copyright>
+	<license>GNU General Public License version 2 or later; see
+		LICENSE.txt</license>
+	<authorEmail>contact@nttuyen.com</authorEmail>
+	<authorUrl>www.nttuyen.com</authorUrl>
+	<version>1.6.0</version>
+	<description>COM_JNT_HANHPHUC_XML_DESCRIPTION</description>
+
+	<files folder="site">
+		<filename>jnt_hanhphuc.php</filename>
+		<filename>controller.php</filename>
+		<filename>index.html</filename>
+		<filename>router.php</filename>
+		<folder>helpers</folder>
+		<folder>models</folder>
+	</files>
+	<administration>
+		<menu>hanhphuc.vn</menu>
+		<submenu>
+			<!--
+				Note that all & must be escaped to &amp; for the file to be valid
+				XML and be parsed by the installer
+			-->
+			<menu link="option=com_categories&amp;extension=com_jnt_hanhphuc"
+				alt="hanhphuc/service_categories">Service categories</menu>
+		</submenu>
+		<files folder="admin">
+			<filename>access.xml</filename>
+			<filename>banners.php</filename>
+			<filename>config.xml</filename>
+			<filename>controller.php</filename>
+			<filename>index.html</filename>
+			<folder>controllers</folder>
+			<folder>helpers</folder>
+			<folder>models</folder>
+			<folder>tables</folder>
+			<folder>views</folder>
+		</files>
+	</administration>
+</extension>
+

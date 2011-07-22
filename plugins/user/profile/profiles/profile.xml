@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+	<!-- $Id: profile.xml 20156 2011-01-07 13:10:16Z eddieajau $ -->
+<form>
+	<fields name="profile">
+		<fieldset name="profile"
+			label="PLG_USER_PROFILE_SLIDER_LABEL"
+		>
+			<field
+				name="address1"
+				type="text"
+				id="address1"
+				description="PLG_USER_PROFILE_FIELD_ADDRESS1_DESC"
+				filter="string"
+				label="PLG_USER_PROFILE_FIELD_ADDRESS1_LABEL"
+				message="PLG_USER_PROFILE_FIELD_ADDRESS1_MESSAGE"
+				size="30"
+			/>
+
+			<field
+				name="address2"
+				type="text"
+				id="address2"
+				description="PLG_USER_PROFILE_FIELD_ADDRESS2_DESC"
+				filter="string"
+				label="PLG_USER_PROFILE_FIELD_ADDRESS2_LABEL"
+				message="PLG_USER_PROFILE_FIELD_ADDRESS1_MESSAGE"
+				size="30"
+			/>
+
+			<field
+				name="city"
+				type="text"
+				id="city"
+				description="PLG_USER_PROFILE_FIELD_CITY_DESC"
+				filter="string"
+				label="PLG_USER_PROFILE_FIELD_CITY_LABEL"
+				message="PLG_USER_PROFILE_FIELD_CITY_MESSAGE"
+				size="30"
+			/>
+
+			<field
+				name="region"
+				type="text"
+				id="region"
+				description="PLG_USER_PROFILE_FIELD_REGION_DESC"
+				filter="string"
+				label="PLG_USER_PROFILE_FIELD_REGION_LABEL"
+				message="PLG_USER_PROFILE_FIELD_REGION_MESSAGE"
+				size="30"
+			/>
+
+			<field
+				name="country"
+				type="text"
+				id="country"
+				description="PLG_USER_PROFILE_FIELD_COUNTRY_DESC"
+				filter="string"
+				label="PLG_USER_PROFILE_FIELD_COUNTRY_LABEL"
+				message="PLG_USER_PROFILE_FIELD_COUNTRY_MESSAGE"
+				size="30"
+			/>
+
+			<field
+				name="postal_code"
+				type="text"
+				id="postal_code"
+				description="PLG_USER_PROFILE_FIELD_POSTAL_CODE_DESC"
+				filter="string"
+				label="PLG_USER_PROFILE_FIELD_POSTAL_CODE_LABEL"
+				message="PLG_USER_PROFILE_FIELD_POSTAL_CODE_MESSAGE"
+				size="30"
+			/>
+
+			<field
+				name="phone"
+				type="tel"
+				id="phone"
+				description="PLG_USER_PROFILE_FIELD_PHONE_DESC"
+				filter="string"
+				label="PLG_USER_PROFILE_FIELD_PHONE_LABEL"
+				message="PLG_USER_PROFILE_FIELD_PHONE_MESSAGE"
+				size="30"
+			/>
+
+			<field
+				name="website"
+				type="url"
+				id="website"
+				description="PLG_USER_PROFILE_FIELD_WEB_SITE_DESC"
+				filter="string"
+				label="PLG_USER_PROFILE_FIELD_WEB_SITE_LABEL"
+				message="PLG_USER_PROFILE_FIELD_WEB_SITE_MESSAGE"
+				size="30"
+			/>
+			<field
+				name="favoritebook"
+				type="text"
+				description="PLG_USER_PROFILE_FIELD_FAVORITE_BOOK_DESC"
+				filter="string"
+				label="PLG_USER_PROFILE_FIELD_FAVORITE_BOOK_LABEL"
+				message="PLG_USER_PROFILE_FIELD_FAVORITE_BOOK_MESSAGE"
+				size="30"
+			/>
+			<field
+				name="aboutme"
+				type="textarea"
+				description="PLG_USER_PROFILE_FIELD_ABOUT_ME_DESC"
+				label="PLG_USER_PROFILE_FIELD_ABOUT_ME_LABEL"
+				message="PLG_USER_PROFILE_FIELD_ABOUT_ME_MESSAGE"
+				cols="30"
+				rows="5"
+				filter="safehtml"
+			/>
+			<field
+					name="tos"
+					type="radio"
+					label="PLG_USER_PROFILE_FIELD_TOS_LABEL"
+					description="PLG_USER_PROFILE_FIELD_TOS_DESC">
+					<option	value="1">PLG_USER_PROFILE_OPTION_AGREE</option>
+			</field>
+			<field
+					name="dob"
+					type="calendar"
+					label="PLG_USER_PROFILE_FIELD_DOB_LABEL"
+					description="PLG_USER_PROFILE_FIELD_DOB_DESC"
+				 />
+		</fieldset>
+        
+        
+        <fieldset name="business_profile"
+			label="Business profile"
+		>
+            <field
+				name="business_director"
+				type="text"
+				id="business_director"
+				description="Business director"
+				filter="string"
+				label="Business director"
+				message="Business director"
+				size="30"
+			/>
+            <field
+				name="business_name"
+				type="text"
+				id="business_name"
+				description="Business name"
+				filter="string"
+				label="Business name"
+				message="Business name"
+				size="30"
+			/>
+            <field
+				name="business_address"
+				type="text"
+				id="business_address"
+				description="Business address"
+				filter="string"
+				label="Business address"
+				message="Business address"
+				size="30"
+			/>
+            <field
+				name="business_city"
+				type="list"
+				id="business_city"
+				description="Business city"
+				filter="string"
+				label="Business city"
+				message="Business city"
+				size="1"
+			/>
+            <field
+				name="business_district"
+				type="list"
+				id="business_district"
+				description="Business district"
+				filter="string"
+				label="Business district"
+				message="Business district"
+				size="1"
+			/>
+            <field
+				name="business_village"
+				type="text"
+				id="business_village"
+				description="Business village"
+				filter="string"
+				label="Business village"
+				message="Business village"
+				size="30"
+			/>
+            <field
+				name="business_phone"
+				type="text"
+				id="business_phone"
+				description="Business phone"
+				filter="string"
+				label="Business phone"
+				message="Business phone"
+				size="30"
+			/>
+            <field
+				name="business_fax"
+				type="text"
+				id="business_fax"
+				description="Business fax"
+				filter="string"
+				label="Business fax"
+				message="Business fax"
+				size="30"
+			/>
+            <field
+				name="business_website"
+				type="url"
+				id="business_website"
+				description="Business website"
+				filter="string"
+				label="Business website"
+				message="Business website"
+				size="30"
+			/>
+            <field
+				name="business_logo"
+				type="file"
+				id="business_logo"
+				description="Business logo"
+				filter="string"
+				label="Business logo"
+				message="Business logo"
+				size="30"
+			/>
+            <field
+				name="business_sitename"
+				type="text"
+				id="business_sitename"
+				description="Business site name"
+				filter="string"
+				label="Business site name"
+				message="Business site name"
+				size="30"
+			/>
+            <field
+				name="business_slogan"
+				type="text"
+				id="business_slogan"
+				description="Business slogan"
+				filter="string"
+				label="Business slogan"
+				message="Business slogan"
+				size="30"
+			/>
+            <field
+				name="business_banner"
+				type="file"
+				id="business_banner"
+				description="Business banner"
+				filter="string"
+				label="Business banner"
+				message="Business banner"
+				size="30"
+			/>
+        </fieldset>
+	</fields>
+</form>
