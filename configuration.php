@@ -51,7 +51,7 @@ class JConfig {
 	public $unicodeslugs = '0';
 	public $feed_limit = '10';
 	public $log_path = '/var/www/hanhphuc/logs';
-	public $tmp_path = '/var/www/hanhphuc/tmp';
+	public $tmp_path = 'D:\\temp\\hanhphuc';
 	public $lifetime = '9999';
 	public $session_handler = 'database';
 	public $MetaRights = 'hanhphuc';
