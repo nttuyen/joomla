@@ -6,6 +6,10 @@
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
+//#nttuyen edit 
+error_reporting(0);
+#nttuyen edit end
+
 // Set flag that this is a parent file.
 
 define('_JEXEC', 1);
@@ -53,4 +57,4 @@ echo $app;
 // Counter.
 $chCounter_visible = 0;
 $chCounter_status = 'active';
-include( '/home/thongti3/domains/hanhphuc.vn/public_html/ch_counter/counter.php' );
+//include( '/home/thongti3/domains/hanhphuc.vn/public_html/ch_counter/counter.php' );
