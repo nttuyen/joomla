@@ -1,0 +1,362 @@
+   <div class="box_containing_2_centered_boxes">
+    <div class="access_stats_start">{V_START_DATE_ACCESS_STATISTIC}</div>
+    <br />
+    <br />
+    <br />
+    <br />
+    <div class="stats_title" style="margin-bottom: 10px;">{L_RECORDS}</div>
+    <div class="left_box_of_2_centered_boxes">
+     <table class="table_data_and_records" cellpadding="0" cellspacing="1">
+      <tr class="row3">
+       <td colspan="2" style="text-align: center;"><b>{L_VISITORS}</b></td>
+      </tr>
+      <tr class="row1">
+       <td style="width: 150px;">{L_MAX_A_DAY}</td>
+       <td style="text-align:right"><b>{V_MAX_VISITORS_A_DAY}</b><br /><i>{V_MAX_VISITORS_A_DAY_DATE}</i></td>
+      </tr>
+      <tr class="row2">
+       <td>{L_MIN_A_DAY}</td>
+       <td style="text-align:right"><b>{V_MIN_VISITORS_A_DAY}</b><br /><i>{V_MIN_VISITORS_A_DAY_DATE}</i></td>
+      </tr>
+      <tr class="row1">
+       <td>{L_MAX_A_CALENDAR_WEEK}</td>
+       <td style="text-align:right"><b>{V_MAX_VISITORS_A_CALENDAR_WEEK}</b><br /><i>{V_MAX_VISITORS_A_CALENDAR_WEEK_DATE}</i></td>
+      </tr>
+      <tr class="row2">
+       <td>{L_MIN_A_CALENDAR_WEEK}</td>
+       <td style="text-align:right"><b>{V_MIN_VISITORS_A_CALENDAR_WEEK}</b><br /><i>{V_MIN_VISITORS_A_CALENDAR_WEEK_DATE}</i></td>
+      </tr>
+      <tr class="row1">
+       <td>{L_MAX_A_MONTH}</td>
+       <td style="text-align:right"><b>{V_MAX_VISITORS_A_MONTH}</b><br /><i>{V_MAX_VISITORS_A_MONTH_DATE}</i></td>
+      </tr>
+      <tr class="row2">
+       <td>{L_MIN_A_MONTH}</td>
+       <td style="text-align:right"><b>{V_MIN_VISITORS_A_MONTH}</b><br /><i>{V_MIN_VISITORS_A_MONTH_DATE}</i></td>
+      </tr>
+      <tr class="row1">
+       <td>{L_MAX_A_YEAR}</td>
+       <td style="text-align:right"><b>{V_MAX_VISITORS_A_YEAR}</b><br /><i>{V_MAX_VISITORS_A_YEAR_DATE}</i></td>
+      </tr>
+      <tr class="row2">
+       <td>{L_MIN_A_YEAR}</td>
+       <td style="text-align:right"><b>{V_MIN_VISITORS_A_YEAR}</b><br /><i>{V_MIN_VISITORS_A_YEAR_DATE}</i></td>
+      </tr>
+     </table>
+    </div>
+    <div class="right_box_of_2_centered_boxes">
+     <table class="table_data_and_records" cellpadding="0" cellspacing="1">
+      <tr class="row3">
+       <td colspan="2" style="text-align: center;"><b>{L_PAGE_VIEWS}</b></td>
+      </tr>
+      <tr class="row1">
+       <td style="width: 150px;">{L_MAX_A_DAY}</td>
+       <td style="text-align:right"><b>{V_MAX_PAGE_VIEWS_A_DAY}</b><br /><i>{V_MAX_PAGE_VIEWS_A_DAY_DATE}</i></td>
+      </tr>
+      <tr class="row2">
+       <td>{L_MIN_A_DAY}</td>
+       <td style="text-align:right"><b>{V_MIN_PAGE_VIEWS_A_DAY}</b><br /><i>{V_MIN_PAGE_VIEWS_A_DAY_DATE}</i></td>
+      </tr>
+      <tr class="row1">
+       <td>{L_MAX_A_CALENDAR_WEEK}</td>
+       <td style="text-align:right"><b>{V_MAX_PAGE_VIEWS_A_CALENDAR_WEEK}</b><br /><i>{V_MAX_PAGE_VIEWS_A_CALENDAR_WEEK_DATE}</i></td>
+      </tr>
+      <tr class="row2">
+       <td>{L_MIN_A_CALENDAR_WEEK}</td>
+       <td style="text-align:right"><b>{V_MIN_PAGE_VIEWS_A_CALENDAR_WEEK}</b><br /><i>{V_MIN_PAGE_VIEWS_A_CALENDAR_WEEK_DATE}</i></td>
+      </tr>
+      <tr class="row1">
+       <td>{L_MAX_A_MONTH}</td>
+       <td style="text-align:right"><b>{V_MAX_PAGE_VIEWS_A_MONTH}</b><br /><i>{V_MAX_PAGE_VIEWS_A_MONTH_DATE}</i></td>
+      </tr>
+      <tr class="row2">
+       <td>{L_MIN_A_MONTH}</td>
+       <td style="text-align:right"><b>{V_MIN_PAGE_VIEWS_A_MONTH}</b><br /><i>{V_MIN_PAGE_VIEWS_A_MONTH_DATE}</i></td>
+      </tr>
+      <tr class="row1">
+       <td>{L_MAX_A_YEAR}</td>
+       <td style="text-align:right"><b>{V_MAX_PAGE_VIEWS_A_YEAR}</b><br /><i>{V_MAX_PAGE_VIEWS_A_YEAR_DATE}</i></td>
+      </tr>
+      <tr class="row2">
+       <td>{L_MIN_A_YEAR}</td>
+       <td style="text-align:right"><b>{V_MIN_PAGE_VIEWS_A_YEAR}</b><br /><i>{V_MIN_PAGE_VIEWS_A_YEAR_DATE}</i></td>
+      </tr>
+     </table>
+    </div>
+   </div>
+   <div class="stats_spacer"></div>
+   <div class="center" style="text-align: center;">
+    <div class="stats_title" style="margin-bottom: 10px;" id="daily_weekly_distribution">{L_DAILY_WEEKLY_DISTRIBUTION}</div>
+    <select name="distr_type">
+<!-- BEGIN BLOCK DISTR_TYPE -->
+     <option value="{VALUE}" <!-- IF SELECTED -->selected="selected"<!-- ENDIF SELECTED -->> {NAME}</option>
+<!-- END BLOCK DISTR_TYPE -->
+    </select>
+    <select name="distr_of">
+<!-- BEGIN BLOCK DISTR_OF -->
+     <option value="{VALUE}" <!-- IF SELECTED -->selected="selected"<!-- ENDIF SELECTED -->> {NAME}</option>
+<!-- END BLOCK DISTR_OF -->
+    </select>
+    <input type="submit" value="{L_OK}" onClick="submit_with_anchor('daily_weekly_distribution');" /><br />
+    <br />
+    <table cellpadding="0" cellspacing="1" border="0" style="border-collapse: separate; border: 1px solid #000000">
+<!-- IF BLOCK TIME_OF_DAY -->
+     <tr class="row3">
+      <td>{L_HOUR}</td>
+      <td style="width: 200px;"></td>
+      <td>{L_PERCENTAGE}</td>
+      <td>{X_ON_THE_AVERAGE}</td>
+     </tr>
+<!-- ENDIF BLOCK TIME_OF_DAY -->
+<!-- BEGIN BLOCK TIME_OF_DAY -->
+     <tr class="row{ROW_CLASS_No.}" title="{TIME_SPAN}: {AVERAGE_LONG} ({PERCENTAGE}%)">
+      <td>{TIME_SPAN}:</td>
+      <td style="width: 200px; padding: 0px;">
+      <div class="bar_access_stats_{BAR_No.}" style="width: {GRAPH_PERCENTAGE}%;"></div>
+      </td>
+      <td>{PERCENTAGE}%</td>
+      <td>{AVERAGE}</td>
+     </tr>
+<!-- END BLOCK TIME_OF_DAY -->
+
+<!-- IF BLOCK WEEKDAYS -->
+     <tr class="row3">
+      <td>{L_WEEKDAY}</td>
+      <td style="width: 200px;"></td>
+      <td>{L_PERCENTAGE}</td>
+      <td>{X_ON_THE_AVERAGE}</td>
+     </tr>
+<!-- ENDIF BLOCK WEEKDAYS -->
+<!-- BEGIN BLOCK WEEKDAYS -->
+     <tr class="row{ROW_CLASS_No.}" title="{WEEKDAY_LONG}: {AVERAGE_LONG} ({PERCENTAGE}%)">
+      <td><!-- {WEEKDAY_SHORT} -->{WEEKDAY_LONG}:</td>
+      <td style="width: 200px; padding: 0px;">
+       <div class="bar_access_stats_{BAR_No.}" style="width: {GRAPH_PERCENTAGE}%;"></div>
+      </td>
+      <td>{PERCENTAGE}%</td>
+      <td>{AVERAGE}</td>
+     </tr>
+<!-- END BLOCK WEEKDAYS -->
+    </table>
+    <div class="stats_spacer"></div>
+    <div class="stats_title" style="margin-bottom: 10px;" id="day_stats">{L_DAY_STATS}</div>
+    <select name="d_day">
+<!-- BEGIN BLOCK D_DAY -->
+     <option value="{VALUE}" <!-- IF SELECTED -->selected="selected"<!-- ENDIF SELECTED -->> {NAME}</option>
+<!-- END BLOCK D_DAY -->
+    </select>
+    <select name="d_month">
+<!-- BEGIN BLOCK D_MONTH -->
+     <option value="{VALUE}" <!-- IF SELECTED -->selected="selected"<!-- ENDIF SELECTED -->> {NAME}</option>
+<!-- END BLOCK D_MONTH -->
+    </select>
+    <select name="d_year">
+<!-- BEGIN BLOCK D_YEAR -->
+     <option value="{VALUE}" <!-- IF SELECTED -->selected="selected"<!-- ENDIF SELECTED -->> {NAME}</option>
+<!-- END BLOCK D_YEAR -->
+    </select>
+    <select name="d_type">
+<!-- BEGIN BLOCK D_TYPE -->
+     <option value="{VALUE}" <!-- IF SELECTED -->selected="selected"<!-- ENDIF SELECTED -->> {NAME}</option>
+<!-- END BLOCK D_TYPE -->
+    </select>
+    <input type="submit" value="{L_OK}" onClick="submit_with_anchor('day_stats');" /><br />
+    <br />
+    <table cellpadding="0" cellspacing="1" border="0" style="border-collapse: separate; border: 1px solid #000000;">
+     <tr class="row3">
+      <td>{L_HOUR}</td>
+      <td style="width: 200px;"></td>
+      <td>{L_PERCENTAGE}</td>
+      <td>{L_VISITORS}</td>
+      <td>{L_PAGE_VIEWS}</td>
+     </tr>
+<!-- BEGIN BLOCK DAY_STATS -->
+     <tr class="row{ROW_CLASS_No.}" title="{TIME_SPAN}: {VISITORS_LONG}, {PAGE_VIEWS_LONG}">
+      <td>{TIME_SPAN}:</td>
+      <td style="width: 200px; padding: 0px; padding-right: 0px;"><div class="bar_access_stats_{BAR_No.}" style="width: {GRAPH_PERCENTAGE}%;"></div></td>
+      <td>{PERCENTAGE}%</td>
+      <td><span class="number_{VISITORS_FONT_CLASS}">{VISITORS}</span></td>
+      <td><span class="number_{PAGE_VIEWS_FONT_CLASS}">{PAGE_VIEWS}</span></td>
+     </tr>
+<!-- END BLOCK DAY_STATS -->
+    </table>
+    <div class="stats_spacer"></div>
+    <div class="stats_title" style="margin-bottom: 10px;" id="month_stats">{L_MONTH_STATS}</div>
+     <select name="m_month">
+<!-- BEGIN BLOCK M_MONTH -->
+      <option value="{VALUE}" <!-- IF SELECTED -->selected="selected"<!-- ENDIF SELECTED -->> {NAME}</option>
+<!-- END BLOCK M_MONTH -->
+     </select>
+     <select name="m_year">
+<!-- BEGIN BLOCK M_YEAR -->
+      <option value="{VALUE}" <!-- IF SELECTED -->selected="selected"<!-- ENDIF SELECTED -->> {NAME}</option>
+<!-- END BLOCK M_YEAR -->
+     </select>
+     <select name="m_type">
+<!-- BEGIN BLOCK M_TYPE -->
+      <option value="{VALUE}" <!-- IF SELECTED -->selected="selected"<!-- ENDIF SELECTED -->> {NAME}</option>
+<!-- END BLOCK M_TYPE -->
+     </select>
+     <input type="submit" value="{L_OK}" onClick="submit_with_anchor('month_stats');" /><br />
+     <br />
+    <table cellpadding="0" cellspacing="1" border="0" style="border-collapse: separate; border: 1px solid #000000;">
+     <tr class="row3">
+      <td>{L_DAY}</td>
+      <td style="width: 200px;"></td>
+      <td>{L_PERCENTAGE}</td>
+      <td>{L_VISITORS}</td>
+      <td>{L_PAGE_VIEWS}</td>
+     </tr>
+<!-- BEGIN BLOCK MONTH_STATS -->
+     <tr class="row{ROW_CLASS_No.}" title="{DAY_LONG}: {VISITORS_LONG}, {PAGE_VIEWS_LONG}">
+      <td>{DAY_SHORT}</td>
+      <td style="width: 200px; padding: 0px;"><div class="bar_access_stats_{BAR_No.}" style="width: {GRAPH_PERCENTAGE}%;"></div></td>
+      <td>{PERCENTAGE}%</td>
+      <td><span class="number_{VISITORS_FONT_CLASS}">{VISITORS}</span></td>
+      <td><span class="number_{PAGE_VIEWS_FONT_CLASS}">{PAGE_VIEWS}</span></td>
+     </tr>
+<!-- END BLOCK MONTH_STATS -->
+    </table>
+    <div class="stats_spacer"></div>
+    <div class="stats_title" style="margin-bottom: 10px;" id="calendar_week_stats">{L_CALENDAR_WEEK_STATS}</div>
+    <select name="w_month">
+<!-- BEGIN BLOCK W_MONTH -->
+     <option value="{VALUE}" <!-- IF SELECTED -->selected="selected"<!-- ENDIF SELECTED -->> {NAME}</option>
+<!-- END BLOCK W_MONTH -->
+    </select>
+    <select name="w_year">
+<!-- BEGIN BLOCK W_YEAR -->
+     <option value="{VALUE}" <!-- IF SELECTED -->selected="selected"<!-- ENDIF SELECTED -->> {NAME}</option>
+<!-- END BLOCK W_YEAR -->
+    </select>
+    <select name="w_type">
+<!-- BEGIN BLOCK W_TYPE -->
+     <option value="{VALUE}" <!-- IF SELECTED -->selected="selected"<!-- ENDIF SELECTED -->> {NAME}</option>
+<!-- END BLOCK W_TYPE -->
+    </select>
+    <input type="submit" value="{L_OK}" onClick="submit_with_anchor('calendar_week_stats');" /><br />
+    <br />
+    <table cellpadding="0" cellspacing="1" border="0" style="border-collapse: separate; border: 1px solid #000000">
+     <tr class="row3">
+      <td>{L_WEEK}</td>
+      <td style="width: 200px;"></td>
+      <td>{L_PERCENTAGE}</td>
+      <td>{L_VISITORS}</td>
+      <td>{L_PAGE_VIEWS}</td>
+     </tr>
+<!-- BEGIN BLOCK WEEK_STATS -->
+     <tr class="row{ROW_CLASS_No.}" title="{CALENDAR_WEEK_LONG}: {VISITORS_LONG}, {PAGE_VIEWS_LONG}">
+      <td>{CALENDAR_WEEK_SHORT}</td>
+      <td style="width: 200px; padding: 0px;"><div class="bar_access_stats_{BAR_No.}" style="width: {GRAPH_PERCENTAGE}%;"></div></td>
+      <td>{PERCENTAGE}%</td>
+      <td><span class="number_{VISITORS_FONT_CLASS}">{VISITORS}</span></td>
+      <td><span class="number_{PAGE_VIEWS_FONT_CLASS}">{PAGE_VIEWS}</span></td>
+     </tr>
+<!-- END BLOCK WEEK_STATS -->
+    </table>
+    <div class="stats_spacer"></div>
+    <div class="stats_title" style="margin-bottom: 10px;" id="year_stats">{L_YEAR_STATS}</div>
+    <select name="y_year">
+<!-- BEGIN BLOCK Y_YEAR -->
+     <option value="{VALUE}" <!-- IF SELECTED -->selected="selected"<!-- ENDIF SELECTED -->> {NAME}</option>
+<!-- END BLOCK Y_YEAR -->
+    </select>
+    <select name="y_type">
+<!-- BEGIN BLOCK Y_TYPE -->
+     <option value="{VALUE}" <!-- IF SELECTED -->selected="selected"<!-- ENDIF SELECTED -->> {NAME}</option>
+<!-- END BLOCK Y_TYPE -->
+    </select>
+    <input type="submit" value="{L_OK}" onClick="submit_with_anchor('year_stats');" /><br />
+    <br />
+    <table cellpadding="0" cellspacing="1" border="0" style="border-collapse: separate; border: 1px solid #000000">
+     <tr class="row3">
+      <td>{L_MONTH}</td>
+      <td style="width: 200px;"></td>
+      <td>{L_PERCENTAGE}</td>
+      <td>{L_VISITORS}</td>
+      <td>{L_PAGE_VIEWS}</td>
+     </tr>
+<!-- BEGIN BLOCK YEAR_STATS -->
+     <tr class="row{ROW_CLASS_No.}" title="{MONTH_LONG}: {VISITORS_LONG}, {PAGE_VIEWS_LONG}">
+      <td>{MONTH_SHORT}</td>
+      <td style="width: 200px; padding: 0px;"><div class="bar_access_stats_{BAR_No.}" style="width: {GRAPH_PERCENTAGE}%;"></div></td>
+      <td>{PERCENTAGE}%</td>
+      <td><span class="number_{VISITORS_FONT_CLASS}">{VISITORS}</span></td>
+      <td><span class="number_{PAGE_VIEWS_FONT_CLASS}">{PAGE_VIEWS}</span></td>
+     </tr>
+<!-- END BLOCK YEAR_STATS -->
+    </table>
+    <div class="stats_spacer"></div>
+    <br />
+    <br />
+    <div class="stats_title" style="margin-bottom: 10px;" id="last">
+     {L_LAST}
+     <select name="l_last">
+<!-- BEGIN BLOCK L_LAST -->
+      <option value="{VALUE}" <!-- IF SELECTED -->selected="selected"<!-- ENDIF SELECTED -->>{NAME}</option>
+<!-- END BLOCK L_LAST -->
+     </select>
+     <select name="l_type">
+<!-- BEGIN BLOCK L_TYPE -->
+      <option value="{VALUE}" <!-- IF SELECTED -->selected="selected"<!-- ENDIF SELECTED -->>{NAME}</option>
+<!-- END BLOCK L_TYPE -->
+     </select>
+     <input type="submit" value="{L_OK}" onClick="submit_with_anchor('last');" />
+    </div>
+    <table cellpadding="0" cellspacing="1" border="0" style="border-collapse: separate; border: 1px solid #000000">
+<!-- IF SHOW_LAST_YEARS -->
+     <tr class="row3">
+      <td>{L_YEAR}</td>
+      <td style="width: 200px;"></td>
+      <td>{L_PERCENTAGE}</td>
+      <td>{L_VISITORS}</td>
+      <td>{L_PAGE_VIEWS}</td>
+     </tr>
+<!-- BEGIN BLOCK LAST_YEARS -->
+     <tr class="row{ROW_CLASS_No.}" title="{YEAR_LONG}: {VISITORS_LONG}, {PAGE_VIEWS_LONG}">
+      <td><!-- {YEAR_SHORT} -->{YEAR_LONG}</td>
+      <td style="width: 200px; padding: 0px;"><div class="bar_access_stats_{BAR_No.}" style="width: {GRAPH_PERCENTAGE}%;"></div></td>
+      <td>{PERCENTAGE}%</td>
+      <td><span class="number_{VISITORS_FONT_CLASS}">{VISITORS}</span></td>
+      <td><span class="number_{PAGE_VIEWS_FONT_CLASS}">{PAGE_VIEWS}</span></td>
+     </tr>
+<!-- END BLOCK LAST_YEARS -->
+<!-- ENDIF SHOW_LAST_YEARS -->
+<!-- IF SHOW_LAST_28_DAYS -->
+     <tr class="row3">
+      <td>{L_DAY}</td>
+      <td style="width: 200px;"></td>
+      <td>{L_PERCENTAGE}</td>
+      <td>{L_VISITORS}</td>
+      <td>{L_PAGE_VIEWS}</td>
+     </tr>
+<!-- BEGIN BLOCK LAST_28_DAYS -->
+     <tr class="row{ROW_CLASS_No.}" title="{DAY_LONG}: {VISITORS_LONG}, {PAGE_VIEWS_LONG}">
+      <td>{DAY_SHORT}</td>
+      <td style="width: 200px; padding: 0px;"><div class="bar_access_stats_{BAR_No.}" style="width: {GRAPH_PERCENTAGE}%;"></div></td>
+      <td>{PERCENTAGE}%</td>
+      <td><span class="number_{VISITORS_FONT_CLASS}">{VISITORS}</span></td>
+      <td><span class="number_{PAGE_VIEWS_FONT_CLASS}">{PAGE_VIEWS}</span></td>
+     </tr>
+<!-- END BLOCK LAST_28_DAYS -->
+<!-- ENDIF SHOW_LAST_28_DAYS -->
+<!-- IF SHOW_LAST_12_MONTHS -->
+     <tr class="row3">
+      <td>{L_MONTH}</td>
+      <td style="width: 200px;"></td>
+      <td>{L_PERCENTAGE}</td>
+      <td>{L_VISITORS}</td>
+      <td>{L_PAGE_VIEWS}</td>
+     </tr>
+<!-- BEGIN BLOCK LAST_12_MONTHS -->
+     <tr class="row{ROW_CLASS_No.}" title="{MONTH_LONG}: {VISITORS_LONG}, {PAGE_VIEWS_LONG}">
+      <td>{MONTH_SHORT}</td>
+      <td style="width: 200px; padding: 0px;"><div class="bar_access_stats_{BAR_No.}" style="width: {GRAPH_PERCENTAGE}%;"></div></td>
+      <td>{PERCENTAGE}%</td>
+      <td><span class="number_{VISITORS_FONT_CLASS}">{VISITORS}</span></td>
+      <td><span class="number_{PAGE_VIEWS_FONT_CLASS}">{PAGE_VIEWS}</span></td>
+     </tr>
+<!-- END BLOCK LAST_12_MONTHS -->
+<!-- ENDIF SHOW_LAST_12_MONTHS -->
+    </table>
+   </div>

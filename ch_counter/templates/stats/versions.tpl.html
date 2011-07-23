@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+  <title>chCounter {V_SCRIPT_VERSION}: {L_VERSIONS_INFO}</title>
+  <link rel="stylesheet" type="text/css" href="../templates/stats/style.css" />
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="robots" content="noindex,nofollow" /> 
+ </head>
+ <body>
+<!-- the counter output. It's included invisible, but as it may print out a JavaScript, it's noted here. -->
+  {COUNTER}
+<!-- end counter -->
+  <form method="get" action="versions.php">
+   <div class="navigation_bar" style="margin-bottom: 50px; height: 25px; background-image:url(../images/bg_top_small.png); background-repeat:repeat-x;">
+    <span class="stats_title">{L_VERSIONS_INFO}</span>
+    <span style="margin-left: 30px;">{L_LANGUAGE}
+    <select name="lang">
+<!-- BEGIN BLOCK COUNTER_LANGUAGES -->
+     <option value="{VALUE}" <!-- IF SELECTED -->selected="selected"<!-- ENDIF SELECTED -->>{NAME}</option>
+<!-- END BLOCK COUNTER_LANGUAGES -->
+    </select>
+    <input type="submit" value="{L_OK}" />
+    </span>
+   </div>
+   <div class="center">
+    {L_TIME_FRAME}
+    <select name="month">
+<!-- BEGIN BLOCK MONTH -->
+     <option value="{VALUE}" <!-- IF SELECTED -->selected="selected"<!-- ENDIF SELECTED -->> {NAME}</option>
+<!-- END BLOCK MONTH -->
+    </select>
+    <input type="submit" value="{L_OK}" /><br />
+    <br />
+    <br />
+    {L_SHOW}
+    <select name="type">
+<!-- IF BLOCK OPTIONS_BROWSERS -->
+     <optgroup label="{L_BROWSERS}">
+<!-- ENDIF BLOCK OPTIONS_BROWSERS -->
+<!-- BEGIN BLOCK OPTIONS_BROWSERS -->
+      <option value="{VALUE}" <!-- IF SELECTED -->selected="selected"<!-- ENDIF SELECTED -->>{NAME}</option>
+<!-- END BLOCK OPTIONS_BROWSERS -->
+<!-- IF BLOCK OPTIONS_BROWSERS -->
+     </optgroup>
+<!-- ENDIF BLOCK OPTIONS_BROWSERS -->
+<!-- IF BLOCK OPTIONS_OSes -->
+     <optgroup label="{L_OSes}">
+<!-- ENDIF BLOCK OPTIONS_OSes -->
+<!-- BEGIN BLOCK OPTIONS_OSes -->
+      <option value="{VALUE}" <!-- IF SELECTED -->selected="selected"<!-- ENDIF SELECTED -->>{NAME}</option>
+<!-- END BLOCK OPTIONS_OSes -->
+<!-- IF BLOCK OPTIONS_OSes -->
+     </optgroup>
+<!-- ENDIF BLOCK OPTIONS_OSes -->
+<!-- IF BLOCK OPTIONS_ROBOTS -->
+     <optgroup label="{L_ROBOTS}">
+<!-- ENDIF BLOCK OPTIONS_ROBOTS -->
+<!-- BEGIN BLOCK OPTIONS_ROBOTS -->
+      <option value="{VALUE}" <!-- IF SELECTED -->selected="selected"<!-- ENDIF SELECTED -->>{NAME}</option>
+<!-- END BLOCK OPTIONS_ROBOTS -->
+<!-- IF BLOCK OPTIONS_ROBOTS -->
+     </optgroup>
+<!-- ENDIF BLOCK OPTIONS_ROBOTS -->
+    </select>
+    <input type="submit" value="{L_OK}" />
+    <br />
+    <br />
+    <table cellpadding="0" cellspacing="1" border="0">
+     <tr class="row3">
+      <td>{L_No.}</td>
+      <td>{L_VERSION}</td>
+      <td style="text-align:right">{L_QUANTITY}</td>
+      <td style="text-align:right">{L_PERCENTAGE}</td>
+      <td><div style="width: 40px;">&nbsp;</div></td>
+     </tr>
+<!-- BEGIN BLOCK VERSIONS -->
+     <tr class="row{ROW_CLASS_NR}">
+      <td>{No.}</td>
+      <td>{VERSION}</td>
+      <td style="text-align:right">{QUANTITY}</td>
+      <td style="text-align:right">{PERCENTAGE}%</td>
+      <td><div class="bar_common_1" style="width: {GRAPH_PERCENTAGE}%;" title="{VERSION}: {PERCENTAGE}%"></div> </td>
+     </tr>
+<!-- END BLOCK VERSIONS -->
+<!-- IF BLOCK VERSIONS -->
+     <tr class="row4">
+      <td>&nbsp;</td>
+      <td><b>{L_TOTAL:} {V_TOTAL_VERSIONS}</b></td>
+      <td style="text-align:right">{V_TOTAL_QUANTITY}</td>
+      <td style="text-align:right">100%</td>
+      <td>&nbsp;</td>
+     </tr>
+<!-- ELSEIF !(BLOCK VERSIONS) -->
+     <tr class="row1">
+      <td colspan="5" style="text-align:center">{L_NO_ENTRY_IN_DATABASE}</td>
+     </tr>
+<!-- ENDIF BLOCK VERSIONS -->
+    </table>
+    <br />
+    <br />
+    <br />
+    <span style="font-size:7pt;"><a href="javascript:window.close()">{L_CLOSE_WINDOW}</a> | <a href="http://chcounter.org/" target="_blank">chCounter {V_SCRIPT_VERSION}</a></span>
+   </div>
+  </form>
+ </body>
+</html>

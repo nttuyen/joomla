@@ -1,0 +1,97 @@
+   <div class="center">
+    <div class="stats_title" style="margin-bottom: 15px;" id="downloads">{L_TOP_DOWNLOADS}</div>
+    <div style="text-align: center">
+     <select name="d_month">
+<!-- BEGIN BLOCK D_MONTHS -->
+      <option value="{VALUE}" <!-- IF SELECTED -->selected="selected"<!-- ENDIF SELECTED -->> {NAME}</option>
+<!-- END BLOCK D_MONTHS -->
+     </select>
+     <input type="submit" value="{L_OK}" onClick="submit_with_anchor('downloads');" />
+    </div>
+    <br />
+    <table class="table_stats" style="width: 500px" cellpadding="0" cellspacing="1">
+     <tr class="row3">
+      <td>{L_No.}</td>
+      <td>{L_DOWNLOAD}</td>
+      <td style="text-align:right">{L_QUANTITY}</td>
+      <td style="text-align:right">{L_PERCENTAGE}</td>
+      <td><div style="width: 100px;">&nbsp;</div></td>
+     </tr>
+<!-- BEGIN BLOCK DOWNLOADS -->
+     <tr class="row{ROW_CLASS_NR}">
+      <td>{No.}</td>
+      <td><a href="{DOWNLOAD_URL}" target="_blank">{DOWNLOAD_NAME}</a></td>
+      <td style="text-align:right">{QUANTITY}</td>
+      <td style="text-align:right">{PERCENTAGE}%</td>
+      <td><div class="bar_common_{BAR_No.}" style="width: {GRAPH_PERCENTAGE}%;" title="{PERCENTAGE}%"></div></td>
+     </tr>
+<!-- END BLOCK DOWNLOADS -->
+<!-- IF BLOCK DOWNLOADS -->
+     <tr class="row4">
+      <td>&nbsp;</td>
+      <td><b>{L_TOTAL:} {V_TOTAL_DOWNLOAD_FILES}</b></td>
+      <td style="text-align:right">{V_TOTAL_DOWNLOADS}</td>
+      <td style="text-align:right">100%</td>
+      <td>&nbsp;</td>
+     </tr>
+     <tr style="border: 0px;">
+      <td colspan="5" style="text-align:center">
+       <br />
+       <a href="index.php?cat=downloads_and_hyperlinks&amp;list_all=downloads&amp;month={D_MONTH}"><img src="../images/all_entries_{V_LANG_CODE}.png" alt="{L_SHOW_ALL_ENTRIES}" title="{L_SHOW_ALL_ENTRIES}" /></a>
+      </td>
+     </tr>
+<!-- ELSEIF !(BLOCK DOWNLOADS) -->
+     <tr class="row1">
+      <td colspan="5" style="text-align:center">{L_NO_ENTRY_IN_DATABASE}</td>
+     </tr>
+<!-- ENDIF BLOCK DOWNLOADS -->
+    </table>
+    <div class="stats_spacer"></div>
+    <div class="stats_title" style="margin-bottom: 15px;" id="hyperlinks">{L_TOP_HYPERLINKS}</div>
+    <div style="text-align: center">
+     <select name="h_month">
+<!-- BEGIN BLOCK H_MONTHS -->
+      <option value="{VALUE}" <!-- IF SELECTED -->selected="selected"<!-- ENDIF SELECTED -->> {NAME}</option>
+<!-- END BLOCK H_MONTHS -->
+     </select>
+     <input type="submit" value="{L_OK}" onClick="submit_with_anchor('hyperlinks');" />
+    </div>
+    <br />
+    <table class="table_stats" style="width: 500px" cellpadding="0" cellspacing="1">
+     <tr class="row3">
+      <td>{L_No.}</td>
+      <td>{L_HYPERLINK}</td>
+      <td style="text-align:right">{L_QUANTITY}</td>
+      <td style="text-align:right">{L_PERCENTAGE}</td>
+      <td><div style="width: 100px;">&nbsp;</div></td>
+     </tr>
+<!-- BEGIN BLOCK HYPERLINKS -->
+     <tr class="row{ROW_CLASS_NR}">
+      <td>{No.}</td>
+      <td><a href="{LINK_URL}" target="_blank">{LINK_NAME}</a></td>
+      <td style="text-align:right">{QUANTITY}</td>
+      <td style="text-align:right">{PERCENTAGE}%</td>
+      <td><div class="bar_common_{BAR_No.}" style="width: {GRAPH_PERCENTAGE}%;" title="{PERCENTAGE}%"></div></td>
+     </tr>
+<!-- END BLOCK HYPERLINKS -->
+<!-- IF BLOCK HYPERLINKS -->
+     <tr class="row4">
+      <td>&nbsp;</td>
+      <td><b>{L_TOTAL:} {V_TOTAL_LINKS}</b></td>
+      <td style="text-align:right">{V_TOTAL_REFERRED_VISITORS}</td>
+      <td style="text-align:right">100%</td>
+      <td>&nbsp;</td>
+     </tr>
+     <tr style="border: 0px;">
+      <td colspan="5" style="text-align:center">
+       <br />
+       <a href="index.php?cat=downloads_and_hyperlinks&amp;list_all=hyperlinks&amp;month={H_MONTH}"><img src="../images/all_entries_{V_LANG_CODE}.png" alt="{L_SHOW_ALL_ENTRIES}" title="{L_SHOW_ALL_ENTRIES}" /></a>
+      </td>
+     </tr>
+<!-- ELSEIF !(BLOCK HYPERLINKS) -->
+     <tr class="row1">
+      <td colspan="5" style="text-align:center">{L_NO_ENTRY_IN_DATABASE}</td>
+     </tr>
+<!-- ENDIF BLOCK HYPERLINKS -->
+    </table>
+   </div>

@@ -1,0 +1,38 @@
+#pagewrap{
+	background:#A50312;
+	padding:20px 0;
+}
+#wrapper{
+	width:800px;
+	margin:0 auto;
+}
+.header{
+	background:url(../images/header-bg.png) 0 0 no-repeat;
+	height:88px;
+	border-bottom:solid 2px #6d010c;
+}
+#leftcol{
+	overflow:hidden;
+	clear:both;
+	background:url(../images/leftcol-bg.png) 0 0 repeat-y;
+	width:799px;
+}
+.menu{
+	width:230px;
+	float:left;
+}
+div.menu ul#blogmenu {
+	padding:0;
+}
+div.menu ul#blogmenu li {
+	background:url(../images/bullet.png) 3px 0 no-repeat;
+	padding-left:25px;
+}
+div.menu ul#blogmenu li a{
+	color:#fff;
+}
+.content{
+	width:545px;
+	float:right;
+	padding:10px;
+}

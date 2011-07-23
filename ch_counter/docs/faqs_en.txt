@@ -1,0 +1,45 @@
+ FAQs - Frequently Asked Questions
+=======================
+
+
+- I installed the chCounter, but it does not count every page!
+--------------------------------------------------------------------
+The counter must be integrated into every file that you want to be
+counted. Only if the counter is included, the script will
+be executed when someone request the respective file - and the
+visitor thus counted.
+
+
+
+- I noted the PHP code within a file, but the counter does not work,
+  and only the PHP code is displayed in the source code!
+--------------------------------------------------------------------
+Please see file install_en.txt, chapter 3.2: integration with PHP
+
+
+
+- Neither referrers nor search engines and keywords are displayed!
+--------------------------------------------------------------------
+a) If you use frames:
+Include the counter as well into the file with the frameset. If the
+counter is only included into a frame, the referrer will always be your
+one page with the frameset and not the foreign page anymore.
+b) see FAQ "The counter doesn't count, there is always only one visitor
+online, ...!"
+
+
+
+- The counter doesn't count, there is always only one visitor online,
+   only page views are counted, ...!
+--------------------------------------------------------------------
+Probably you include the counter using the complete HTTP address, e.g.
+include("http://www.homepage.tld/counter/counter.php");
+-> the counter must be included via the file system of the web server.
+
+
+
+- I have lost my user name/password and cannot login anymore!
+--------------------------------------------------------------------
+With the script set_new_login_data.php (in the "install" directory,
+must be executed within that directory) you can set a new user name and
+a new password.

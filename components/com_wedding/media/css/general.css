@@ -1,0 +1,89 @@
+table.list-table
+{
+	border-collapse:collapse;
+	width:100%;
+}
+table.list-table thead th
+{
+	border:1px solid #CCCCCC;
+	background-color:#666;
+	color:#FFF;
+	padding:3px 7px 2px;
+	text-align:center;
+}
+table.list-table td
+{
+	border:1px solid #CCC;
+	padding:3px 7px 2px;
+}
+table.list-table tbody tr.row1 td
+{
+	background-color:#EEEEEE;
+}
+table.list-table tfoot tr td
+{
+	background-color:#DDDDDD;
+}
+table.list-table tbody tr:hover td, table.list-table tbody tr.row1:hover td
+{
+	background-color:#F6F6F6;
+}
+input.order
+{
+	margin:0;
+	padding:0;
+	text-align:center;
+}
+select.inputbox,input.inputbox
+{
+	border:1px solid #CCC;
+}
+select.inputbox:focus,input.inputbox:focus
+{
+	border:1px solid #000;
+	background:#FDFDCC;
+}
+.center
+{
+	text-align:center;
+}
+fieldset.list-fieldset
+{
+	border:1px solid #CCC;
+	padding:10px;
+}
+fieldset.list-fieldset legend
+{
+	font-size:11px;
+}
+fieldset.list-fieldset table
+{
+	/*width:100%;*/
+}
+fieldset.list-fieldset table,fieldset.list-fieldset table tr,fieldset.list-fieldset table td
+{
+	border:0;
+}
+fieldset.list-fieldset table td
+{
+	padding:4px;
+}
+fieldset.list-fieldset table td.key
+{
+	color:#000;
+}
+div.col2
+{
+	float:left;
+	width:320px;
+	margin-bottom:20px;
+}
+div.col2 div
+{
+	text-align:center;
+}
+div.col2 div.title
+{
+	font-weight:bold;
+	padding:4px;	
+}

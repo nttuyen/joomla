@@ -1,0 +1,52 @@
+Update of an older, installed chCounter version
+===============================
+
+
+
+Update from 3.1.x
+----------------------
+1. Overwrite first all files and directories (and all the files within the directories).
+2. Open then the file install/update.php with your web browser and follow the instructions. 
+3. Delete the "install" directory.
+
+
+Update from 3.0.x
+-----------------------------------
+1. Overwrite all files and fill out the file config.inc.php again.
+3. Open the file install/update.php online with your web browser
+    and follow the instructions.
+3. Delete the "install" directory.
+
+
+
+
+Upgrade from 2.3.0
+-----------------------
+1. Backup the file config.inc.php of the old counter version.
+2. Open the file includes/config.inc.php of the new counter version,
+    enter the login data for the database and save the file.
+3. Delete all old files and directories, upload the files of the new
+    version to the same directory.
+4. Rename the config.inc.php file of version 2.3.0 to
+    "old_config.inc.php" and upload it to the "install" directory.
+6. Open the file upgrade_230_to_300.php.
+7. If necessary, update now the counter script from 3.0.0 to the latest
+    version via the file update.php
+8. Delete the "install" directory.
+9. If you have included the counter via JavaScript, you must use the
+    new code of 3.0.x that you can obtain in the administration area.
+
+Notice: Unfortunately the log data, browsers/operating systems,
+access statistics (except the weekday and daily distribution) and
+countries cannot be imported. However, the browsers/robots/operating
+systems may be recovered using the script
+install/reanalyse_user_agents.php
+
+
+
+Upgrade from versions < 2.3.0
+------------------------------------
+1. Download the chCounter version 2.3.0
+   (http://chcounter.org/index.php?s=dateien) and update your counter
+   installation to 2.3.0.
+2. Now perform the upgrade from 2.3.0 to 3.0.0 as it is described above.

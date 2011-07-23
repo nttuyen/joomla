@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension
+	type="module"
+	version="1.6.0"
+	client="site"
+	method="upgrade">
+	<name>mod_bloggers</name>
+	<author>Phạm Văn An</author>
+	<creationDate>September 2010</creationDate>
+	<copyright>Copyright (C) hanhphuc.vn. All rights reserved.</copyright>
+	<license>GNU General Public License version 2 or later</license>
+	<authorEmail>anpv@xipat.com</authorEmail>
+	<authorUrl>www.vietwebs.net</authorUrl>
+	<version>1.0</version>
+	<description>MOD_BLOGGERS_XML_DESCRIPTION</description>
+	<files>
+		<filename
+			module="mod_bloggers">mod_bloggers.php</filename>
+		<folder>tmpl</folder>
+		<filename>helpers.php</filename>
+		<filename>index.html</filename>
+		<filename>mod_bloggers.xml</filename>
+	</files>
+</extension>

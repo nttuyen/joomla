@@ -1,0 +1,252 @@
+   <div class="center">
+    <a href="{V_URL_BACK}" style="text-decoration: none;">{L_GO_BACK_TO_CAT}</a><br />
+    <br />
+    <br />
+    <br />
+    <div class="stats_title" style="margin-bottom: 15px;">{L_LIST_ALL:} {V_TYPE_PLURAL}</div>
+<!-- IF V_START_DATE_STATISTIC -->
+    <div class="stats_start">{V_START_DATE_STATISTIC}</div>
+<!-- ENDIF V_START_DATE_STATISTIC -->
+    {L_SORT:}
+    <input type="hidden" name="list_all" value="{V_LIST_ALL}" />
+    <select name="sort_by">
+<!-- BEGIN BLOCK SORT_BY -->
+     <option value="{VALUE}" <!-- IF SELECTED -->selected="selected"<!-- ENDIF SELECTED -->>{NAME}</option>
+<!-- END BLOCK SORT_BY -->
+    </select>
+    <select name="sort_order">
+<!-- BEGIN BLOCK SORT_ORDER -->
+     <option value="{VALUE}" <!-- IF SELECTED -->selected="selected"<!-- ENDIF SELECTED -->>{NAME}</option>
+<!-- END BLOCK SORT_ORDER -->
+    </select>
+<!-- IF BLOCK SELECT_LIST_MONTHS -->
+    <select name="month">
+<!-- BEGIN BLOCK SELECT_LIST_MONTHS -->
+     <option value="{VALUE}" <!-- IF SELECTED -->selected="selected"<!-- ENDIF SELECTED -->>{NAME}</option>
+<!-- END BLOCK SELECT_LIST_MONTHS -->
+    </select>
+<!-- ENDIF BLOCK SELECT_LIST_MONTHS -->
+    <input type="submit" value="{L_OK}" /><br />
+    <br />
+    <br />
+    <table class="table_stats" style="width: 500px;" cellpadding="0" cellspacing="1">
+     <tr class="row3">
+      <td>{L_No.}</td>
+      <td colspan="2">{V_TYPE_PLURAL}</td>
+      <td style="text-align:right">{L_QUANTITY}</td>
+      <td style="text-align:right">{L_PERCENTAGE}</td>
+      <td style="text-align:right">{L_LAST}</td>
+     </tr>
+
+
+<!-- BEGIN BLOCK BROWSERS -->
+     <tr class="row{ROW_CLASS_NR}">
+      <td>{No.}</td>
+      <td style="width: 14px;"><img src="../images/browsers/{IMG}" alt="" title="{BROWSER}" /></td>
+      <td>
+<!-- IF VERSIONS -->
+       <a href="versions.php?type={VERSIONS}&amp;month={MONTH}" onclick="window.open('versions.php?type={VERSIONS}&amp;month={MONTH}','versions','width=540,height=400,screenX=0,screenY=0,resizable=yes,scrollbars=yes'); return false;" target="versions">{BROWSER}</a>
+<!-- ELSEIF !(VERSIONS) -->
+       {BROWSER}
+<!-- ENDIF VERSIONS -->
+      </td>
+      <td style="text-align:right">{QUANTITY}</td>
+      <td style="text-align:right">{PERCENTAGE}%</td>
+      <td style="text-align:right">{LAST_ACTIVITY}</td>
+     </tr>
+<!-- END BLOCK BROWSERS -->
+
+<!-- BEGIN BLOCK OS -->
+     <tr class="row{ROW_CLASS_NR}">
+      <td>{No.}</td>
+      <td style="width: 14px;"><img src="../images/os/{IMG}" alt="" title="{OS}" /></td>
+      <td>
+<!-- IF VERSIONS -->
+       <a href="versions.php?type={VERSIONS}&amp;month={MONTH}" onclick="window.open('versions.php?type={VERSIONS}&amp;month={MONTH}','versions','width=540,height=400,screenX=0,screenY=0,resizable=yes,scrollbars=yes'); return false;" target="versions">{OS}</a>
+<!-- ELSEIF !(VERSIONS) -->
+       {OS}
+<!-- ENDIF VERSIONS -->
+      </td>
+      <td style="text-align:right">{QUANTITY}</td>
+      <td style="text-align:right">{PERCENTAGE}%</td>
+      <td style="text-align:right">{LAST_ACTIVITY}</td>
+     </tr>
+<!-- END BLOCK OS -->
+
+<!-- BEGIN BLOCK ROBOTS -->
+     <tr class="row{ROW_CLASS_NR}">
+      <td>{No.}</td>
+      <td style="width: 14px;"><img src="../images/robots/{IMG}" alt="" title="{ROBOT}" /></td>
+      <td>
+<!-- IF VERSIONS -->
+       <a href="versions.php?type={VERSIONS}&amp;month={MONTH}" onclick="window.open('versions.php?type={VERSIONS}&amp;month={MONTH}','versions','width=540,height=400,screenX=0,screenY=0,resizable=yes,scrollbars=yes'); return false;" target="versions">{ROBOT}</a>
+<!-- ELSEIF !(VERSIONS) -->
+       {ROBOT}
+<!-- ENDIF VERSIONS -->
+      </td>
+      <td style="text-align:right">{QUANTITY}</td>
+      <td style="text-align:right">{PERCENTAGE}%</td>
+      <td style="text-align:right">{LAST_ACTIVITY}</td>
+     </tr>
+<!-- END BLOCK ROBOTS -->
+
+<!-- BEGIN BLOCK USER_AGENTS -->
+     <tr class="row{ROW_CLASS_NR}">
+      <td>{No.}</td>
+      <td colspan="2">{USER_AGENT}</td>
+      <td style="text-align:right">{QUANTITY}</td>
+      <td style="text-align:right">{PERCENTAGE}%</td>
+      <td style="text-align:right">{LAST_ACTIVITY}</td>
+     </tr>
+<!-- END BLOCK USER_AGENTS -->
+
+<!-- BEGIN BLOCK SCREEN_RESOLUTIONS -->
+     <tr class="row{ROW_CLASS_NR}">
+      <td>{No.}</td>
+      <td colspan="2">{SCREEN_RESOLUTION}</td>
+      <td style="text-align:right">{QUANTITY}</td>
+      <td style="text-align:right">{PERCENTAGE}%</td>
+      <td style="text-align:right">{LAST_ACTIVITY}</td>
+     </tr>
+<!-- END BLOCK SCREEN_RESOLUTIONS -->
+
+<!-- BEGIN BLOCK REFERRERS -->
+     <tr class="row{ROW_CLASS_NR}">
+      <td>{No.}</td>
+      <td colspan="2">
+<!-- IF LINK_URLs -->
+      <a href="{URL}" target="_blank" rel="nofollow">{REFERRER}</a>
+<!-- ELSEIF !(LINK_URLs) -->
+      {REFERRER}
+<!-- ENDIF LINK_URLs -->
+      </td>
+      <td style="text-align:right">{QUANTITY}</td>
+      <td style="text-align:right">{PERCENTAGE}%</td>
+      <td style="text-align:right">{LAST_ACTIVITY}</td>
+     </tr>
+<!-- END BLOCK REFERRERS -->
+
+<!-- BEGIN BLOCK REFERRING_DOMAINS -->
+     <tr class="row{ROW_CLASS_NR}">
+      <td>{No.}</td>
+      <td colspan="2">
+<!-- IF LINK_URLs -->
+      <a href="{URL}" target="_blank" rel="nofollow">{REFERRING_DOMAIN}</a>
+<!-- ELSEIF !(LINK_URLs) -->
+      {REFERRING_DOMAIN}
+<!-- ENDIF LINK_URLs -->
+      </td>
+      <td style="text-align:right">{QUANTITY}</td>
+      <td style="text-align:right">{PERCENTAGE}%</td>
+      <td style="text-align:right">{LAST_ACTIVITY}</td>
+     </tr>
+<!-- END BLOCK REFERRING_DOMAINS -->
+
+<!-- BEGIN BLOCK KEYWORDS -->
+     <tr class="row{ROW_CLASS_NR}">
+      <td>{No.}</td>
+      <td colspan="2">{KEYWORD}</td>
+      <td style="text-align:right">{QUANTITY}</td>
+      <td style="text-align:right">{PERCENTAGE}%</td>
+      <td style="text-align:right">{LAST_ACTIVITY}</td>
+     </tr>
+<!-- END BLOCK KEYWORDS -->
+
+<!-- BEGIN BLOCK SEARCH_PHRASES -->
+     <tr class="row{ROW_CLASS_NR}">
+      <td>{No.}</td>
+      <td colspan="2">{SEARCH_PHRASE}</td>
+      <td style="text-align:right">{QUANTITY}</td>
+      <td style="text-align:right">{PERCENTAGE}%</td>
+      <td style="text-align:right">{LAST_ACTIVITY}</td>
+     </tr>
+<!-- END BLOCK SEARCH_PHRASES -->
+
+<!-- BEGIN BLOCK SEARCH_ENGINES -->
+     <tr class="row{ROW_CLASS_NR}">
+      <td>{No.}</td>
+      <td style="width: 14px;"><img src="../images/search_engines/{IMG}" alt="" title="{SEARCH_ENGINE}" /></td>
+      <td>{SEARCH_ENGINE}</td>
+      <td style="text-align:right">{QUANTITY}</td>
+      <td style="text-align:right">{PERCENTAGE}%</td>
+      <td style="text-align:right">{LAST_ACTIVITY}</td>
+     </tr>
+<!-- END BLOCK SEARCH_ENGINES -->
+
+<!-- BEGIN BLOCK COUNTRIES -->
+     <tr class="row{ROW_CLASS_NR}">
+      <td>{No.}</td>
+      <td style="width: 20px;"><img src="../images/flags/{IMG}" alt="" title="{COUNTRY}" /></td>
+      <td>{COUNTRY}</td>
+      <td style="text-align:right">{QUANTITY}</td>
+      <td style="text-align:right">{PERCENTAGE}%</td>
+      <td style="text-align:right">{LAST_ACTIVITY}</td>
+     </tr>
+<!-- END BLOCK COUNTRIES -->
+
+<!-- BEGIN BLOCK LANGUAGES -->
+     <tr class="row{ROW_CLASS_NR}">
+      <td>{No.}</td>
+      <td colspan="2">{LANGUAGE}</td>
+      <td style="text-align:right">{QUANTITY}</td>
+      <td style="text-align:right">{PERCENTAGE}%</td>
+      <td style="text-align:right">{LAST_ACTIVITY}</td>
+     </tr>
+<!-- END BLOCK LANGUAGES -->
+
+<!-- BEGIN BLOCK HOSTS -->
+     <tr class="row{ROW_CLASS_NR}">
+      <td>{No.}</td>
+      <td style="width: 20px;"><img src="../images/flags/{IMG}" alt="" title="{HOST}" /></td>
+      <td>{HOST}</td>
+      <td style="text-align:right">{QUANTITY}</td>
+      <td style="text-align:right">{PERCENTAGE}%</td>
+      <td style="text-align:right">{LAST_ACTIVITY}</td>
+     </tr>
+<!-- END BLOCK HOSTS -->
+
+<!-- BEGIN BLOCK PAGES -->
+     <tr class="row{ROW_CLASS_NR}">
+      <td>{No.}</td>
+      <td colspan="2"><!-- IF URL --><a href="{URL}" target="_blank" >{PAGE}</a><!-- ELSEIF !(URL) -->{PAGE}<!-- ENDIF URL --></td>
+      <td style="text-align:right">{QUANTITY}</td>
+      <td style="text-align:right">{PERCENTAGE}%</td>
+      <td style="text-align:right">{LAST_ACTIVITY}</td>
+     </tr>
+<!-- END BLOCK PAGES -->
+
+<!-- BEGIN BLOCK DOWNLOADS -->
+     <tr class="row{ROW_CLASS_NR}">
+      <td>{No.}</td>
+      <td colspan="2"><a href="{DOWNLOAD_URL}" target="_blank" >{DOWNLOAD_NAME}</a></td>
+      <td style="text-align:right">{QUANTITY}</td>
+      <td style="text-align:right">{PERCENTAGE}%</td>
+      <td style="text-align:right">{LAST_ACTIVITY}</td>
+     </tr>
+<!-- END BLOCK DOWNLOADS -->
+
+<!-- BEGIN BLOCK HYPERLINKS -->
+     <tr class="row{ROW_CLASS_NR}">
+      <td>{No.}</td>
+      <td colspan="2"><a href="{LINK_URL}" target="_blank" >{LINK_NAME}</a></td>
+      <td style="text-align:right">{QUANTITY}</td>
+      <td style="text-align:right">{PERCENTAGE}%</td>
+      <td style="text-align:right">{LAST_ACTIVITY}</td>
+     </tr>
+<!-- END BLOCK HYPERLINKS -->
+
+<!-- IF ENTRIES_AVAILABLE -->
+     <tr class="row4">
+      <td>&nbsp;</td>
+      <td colspan="2"><b>{L_TOTAL:} {V_TOTAL_INCIDENTS}</b></td>
+      <td style="text-align:right">{V_TOTAL_QUANTITY}</td>
+      <td style="text-align:right">100%</td>
+      <td>&nbsp;</td>
+     </tr>
+<!-- ELSEIF !(ENTRIES_AVAILABLE) -->
+     <tr class="row1">
+      <td colspan="6" style="text-align:center">{L_NO_ENTRY_IN_DATABASE}</td>
+     </tr>
+<!-- ENDIF ENTRIES_AVAILABLE -->
+    </table>
+   </div>

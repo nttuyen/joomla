@@ -1,0 +1,275 @@
+Summary:
+
+	1. System requirements
+
+	2. Installation
+		2.1 Configuration file & upload
+		2.2 installation routine
+
+	3. Counter integration
+		3.1 General notes
+		3.2 Integration via PHP
+			3.2.1 Visibility
+			3.2.2 Status (active/inactive)
+			3.2.3 Page title
+			3.2.4 Individual template
+			3.2.5 Use existent database connection / force new connection
+			3.2.6 Example
+		3.3 PHP code within .html files
+		3.4 Integration via JavaScript
+
+
+
+
+
+1. System requirements
+==================
+The chCounter requires a web space with
+- PHP version 4.2.0 or higher
+- a MySQL database
+
+
+
+
+
+
+2. Installation
+==================
+
+
+2.1: Configuration file & upload
+--------------------------------
+Open first the file "includes/config.inc.php" and enter the login
+information for the MySQL database.
+Furthermore you can change the prefix for the database tables that will
+be created - if multiple chCounter installations shall use the same
+database, each installation must have its own prefix (so that the
+names of the tables do not overlap).
+Please safe after having filled out the file "config.inc.php" and
+upload then all directories and files of the chCounter to your web
+space.
+
+
+2.2: Installation routine
+--------------------------------
+Open the installation file "install.php", located in the directory
+"install" on your web space with your web browser and follow the
+instructions.
+
+After the successful completion of this installation routine the counter
+is installed. Now you can go to the online administration area
+("path_to_counter/administration") and customize the counter settings.
+
+IMPORTANT:
+It is essential to delete the directory "install" directly after the
+completion of the online administration for reasons of safety!
+
+
+
+
+
+
+
+
+
+3. Counter integration
+==============
+
+
+3.1: General notes
+============
+Each chCounter installation can only count one single homepage - its
+URL is changeable in the administration area.
+
+The counter hast to be included into every file that should be counted.
+Only if the counter is included into a file, the script is executed
+when the file is requested and the visitor thus counted.
+
+There are two different possibilities to integrate the chCounter into a
+file: using a PHP- or a JavaScript code. Whenever possible, the counter
+should be included with PHP - JavaScript should be only used as a
+makeshift.
+
+
+
+3.2: Integration with PHP
+================
+ATTENTION: In order that PHP code is executed, the file must have the
+extension ".php". ".html" files can be renamed to ".php" without any
+problem - the content is not touched.
+There is a solution to execute PHP code as well within files without
+a ".php" extension - see chapter 3.3 for information.
+
+The required PHP code to integrate the counter can be quickly and easily
+generated within the administration area in section "Help & Contact",
+but nevertheless, here is a small guide:
+
+The following code includes the chCounter into a file:
+
+<?php
+include( 'path_to_counter_script/counter.php' );
+?>
+
+The path to the file "counter.php" has to be customized: required is
+either a relative from the respective file (e.g.
+"chCounter/counter.php" or "../path_to_counter/counter.php", ...)
+or an absolute path (this is the better method as the absolute can be
+used everywhere, independently from the position of each file that
+should be counted).
+The administration generates the code with an absolute path.
+
+IMPORTANT: Never note an URL, but always a path within the file system
+of the web server!
+
+
+
+There are some optional configuration commands that are described now. 
+All these commands can be combined with each others - important is only
+that the "include" command is noted at last.
+
+
+3.2.1: Visibility
+------------
+The counter may be included visible or invisible. Independent from the
+default setting (see administration area -> settings -> counter ->
+settings) you can individually decide whether the counter should be
+included visible or invisible - using the variable $chCounter_visible
+within the PHP code. 0 stands for invisible, 1 for visible. If this
+variable is not used, the default setting will be used.
+Example:
+
+<?php
+$chCounter_visible = 0;
+include( 'path_to_counter/counter.php' );
+?>
+
+
+
+3.2.2: Status (active/inactive)
+------------------------------
+By request the counter can be included inactive: The counter values
+will be displayed, but the visitors of this file will not be counted.
+Example:
+
+<?php
+$chCounter_status = 'inactive';
+include( 'path_to_counter/counter.php' );
+?>
+
+If the variable $chCounter_status is not noted, the counter will be
+active be default - but if you want, you may also note
+$chCounter_status = 'active'; ;-)
+There is the possibility to receive a cookie within the administration
+which sets the counter status to inactive so that the administrator
+will not be counted - see administration -> settings -> counter ->
+settings).
+
+
+
+3.2.3: Page title
+--------------
+You can pass the title of the respective file to the counter using the
+PHP code so that the counter does not have to search for this title
+anymore. This increases the performance and may be sometimes as well
+the only chance for the counter to obtain the page title - for example
+when you create the page title dynamically using PHP.
+Example:
+
+<?php
+$chCounter_page_title = 'This is the page title - it is displayed in place of the path of the file in the statistics.';
+include('path_to_counter/counter.php');
+?>
+
+For more information see readme_en.txt.
+
+
+
+
+3.2.4: Individual template
+-------------------------
+You can specify a template which replaces the default counter
+template - example:
+
+<?php
+$chCounter_template = <<<TEMPLATE
+The template begins with this line... e.g.:
+visitors: {V_TOTAL_VISITORS}<br />
+currently online: {V_VISITORS_CURRENTLY_ONLINE}
+... and after this line the template ends
+TEMPLATE;
+include( 'path_to_counter/counter.php' );
+?>
+
+VERY IMPORTANT: If you specify an individual template, the line
+"TEMPLATE;" must never be indented or altered!
+
+
+
+
+3.2.5: Use existent database connection / force new connection
+-----------------------------------------------
+By default, chCounter always establishes a new database connection. But
+if the chCounter is included into a PHP script with an already opened DB
+connection, it can use this old connection instead of creating a new one.
+This decreases the script execution time. To enable this feature, the
+following line must be added before the include() command:
+
+$chCounter_force_new_db_connection = FALSE;
+
+
+
+
+3.2.6: Example
+------------------
+Finishing here the code to include the counter invisible, active, with
+the page title "Test page" and an own template:
+
+<?php
+$chCounter_visible = 0;
+$chCounter_page_title = 'Test page';
+$chCounter_template = <<<TEMPLATE
+visitors so far: {V_TOTAL_VISITORS}
+TEMPLATE;
+include( 'path_to_counter/counter.php' );
+?>
+
+
+
+
+
+3.3 PHP code within .html files (Apache web server)
+==================================
+
+ATTENTION: the following method works only with the Apache web server!
+
+Create a plain text file with the file name ".htaccess" and the
+following content:
+
+AddType application/x-httpd-php .html .php .htm
+
+For Windows users: If Windows refuses to create a file called
+".htaccess" (~"Please enter a file name"), open the text editor
+notepad, go to "File" > "Safe as...". There the file name ".htaccess" is
+accepted.
+
+Upload this file to your homepage root directory. Now PHP code within
+all files with the extensions ".html" and ".htm" will be executed as
+well.
+It this method does not work, your hosting company probably limits
+use of .htaccess files.
+
+
+
+
+
+
+3.4 Integration via JavaScript
+===================
+
+IMPORTANT: Whenever possible you should avoid to use JavaScript to include the
+counter. Is JavaScript used all users who JavaScript deactivated (e.g.
+for reasons of safety) cannot be counted. This concerns as well all
+robots (e.g. spiders of search engines).
+
+The JavaScript code is not described here, in the adminstration area
+("Help & Contact") you can obtain this code.

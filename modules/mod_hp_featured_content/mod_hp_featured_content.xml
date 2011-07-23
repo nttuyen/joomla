@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension
+	type="module"
+	version="1.6.0"
+	client="site"
+	method="upgrade">
+	<name>Featured Content</name>
+	<author>Ng Xuan Mui</author>
+	<creationDate>May 2010</creationDate>
+	<copyright>Copyright (C) 2005 - 2010 Open Source Matters. All rights reserved.</copyright>
+	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+	<authorEmail>nguyenxuanmui@gmail.com</authorEmail>
+	<authorUrl>www.thongtinonline.net</authorUrl>
+	<version>1.6.0</version>
+	<description>List Feature Content for Hanhphuc.vn</description>
+	<files>
+		<filename
+			module="mod_hp_featured_content">mod_hp_featured_content.php</filename>
+		<folder>tmpl</folder>
+		<filename>helper.php</filename>
+		<filename>index.php</filename>
+		<filename>mod_hp_featured_content.xml</filename>
+	</files>
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field
+					name="number_to_display"
+					type="text"
+					label="Number to display"
+					description="Number to display featured content" />
+					
+				<field
+					name="type_of_content"
+					type="radio"
+					default="featured"
+					label="Type of content"
+					description="Select type of content">
+					
+					<option value="featured">Featured (Most views)</option>
+					<option value="content_slider">Content Slider</option>
+				</field>
+			</fieldset>
+			
+			<fieldset name="only_for_content_slider">
+				<field
+					name="content_slider_article_id"
+					type="text"
+					label="Article ID"
+					description="Article will be displayed when click content slider" />
+				<field
+					name="content_slider_title"
+					type="text"
+					label="Title"
+					description="Title to display in content slider" />
+				<field
+					name="content_slider_alias"
+					type="text"
+					label="Alias"
+					description="Alias to display in URL" />
+				<field
+					name="content_slider_desc"
+					type="text"
+					label="Desc"
+					description="Description in content slider" />				
+				<field
+					name="content_slider_image_1"
+					type="media"
+					label="Image 1"
+					description="Image 1" />
+				<field
+					name="content_slider_image_2"
+					type="media"
+					label="Image 2"
+					description="Image 2" />
+				<field
+					name="content_slider_image_3"
+					type="media"
+					label="Image 3"
+					description="Image 3" />
+				<field
+					name="content_slider_image_4"
+					type="media"
+					label="Image 4"
+					description="Image 4" />
+				<field
+					name="content_slider_image_5"
+					type="media"
+					label="Image 5"
+					description="Image 5" />
+				<field
+					name="content_slider_image_6"
+					type="media"
+					label="Image 6"
+					description="Image 6" />
+				<field
+					name="content_slider_image_7"
+					type="media"
+					label="Image 7"
+					description="Image 7" />
+				<field
+					name="content_slider_image_8"
+					type="media"
+					label="Image 8"
+					description="Image 8" />
+				<field
+					name="content_slider_image_9"
+					type="media"
+					label="Image 9"
+					description="Image 9" />
+				<field
+					name="content_slider_image_10"
+					type="media"
+					label="Image 10"
+					description="Image 10" />
+			</fieldset>
+			
+			<fieldset
+				name="advanced">
+				<field
+					name="layout"
+					type="modulelayout"
+					label="JFIELD_ALT_LAYOUT_LABEL"
+					description="JFIELD_ALT_MODULE_LAYOUT_DESC" />
+				<field
+					name="moduleclass_sfx"
+					type="text"
+					label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL"
+					description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC" />
+				<field
+					name="cache"
+					type="list"
+					default="0"
+					label="COM_MODULES_FIELD_CACHING_LABEL"
+					description="COM_MODULES_FIELD_CACHING_DESC">
+					<option
+						value="0">COM_MODULES_FIELD_VALUE_NOCACHING</option>
+				</field>
+			</fieldset>
+		</fields>
+	</config>
+</extension>
+

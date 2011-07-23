@@ -1,0 +1,55 @@
+Aktualisierung einer älteren installierten chCounter-Version
+=======================================
+
+
+
+Update von 3.1.x
+---------------------
+1. Zunächst alle Dateien und Verzeichnisse (und alle darin befindlichen Dateien) überschreiben.
+2. Danach die Datei install/update.php auf dem Webspace aufrufen und den Anweisungen folgen.
+3. Lösche das Verzeichnis "install".
+
+
+
+Update von 3.0.x
+------------------------------------
+1. Überschreibe alle Dateien und fülle die Datei config.inc.php neu
+    aus.
+2. Rufe die Datei install/update.php online mit deinem Webbrowser auf
+    und folge den Anweisungen.
+3. Lösche das Verzeichnis "install".
+
+
+
+
+Upgrade von 2.3.0
+-----------------------
+1. Sichere die ausgefüllte Datei config.inc.php der alten Version.
+2. Fülle die Datei includes/config.inc.php der neuen Version aus.
+3. Lösche alle alten Dateien des chCounters und lade die neuen Dateien
+    in das alte Counterverzeichnis hoch.
+4. Benenne die Datei config.inc.php der Version 2.3.0 um in
+    "old_config.inc.php" und lade sie in das "install"-Verzeichnis
+    hoch.
+6. Rufe die Datei upgrade_230_to_300.php auf.
+7. Wenn nötig, aktualisiere nun noch den Counter von 3.0.0 auf die
+    aktuellste Version mittels der Datei update.php.
+8. Lösche das Verzeichnis "install".
+9. Hast du den Counter mit JavaScript eingebunden, musst du dir den
+    JavaScript-Code auf jeden Fall erneut in der Administration ausgeben
+    lassen.
+
+Hinweis: Die Logdaten, Browser/Betriebsysteme, Zugriffsstatistiken
+(abgesehen von Wochentagen/Tageszeit) und Länder können leider nicht
+übernommen werden. Browser/Robots/Betriebssysteme können jedoch mit dem
+Script install/reanalyse_user_agents.php wieder hergestellt werden.
+
+
+
+Upgrade von Versionen < 2.3.0
+-------------------------------------
+1. Lade die Version 2.3.0 herunter
+   (http://chcounter.org/index.php?s=dateien) und update deine
+   Counterinstallation auf 2.3.0.
+2. Führe nun wie oben beschrieben das Upgrade von 2.3.0 auf 3.0.0
+   durch.

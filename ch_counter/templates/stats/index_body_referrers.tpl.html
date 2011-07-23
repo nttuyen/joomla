@@ -1,0 +1,272 @@
+   <div class="box_containing_2_centered_boxes">
+    <div class="left_box_of_2_centered_boxes">
+     <div class="stats_title" id="referrers">{L_TOP_REFERRERS}</div>
+     <div class="stats_start">{V_START_DATE_REFERRERS_STATISTIC}</div>
+     <div style="text-align: center">
+      <select name="ref_month">
+<!-- BEGIN BLOCK REF_MONTHS -->
+       <option value="{VALUE}" <!-- IF SELECTED -->selected="selected"<!-- ENDIF SELECTED -->> {NAME}</option>
+<!-- END BLOCK REF_MONTHS -->
+      </select>
+      <input type="submit" value="{L_OK}" onClick="submit_with_anchor('referrers');" />
+     </div>
+     <br />
+     <table class="table_stats" cellpadding="0" cellspacing="1">
+      <tr class="row3">
+       <td>{L_No.}</td>
+       <td>{L_REFERRER}</td>
+       <td style="text-align: right">{L_QUANTITY}</td>
+       <td style="text-align: right">{L_PERCENTAGE}</td>
+       <!-- <td><div style="width: 40px;">&nbsp;</div></td> -->
+      </tr>
+<!-- BEGIN BLOCK REFERRERS -->
+      <tr class="row{ROW_CLASS_NR}">
+       <td>{No.}</td>
+       <td>
+<!-- IF LINK_URLs -->
+	<a href="{URL}" target="_blank" rel="nofollow">{REFERRER}</a>
+<!-- ELSEIF !(LINK_URLs) -->
+	{REFERRER}
+<!-- ENDIF LINK_URLs -->
+       </td>
+       <td style="text-align: right">{QUANTITY}</td>
+       <td style="text-align: right">{PERCENTAGE}%</td>
+       <!-- <td>
+	<div class="bar_common_{BAR_No.}" style="width: {GRAPH_PERCENTAGE}%;" title="{PERCENTAGE}%"></div>
+       </td> -->
+      </tr>
+<!-- END BLOCK REFERRERS -->
+<!-- IF BLOCK REFERRERS -->
+      <tr class="row4">
+       <td>&nbsp;</td>
+       <td><b>{L_TOTAL:} {V_TOTAL_REFERRERS}</b></td>
+       <td style="text-align:right">{V_TOTAL_REFERRERS_INCIDENTS}</td>
+       <td style="text-align:right">100%</td>
+       <!-- <td>&nbsp;</td> -->
+      </tr>
+      <tr style="border: 0px;">
+       <td colspan="4" style="text-align:center">
+	<br />
+	<a href="index.php?cat=referrers&amp;list_all=referrers&amp;month={REF_MONTH}"><img src="../images/all_entries_{V_LANG_CODE}.png" alt="{L_SHOW_ALL_ENTRIES}" title="{L_SHOW_ALL_ENTRIES}" /></a>
+       </td>
+      </tr>
+<!-- ELSEIF !(BLOCK REFERRERS) -->
+      <tr class="no_entry">
+       <td colspan="4">{L_NO_ENTRY_IN_DATABASE}</td>
+      </tr>
+<!-- ENDIF BLOCK REFERRERS -->
+     </table>
+    </div>
+    <div class="right_box_of_2_centered_boxes">
+     <div class="stats_title" id="referring_domains">{L_TOP_REFERRING_DOMAINS}</div>
+     <div class="stats_start">{V_START_DATE_REFERRING_DOMAINS_STATISTIC}</div>
+     <div style="text-align: center">
+      <select name="refdom_month">
+<!-- BEGIN BLOCK REFDOM_MONTHS -->
+       <option value="{VALUE}" <!-- IF SELECTED -->selected="selected"<!-- ENDIF SELECTED -->> {NAME}</option>
+<!-- END BLOCK REFDOM_MONTHS -->
+      </select>
+      <input type="submit" value="{L_OK}" onClick="submit_with_anchor('referring_domains');" />
+     </div>
+     <br />
+     <table class="table_stats" cellpadding="0" cellspacing="1">
+      <tr class="row3">
+       <td>#</td>
+       <td>{L_DOMAIN}</td>
+       <td style="text-align: right">{L_QUANTITY}</td>
+       <td style="text-align: right">{L_PERCENTAGE}</td>
+       <!-- <td><div style="width: 50px;">&nbsp;</div></td> -->
+      </tr>
+<!-- BEGIN BLOCK REFERRERING_DOMAINS -->
+      <tr class="row{ROW_CLASS_NR}">
+       <td>{No.}</td>
+       <td>
+<!-- IF LINK_URLs -->
+	<a href="{URL}" target="_blank" rel="nofollow">{REFERRING_DOMAIN}</a>
+<!-- ELSEIF !(LINK_URLs) -->
+	{REFERRING_DOMAIN}
+<!-- ENDIF LINK_URLs -->
+       </td>
+       <td style="text-align: right">{QUANTITY}</td>
+       <td style="text-align: right">{PERCENTAGE}%</td>
+       <!-- <td><div class="bar_common_{BAR_No.}" style="width: {GRAPH_PERCENTAGE}%;" title="{PERCENTAGE}%"></div></td> -->
+      </tr>
+<!-- END BLOCK REFERRERING_DOMAINS -->
+<!-- IF BLOCK REFERRERING_DOMAINS -->
+      <tr class="row4">
+       <td>&nbsp;</td>
+       <td><b>{L_TOTAL:} {V_TOTAL_REFERRERING_DOMAINS}</b></td>
+       <td style="text-align: right">{V_TOTAL_REFERRERING_DOMAINS_INCIDENTS}</td>
+       <td style="text-align: right">100%</td>
+       <!-- <td>&nbsp;</td> -->
+      </tr>
+      <tr style="border: 0px;">
+       <td colspan="4" style="text-align:center">
+	<br />
+	<a href="index.php?cat=referrers&amp;list_all=referring_domains&amp;month={REFDOM_MONTH}"><img src="../images/all_entries_{V_LANG_CODE}.png" alt="{L_SHOW_ALL_ENTRIES}" title="{L_SHOW_ALL_ENTRIES}" /></a>
+       </td>
+      </tr>
+<!-- ELSEIF !(BLOCK REFERRERING_DOMAINS) -->
+      <tr class="no_entry">
+       <td colspan="4">{L_NO_ENTRY_IN_DATABASE}</td>
+      </tr>
+<!-- ENDIF BLOCK REFERRERING_DOMAINS -->
+     </table>
+    </div>
+    <div style="clear: both"><!-- This div is needed, otherwise the IE may cut the left table if it is larger than the right one... --></div>
+   </div>
+   <div class="stats_spacer"></div>
+   <div class="box_containing_2_centered_boxes">
+    <div class="left_box_of_2_centered_boxes">
+     <div class="stats_title" id="search_keywords_phrases">{L_TOP_SEARCH_KEYWORDS_PHRASES}</div>
+     <div class="stats_start">{V_START_DATE_SEARCH_KEYWORDS_PHRASES_STATISTIC}</div>
+     <div style="text-align: center;">
+      {L_SHOW:}
+      <select name="kp">
+<!-- BEGIN BLOCK SEARCH_KEYWORDS_PHRASES_SELECT -->
+       <option value="{VALUE}" <!-- IF SELECTED -->selected="selected"<!-- ENDIF SELECTED -->>{NAME}</option>
+<!-- END BLOCK SEARCH_KEYWORDS_PHRASES_SELECT -->
+      </select>
+      <select name="kp_month">
+<!-- BEGIN BLOCK KP_MONTHS -->
+       <option value="{VALUE}" <!-- IF SELECTED -->selected="selected"<!-- ENDIF SELECTED -->> {NAME}</option>
+<!-- END BLOCK KP_MONTHS -->
+      </select>
+      <input type="submit" value="{L_OK}" onClick="submit_with_anchor('search_keywords_phrases');" />
+     </div>
+     <br />
+     <table class="stats_table" cellpadding="0" cellspacing="1">
+<!-- IF KEYWORDS_STATISTIC -->
+      <tr class="row3">
+       <td>#</td>
+       <td>{L_KEYWORD}</td>
+       <td style="text-align: right">{L_QUANTITY}</td>
+       <td style="text-align: right">{L_PERCENTAGE}</td>
+       <td style="width: 100px;">&nbsp;</td>
+      </tr>
+<!-- BEGIN BLOCK KEYWORDS -->
+      <tr class="row{ROW_CLASS_NR}">
+       <td>{No.}</td>
+       <td>{KEYWORD}</td>
+       <td style="text-align: right">{QUANTITY}</td>
+       <td style="text-align: right">{PERCENTAGE}%</td>
+       <td><div class="bar_common_{BAR_No.}" style="width: {GRAPH_PERCENTAGE}%;" title="{KEYWORD}: {PERCENTAGE}%"></div></td>
+      </tr>
+<!-- END BLOCK KEYWORDS -->
+<!-- IF BLOCK KEYWORDS -->
+      <tr class="row4">
+       <td>&nbsp;</td>
+       <td><b>{L_TOTAL:} {V_TOTAL_KEYWORDS}</b></td>
+       <td style="text-align: right">{V_TOTAL_KEYWORDS_INCIDENTS}</td>
+       <td style="text-align: right">100%</td>
+       <td>&nbsp;</td>
+      </tr>
+      <tr style="border: 0px;">
+       <td colspan="5" style="text-align:center">
+	<br />
+	<a href="index.php?cat=referrers&amp;list_all=keywords&amp;month={KP_MONTH}"><img src="../images/all_entries_{V_LANG_CODE}.png" alt="{L_SHOW_ALL_ENTRIES}" title="{L_SHOW_ALL_ENTRIES}" /></a>
+       </td>
+      </tr>
+<!-- ELSEIF !(BLOCK KEYWORDS) -->
+      <tr class="no_entry">
+       <td colspan="5">{L_NO_ENTRY_IN_DATABASE}</td>
+      </tr>
+<!-- ENDIF BLOCK KEYWORDS -->
+<!-- ENDIF KEYWORDS_STATISTIC -->
+
+<!-- IF SEARCH_PHRASES_STATISTIC -->
+      <tr class="row3">
+       <td>#</td>
+       <td>{L_SEARCH_PHRASE}</td>
+       <td style="text-align: right">{L_QUANTITY}</td>
+       <td style="text-align: right">{L_PERCENTAGE}</td>
+       <td style="width: 100px;">&nbsp;</td>
+      </tr>
+<!-- BEGIN BLOCK SEARCH_PHRASES -->
+      <tr class="row{ROW_CLASS_NR}">
+       <td>{No.}</td>
+       <td>{SEARCH_PHRASE}</td>
+       <td style="text-align: right">{QUANTITY}</td>
+       <td style="text-align: right">{PERCENTAGE}%</td>
+       <td><div class="bar_common_{BAR_No.}" style="width: {GRAPH_PERCENTAGE}%;" title="{SEARCH_PHRASE}: {PERCENTAGE}%"></div></td>
+      </tr>
+<!-- END BLOCK SEARCH_PHRASES -->
+<!-- IF BLOCK SEARCH_PHRASES -->
+      <tr class="row4">
+       <td>&nbsp;</td>
+       <td><b>{L_TOTAL:} {V_TOTAL_SEARCH_PHRASES}</b></td>
+       <td style="text-align: right">{V_TOTAL_SEARCH_PHRASES_INCIDENTS}</td>
+       <td style="text-align: right">100%</td>
+       <td>&nbsp;</td>
+      </tr>
+      <tr style="border: 0px;">
+       <td colspan="5" style="text-align:center">
+	<br />
+	<a href="index.php?cat=referrers&amp;list_all=search_phrases&amp;month={KP_MONTH}"><img src="../images/all_entries_{V_LANG_CODE}.png" alt="{L_SHOW_ALL_ENTRIES}" title="{L_SHOW_ALL_ENTRIES}" /></a>
+       </td>
+      </tr>
+<!-- ELSEIF !(BLOCK SEARCH_PHRASES) -->
+      <tr class="no_entry">
+       <td colspan="5">{L_NO_ENTRY_IN_DATABASE}</td>
+      </tr>
+<!-- ENDIF BLOCK SEARCH_PHRASES -->
+<!-- ENDIF SEARCH_PHRASES_STATISTIC -->
+
+
+     </table>
+    </div>
+    <div class="right_box_of_2_centered_boxes">
+     <div class="stats_title" id="search_engines">{L_TOP_SEARCH_ENGINES}</div>
+     <div class="stats_start">{V_START_DATE_SEARCH_ENGINES_STATISTIC}</div>
+     <div style="text-align: center">
+      <select name="se_month">
+<!-- BEGIN BLOCK SE_MONTHS -->
+       <option value="{VALUE}" <!-- IF SELECTED -->selected="selected"<!-- ENDIF SELECTED -->> {NAME}</option>
+<!-- END BLOCK SE_MONTHS -->
+      </select>
+      <input type="submit" value="{L_OK}" onClick="submit_with_anchor('search_engines');" />
+     </div>
+     <br />
+     <table class="table_stats" cellpadding="0" cellspacing="1">
+      <tr class="row3">
+       <td>#</td>
+       <td>&nbsp;</td>
+       <td>{L_SEARCH_ENGINE}</td>
+       <td style="text-align: right">{L_QUANTITY}</td>
+       <td style="text-align: right">{L_PERCENTAGE}</td>
+       <td style="width: 100px;">&nbsp;</td>
+      </tr>
+<!-- BEGIN BLOCK SEARCH_ENGINES -->
+      <tr class="row{ROW_CLASS_NR}">
+       <td>{No.}</td>
+       <td><img src="../images/search_engines/{IMG}" alt="" title="{SEARCH_ENGINE}" /></td>
+       <td>{SEARCH_ENGINE}</td>
+       <td style="text-align: right">{QUANTITY}</td>
+       <td style="text-align: right">{PERCENTAGE}%</td>
+       <td><div class="bar_common_{BAR_No.}" style="width: {GRAPH_PERCENTAGE}%;" title="{SEARCH_ENGINE}: {PERCENTAGE}%"></div></td>
+      </tr>
+<!-- END BLOCK SEARCH_ENGINES -->
+<!-- IF BLOCK SEARCH_ENGINES -->
+      <tr class="row4">
+       <td>&nbsp;</td>
+       <td>&nbsp;</td>
+       <td><b>{L_TOTAL:} {V_TOTAL_SEARCH_ENGINES}</b></td>
+       <td style="text-align: right">{V_TOTAL_SEARCH_ENGINES_INCIDENTS}</td>
+       <td style="text-align: right">100%</td>
+       <td>&nbsp;</td>
+      </tr>
+      <tr style="border: 0px;">
+       <td colspan="5" style="text-align:center">
+	<br />
+	<a href="index.php?cat=referrers&amp;list_all=search_engines&amp;month={SE_MONTH}"><img src="../images/all_entries_{V_LANG_CODE}.png" alt="{L_SHOW_ALL_ENTRIES}" title="{L_SHOW_ALL_ENTRIES}" /></a>
+       </td>
+      </tr>
+<!-- ELSEIF !(BLOCK SEARCH_ENGINES) -->
+      <tr class="no_entry">
+       <td colspan="6">{L_NO_ENTRY_IN_DATABASE}</td>
+      </tr>
+<!-- ENDIF BLOCK SEARCH_ENGINES -->
+     </table>
+    </div>
+    <div style="clear: both"><!-- This div is needed, otherwise the IE may cut the left table if it is larger than the right one... --></div>        
+   </div>

@@ -1,0 +1,30 @@
+/**
+ * @version		$Id: white_bg.css 14276 2010-01-18 14:20:28Z louis $
+ * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @license		GNU General Public License version 2 or later; see LICENSE.txt
+ */
+
+/* white */
+#page_bg {
+	background: #fff;
+}
+
+
+div#header {
+	width:990px;
+	height:92px;
+	position:relative;
+}
+
+div#footer {
+	width:990px;
+	border-top:2px solid #E2018E;
+	color:#363636;
+	font-size:12px;
+	line-height:20px;
+	padding-bottom:15px;
+	padding-top:15px;
+	text-align:center;
+	margin:0 auto;
+	margin-top:20px;
+}

@@ -1,0 +1,9 @@
+Many thanks to:
+especially to Christoph Bachner (http://www.christoph-bachner.net)
+
+	- all the (beta) testers, 
+	- Georg Gottschling for the Hungarian translation
+	- Thomas Erhard for the French translation
+	- Marcel Morees for the Dutch translation
+	- Dario Corti for the Italian translation
+        - Roman Neumüller for the Turkish translation

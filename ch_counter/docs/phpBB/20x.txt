@@ -1,0 +1,121 @@
+##############################################################
+## MOD Title: chCounter integration
+## MOD Author: Christoph Bachner < webmaster@christoph-bachner[dot].net > http://www.christoph-bachner[dot]net
+## MOD Description: Includes the chCouter into every phpBB page.
+## MOD Version:  1.0.0
+##
+## Installation Level: easy
+## Installation Time: 3 Minutes
+## Files To Edit: (3)
+##          page_header.php
+##          overall_footer.tpl
+##          simple_footer.php
+##############################################################
+### Author Notes:
+##
+##      This MOD is NOT EasyMod compatible.
+##      The chCounter should be installed first.
+##
+###
+##############################################################
+## Before Adding This MOD To Your Forum, You Should Back Up All Files Related To This MOD
+##############################################################
+
+
+#
+#-----[ OPEN ]------------------------------------------
+#
+includes/page_header.php
+
+#
+#-----[ FIND ]------------------------------------------
+#
+//
+// The following assigns all _common_ variables that may be used at any point
+// in a template.
+//
+
+#
+#-----[ BEFORE, ADD ]------------------------------------------
+#
+//
+// chCounter
+//
+ob_start();
+$chCounter_force_new_db_connection = FALSE;
+include( 'absolute_path_to_counter_directory/counter.php' );
+$chCounter = ob_get_contents();
+ob_end_clean();
+
+
+#
+#-----[ FIND ]------------------------------------------
+#
+	'SITENAME' => $board_config['sitename'],
+
+#
+#-----[ AFTER, ADD ]------------------------------------------
+#
+	'COUNTER' => $chCounter,
+
+
+
+#
+#-----[ OPEN ]------------------------------------------
+#
+templates/subSilver/overall_footer.tpl
+
+#
+#-----[ IN-LINE FIND ]------------------------------------------
+#
+Powered by <a href="http://www.phpbb.com/" target="_phpbb" class="copyright">phpBB</a> {PHPBB_VERSION} &copy; 2001, 2002 phpBB Group<br />{TRANSLATION_INFO}</span>
+
+#
+#-----[ In-LINE AFTER, ADD ]------------------------------------------
+#
+<br />
+{COUNTER}
+
+
+
+#
+#-----[ OPEN ]------------------------------------------
+#
+templates/subSilver/simple_footer.tpl
+
+#
+#-----[ IN-LINE FIND ]------------------------------------------
+#
+Powered by <a href="http://www.phpbb.com/" target="_phpbb" class="copyright">phpBB</a> {PHPBB_VERSION} &copy; 2001,2002 phpBB Group</span>
+
+#
+#-----[ IN-LINE AFTER, ADD ]------------------------------------------
+# 
+<br />
+{COUNTER}
+
+
+
+
+#
+#-----[ SAVE/CLOSE ALL FILES ]--------------------------
+#
+
+
+#
+# ADDITIONAL INSTRUCTIONS/HINTS
+#
+# 1. The chCounter must be installed first.
+# 2. You must customize the path to the counter directory that is added to the file page_header.php.
+# 3. The placeholder {COUNTER} _must_ be noted within the templates. To be able to count JavaScript and screen resolutions,
+#    an (invisible) output of the counter has to be transferred to the visitors. But of course you can note this placeholder
+#    whereever you like.
+# 4. To pretend that the phpBB session IDs are stored by the counter (which would be a serious security issue),
+#    you have to tell the counter to remove the "sid" variable (without quotes)
+#    (Administration Area -> Settings -> Statistics -> Common -> Pages statistic: purge of the query string)
+#    You may even add every GET variable that is used by phpBB to this list. The variables:
+#    sid; mode; u; search_author; t; p; f; highlight; folder; logout; start; postdays; postorder; search_id; mark; view; agreed; vote; watch; unwatch; c; redirect; topicdays; coppa; order; 
+#
+
+
+# EoM

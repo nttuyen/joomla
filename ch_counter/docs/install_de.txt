@@ -1,0 +1,290 @@
+Inhalt:
+
+	1. Systemvoraussetzungen
+
+	2. Installation
+		2.1 Konfigurationsdatei & Upload
+		2.2 Installationsroutine
+
+	3. Einbau des Counters
+		3.1 Allgemeines
+		3.2 Einbau mit PHP
+			3.2.1 Sichbarkeit
+			3.2.2 aktiv/inaktiv
+			3.2.3 Seitentitel
+			3.2.4 individuelles Template
+			3.2.5 vorhandene Datenbankverbindung übernehmen / neue Verbindung erzwingen
+			3.2.6 Anwendungsbeispiel
+		3.3 PHP-Code in .html-Dateien
+		3.4 Einbau mit JavaScript
+
+
+
+
+
+1. Systemvoraussetzungen
+==================
+Der chCounter benötigt auf dem Webspace
+- PHP in der Version 4.2.0 oder höher 
+- eine MySQL-Datenbank
+
+
+
+
+
+2. Installation
+==================
+
+
+2.1: Konfigurationsdatei & Upload
+--------------------------------
+Zunächst müssen in der Datei "includes/config.inc.php" die Zugangsdaten
+für die MySQL-Datenbank angegeben werden.
+Des Weiteren kann hier das Präfix der Tabellennamen geändert werden
+(=die Zeichen, die allen Namen vorangestellt werden) - wenn
+mehrere chCounter-Installationen die selbe Datenbank benutzen sollen,
+muss jede Installation ein eigenes Präfix besitzen, damit sich die
+Tabellennamen nicht überschneiden.
+Ist die Datei "config.inc.php" ausgefüllt, speichere bitte und lade dann
+sämtliche Verzeichnisse und Dateien des chCounters in ein beliebiges
+Verzeichnis deines Webspaces hoch. 
+
+
+2.2: Installationsroutine
+--------------------------------
+Bitte rufe nach dem Hochladen der Dateien nun auf deinem Webspace (nicht
+lokal auf deinem Rechner!) die Installationsdatei "install.php" im
+Verzeichnis "/install/" des Counters auf und folge den Anweisungen.
+
+Nach erfolgreichem Abschluss ist der Counter installiert. Du kannst
+nun die Online-Administration ("Pfad_zum_Counter/administration")
+aufrufen, um den Counter für deine Bedürfnisse anzupassen.
+
+WICHTIG:
+Lösche nach Abschluss der Onlineinstallation UNBEDINGT das Verzeichnis
+"install", um Missbrauch zu verhindern!
+
+
+
+
+
+
+
+
+
+3. Einbau des Counters
+==================
+
+
+3.1: Allgemeines
+===========
+Jede chCounter-Installation kann nur jeweils eine einzige Homepage
+zählen - deren URL ist in der Administration veränderbar.
+
+Der Counter muss in alle Dateien eingefügt werden, die gezählt werden
+sollen. Nur wenn der Counter in eine Datei eingefügt ist, wird das
+Counter-Script bei einem Aufruf der Datei ausgeführt und der Besucher
+somit gezählt.
+
+Es gibt zwei verschiedene Möglichkeiten, den chCounter in eine Seite zu
+integrieren: über einen PHP- oder einen JavaScript-Code. Wann immer
+möglich, sollte der Counter mit PHP eingebunden werden - JavaScript ist
+nur als Notlösung anzusehen.
+
+
+
+
+3.2: Einbau mit PHP
+=============
+ACHTUNG: Damit PHP-Code in einer Datei ausgeführt werden kann, muss die
+Datei die Endung ".php" haben. ".html"-Dateien können einfach in ".php"-
+Dateien umbenannt werden - Konsequenzen für deren Inhalt hat dies
+nicht.
+Es gibt eine Lösung, PHP-Code auch in Dateien ohne ".php"-Endung
+ausführen zu lassen - mehr dazu im Kapitel 3.3.
+
+Der benötigte PHP-Code zum Einbau des Counters kann in der
+Administration in der Rubrik "Hilfe & Kontakt" schnell und einfach
+generiert werden, hier jedoch noch eine kleine Anleitung zum
+"Selberbasteln": ;-)
+
+Folgender Code fügt den chCounter in eine Datei ein:
+
+<?php
+include('pfad_zum_counter/counter.php');
+?>
+
+Der Pfad zu der Datei counter.php muss dabei jeweils angepasst werden:
+es wird entweder ein relativer Pfad von der jeweiligen Datei aus (z.B.
+"chCounter/counter.php" oder "../pfad_zum_counter/counter.php", ...)
+oder aber ein absoluter Pfad benötigt (dies ist die bessere Variante, da
+hier der eine (absolute) Pfad überall angewendet werden kann, unabhängig
+vom Ort der jeweiligen zu zählenden Datei.
+Die Administration generiert den Code mit absoluten Pfad.
+
+WICHTIG: Bitte gib niemals eine URL an, sondern immer nur einen Pfad
+des Dateisystems des Webservers!
+
+
+
+Es gibt noch einige zusätzlichen Einstellungsmöglichkeiten, die nun
+vorgestellt werden. Alle diese lassen sich auch kombinieren - wichtig
+ist nur, dass der "include"-Befehl immer zuletzt kommt.
+
+
+3.2.1: Sichbarkeit
+----------------
+Der Counter kann sowohl sichtbar als auch unsichtbar in eine Seite
+eingebunden werden. Unabhängig von der standardmäßigen Einstellung
+(siehe Administration -> Einstellungen -> Counter -> Einstellungen) kann
+individuell im PHP-Code mittels der Variable $chCounter_visible
+angegeben werden, wie der Counter scheinen soll. 0 steht für unsichtbar,
+1 für sichtbar. Ist diese Variable nicht angegeben , wird die
+standardmäßige Einstellung genutzt.
+Beispiel:
+
+<?php
+$chCounter_visible = 0;
+include('pfad_zum_counter/counter.php');
+?>
+
+
+
+3.2.2: aktiv/inaktiv
+-----------------
+Auf Wunsch kann der Counter inaktiv in eine Datei eingebunden werden: Es
+werden dann die Counterwerte angezeigt, die Besucher dieser bestimmten
+Datei jedoch nicht mitgezählt.
+
+Beispielcode:
+
+<?php
+$chCounter_status = 'inactive';
+include('pfad_zum_counter/counter.php');
+?>
+
+Wird die Variable $chCounter_status nicht angegeben, ist der Counter
+automatisch aktiv - wer möchte, kann aber $chCounter_status = 'active';
+notieren.
+Damit der Administrator nicht vom Counter mitgezählt wird, gibt es in
+der Administration die Möglichkeit, ein Cookie zu erhalten, welches das
+Zählen sodann verhindert (siehe Administration -> Einstellungen ->
+Counter -> Einstellungen).
+
+
+
+3.2.3: Seitentitel
+--------------
+Es kann dem Counter auch ein Seitentitel der jeweiligen Datei über den
+PHP-Code mitgeteilt werden, so dass der Counter nicht mehr nach dem
+Titel suchen muss. Dies ist zum einen schneller, zum anderen bei
+dynamisch generiertem Titel für den Counter die einzige Möglichkeit, den
+Seitentitel zu erhalten.
+Beispiel:
+
+<?php
+$chCounter_page_title = 'Dies ist der Titel der Datei - er wird in den Statistiken an Stelle des Dateipfades angezeigt.';
+include('pfad_zum_counter/counter.php');
+?>
+
+Für weitere Informationen zu Seitentiteln siehe readme_de.txt
+
+
+
+
+3.2.4: individuelles Template
+----------------------------
+Unabhängig von dem globalen Template (=Layoutvorlage) kann beim
+Einbinden des Counters ein eigenes Template definiert werden.
+Beispiel:
+
+<?php
+$chCounter_template = <<<TEMPLATE
+Mit dieser Zeile beginnt das Template... z.B.:
+Besucher: {V_TOTAL_VISITORS}<br />
+gerade online: {V_VISITORS_CURRENTLY_ONLINE}
+... und nach dieser Zeile endet das Template.
+TEMPLATE;
+include('pfad_zum_counter/counter.php');
+?>
+
+GANZ WICHTIG: Wird auf diesem Weg ein Template angegeben, darf die Zeile
+"TEMPLATE;" niemals eingerückt werden, noch anderweitig verändert
+werden!
+
+
+
+
+
+3.2.5: vorhandene Datenbankverbindung übernehmen / neue Verbindung erzwingen
+-----------------------------------------------
+Standardmäßig baut der chCounter immer eine neue Datenbankverbindung
+auf. Wird der Counter in einem PHP-Script an einer Stelle eingebunden,
+an der bereits eine Verbindung zur DB aufgebaut wurde, muss der
+Counter jedoch keine zusätzliche Verbindung aufbauen, sondern kann die
+bereits existierende ebenfalls nutzen. Dadurch wird die
+Ausführungsgeschwindigkeit etwas verringert. Um dies zu ermöglichen,
+muss vor dem include()-Befehl folgende Zeile hinzugefügt werden:
+
+$chCounter_force_new_db_connection = FALSE;
+
+
+
+
+
+3.2.6: Beispiel
+-------------------
+Abschließend hier der Code, um den Counter unsichtbar, aktiv, mit
+Seitentitel "Testseite" und eigenen Template einzubinden:
+
+<?php
+$chCounter_visible = 0;
+$chCounter_page_title = 'Testseite';
+$chCounter_template = <<<TEMPLATE
+bisherige Besucher: {V_TOTAL_VISITORS}
+TEMPLATE;
+include('pfad_zum_counter/counter.php');
+?>
+
+
+
+
+
+3.3 PHP-Code in .html-Dateien (Apache Webserver)
+==================================
+
+ACHTUNG: folgendes Methode ist nur auf dem Apache Webserver möglich!
+
+Mit folgender Lösung kann PHP-Code auch in Dateien ohne .php-Endung
+ausgeführt werden: Erstelle eine reine Textdatei mit dem Dateinamen
+".htaccess" und diesem Inhalt:
+
+AddType application/x-httpd-php .html .php .htm
+
+Für Benutzer von Windows: Wenn Windows sich weigert, eine Datei namens
+".htaccess" zu erstellen ("Bitte geben Sie einen Dateinamen an."), öffne
+den Texteditor Notepad, und gehe auf "Datei -> Speicher unter...". Hier
+wird der Dateiname ".htaccess" akzeptiert.
+
+Lade diese .htaccess-Datei nun in dein Homepage-Hauptverzeichnis hoch.
+Sämtliche Dateien mit den Endungen .html und .htm werden nun ebenfalls
+nach PHP-Code durchsucht.
+
+
+
+
+
+
+
+3.4 Einbau mit JavaScript
+=================
+
+WICHTIG: Wann immer möglich, sollte JavaScript nicht zum Einbau des
+Counters benutzt werden. Wird JavaScript genutzt, können sämtliche
+Besucher, welche JavaScript deaktiviert haben (zum Beispiel aus
+Sicherheitsgründen), nicht mehr gezählt werden. Auch alle Robots (bspw.
+die Indexierungsprogramme von Suchmaschinen) werden dann nicht mehr
+registriert.
+
+Der JavaScript-Code wird an dieser Stelle nicht vorgestellt, in der
+Administration ("Hilfe & Kontakt") kann der JS-Code schnell erzeugt werden.

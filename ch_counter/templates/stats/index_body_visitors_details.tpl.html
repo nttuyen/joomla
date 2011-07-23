@@ -1,0 +1,438 @@
+   <div class="box_containing_2_centered_boxes">
+    <div class="left_box_of_2_centered_boxes">
+     <div class="stats_title" id="browsers">{L_TOP_BROWSERS}</div>
+     <div class="stats_start">{V_START_DATE_BROWSERS_STATISTIC}</div>
+     <div style="text-align: center">
+      <select name="b_month">
+<!-- BEGIN BLOCK B_MONTHS -->
+       <option value="{VALUE}" <!-- IF SELECTED -->selected="selected"<!-- ENDIF SELECTED -->> {NAME}</option>
+<!-- END BLOCK B_MONTHS -->
+      </select>
+      <input type="submit" value="{L_OK}" onClick="submit_with_anchor('browsers');" />
+     </div>
+     <br />
+     <table class="table_stats" cellpadding="0" cellspacing="1">
+      <tr class="row3">
+       <td>#</td>
+       <td>&nbsp;</td>
+       <td>{L_BROWSER}</td>
+       <td style="text-align: right">{L_QUANTITY}</td>
+       <td style="text-align: right">{L_PERCENTAGE}</td>
+       <td><div style="width: 80px;">&nbsp;</div></td>
+      </tr>
+<!-- BEGIN BLOCK BROWSERS -->
+      <tr class="row{ROW_CLASS_NR}">
+       <td>{No.}</td>
+       <td><img src="../images/browsers/{BROWSER_ICON}" alt="" title="{BROWSER}" /></td>
+       <td>
+<!-- IF DETAILS -->
+	<a href="versions.php?type={DETAILS}&amp;month={B_MONTH}" onclick="window.open('versions.php?type={DETAILS}&amp;month={B_MONTH}','versions','width=540,height=400,screenX=0,screenY=0,resizable=yes,scrollbars=yes'); return false;" target="versions">{BROWSER}</a>
+<!-- ELSEIF !(DETAILS) -->
+	{BROWSER}
+<!-- ENDIF DETAILS -->
+       </td>
+       <td style="text-align: right">{QUANTITY}</td>
+       <td style="text-align: right">{PERCENTAGE}%</td>
+       <td>
+	<div class="bar_common_{BAR_No.}" style="width: {GRAPH_PERCENTAGE}%;" title="{BROWSER}: {PERCENTAGE}%"></div>
+       </td>
+      </tr>
+<!-- END BLOCK BROWSERS -->
+<!-- IF BLOCK BROWSERS -->
+      <tr class="row4">
+       <td>&nbsp;</td>
+       <td>&nbsp;</td>
+       <td ><b>{L_TOTAL:} {V_TOTAL_BROWSERS}</b></td>
+       <td style="text-align: right">{V_TOTAL_BROWSERS_INCIDENTS}</td>
+       <td style="text-align: right">100%</td>
+       <td>&nbsp;</td>
+      </tr>
+      <tr style="border: 0px;">
+       <td colspan="6" style="text-align:center">
+	<br />
+	<a href="index.php?cat=visitors_details&amp;list_all=browsers"><img src="../images/all_entries_{V_LANG_CODE}.png" alt="{L_SHOW_ALL_ENTRIES}" title="{L_SHOW_ALL_ENTRIES}" /></a>
+       </td>
+      </tr>
+<!-- ELSEIF !(BLOCK BROWSERS) -->
+      <tr class="no_entry">
+       <td colspan="6">{L_NO_ENTRY_IN_DATABASE}</td>
+      </tr>
+<!-- ENDIF BLOCK BROWSERS -->
+     </table>
+    </div>
+    <div class="right_box_of_2_centered_boxes table">
+     <div class="stats_title" id="operating_systems">{L_TOP_OPERATING_SYSTEMS}</div>
+     <div class="stats_start">{V_START_DATE_OPERATING_SYSTEMS_STATISTIC}</div>
+     <div style="text-align: center">
+      <select name="os_month">
+<!-- BEGIN BLOCK OS_MONTHS -->
+       <option value="{VALUE}" <!-- IF SELECTED -->selected="selected"<!-- ENDIF SELECTED -->> {NAME}</option>
+<!-- END BLOCK OS_MONTHS -->
+      </select>
+      <input type="submit" value="{L_OK}" onClick="submit_with_anchor('operating_systems');" />
+     </div>
+     <br />
+     <table class="stats_table" cellpadding="0" cellspacing="1">
+      <tr class="row3">
+       <td>#</td>
+       <td>&nbsp;</td>
+       <td>{L_OS}</td>
+       <td style="text-align: right">{L_QUANTITY}</td>
+       <td style="text-align: right">{L_PERCENTAGE}</td>
+       <td><div style="width: 80px;">&nbsp;</div></td>
+      </tr>
+<!-- BEGIN BLOCK OS -->
+      <tr class="row{ROW_CLASS_NR}">
+       <td>{No.}</td>
+       <td><img src="../images/os/{OS_ICON}" alt="" title="{OS}" /></td>
+       <td>
+<!-- IF DETAILS -->
+	<a href="versions.php?type={DETAILS}&amp;month={OS_MONTH}" onclick="window.open('versions.php?type={DETAILS}&amp;month={OS_MONTH}','versions','width=540,height=400,screenX=0,screenY=0,resizable=yes,scrollbars=yes'); return false;" target="versions">{OS}</a>
+<!-- ELSEIF !(DETAILS) -->
+	{OS}
+<!-- ENDIF DETAILS -->
+       </td>
+       <td style="text-align: right">{QUANTITY}</td>
+       <td style="text-align: right">{PERCENTAGE}%</td>
+       <td>
+       <div class="bar_common_{BAR_No.}" style="width: {GRAPH_PERCENTAGE}%;" title="{OS}: {PERCENTAGE}%"></div>
+       </td>
+      </tr>
+<!-- END BLOCK OS -->
+<!-- IF BLOCK OS -->
+      <tr class="row4">
+       <td>&nbsp;</td>
+       <td>&nbsp;</td>
+       <td><b>{L_TOTAL:} {V_TOTAL_OS}</b></td>
+       <td style="text-align: right">{V_TOTAL_OS_INCIDENTS}</td>
+       <td style="text-align: right">100%</td>
+       <td>&nbsp;</td>
+      </tr>
+      <tr style="border: 0px;">
+       <td colspan="6" style="text-align:center">
+	<br />
+	<a href="index.php?cat=visitors_details&amp;list_all=operating_systems"><img src="../images/all_entries_{V_LANG_CODE}.png" alt="{L_SHOW_ALL_ENTRIES}" title="{L_SHOW_ALL_ENTRIES}" /></a>
+       </td>
+      </tr>
+<!-- ELSEIF !(BLOCK OS) -->
+      <tr class="no_entry">
+       <td colspan="6">{L_NO_ENTRY_IN_DATABASE}</td>
+      </tr>
+<!-- ENDIF BLOCK OS -->
+     </table>
+    </div>
+    <div style="clear: both"><!-- This div is needed, otherwise the IE may cut the left table if it is larger than the right one... --></div>
+   </div>
+   <div class="stats_spacer"></div>
+   <div class="box_containing_2_centered_boxes">
+    <div class="left_box_of_2_centered_boxes">
+     <div class="stats_title" id="robots">{L_TOP_ROBOTS}</div>
+     <div class="stats_start">{V_START_DATE_ROBOTS_STATISTIC}</div>
+     <div style="text-align: center">
+      <select name="r_month">
+<!-- BEGIN BLOCK R_MONTHS -->
+       <option value="{VALUE}" <!-- IF SELECTED -->selected="selected"<!-- ENDIF SELECTED -->> {NAME}</option>
+<!-- END BLOCK R_MONTHS -->
+      </select>
+      <input type="submit" value="{L_OK}" onClick="submit_with_anchor('robots');" />
+     </div>
+     <br />
+     <table class="table_stats" cellpadding="0" cellspacing="1">
+      <tr class="row3">
+       <td>#</td>
+       <td>&nbsp;</td>
+       <td>{L_ROBOT}</td>
+       <td style="text-align: right">{L_QUANTITY}</td>
+       <td style="text-align: right">{L_PERCENTAGE}</td>
+       <td><div style="width: 80px;">&nbsp;</div></td>
+      </tr>
+<!-- BEGIN BLOCK ROBOTS -->
+      <tr class="row{ROW_CLASS_NR}">
+       <td>{No.}</td>
+       <td><img src="../images/robots/{ROBOT_ICON}" alt="" title="{ROBOT}" /></td>
+       <td>
+<!-- IF DETAILS -->
+	<a href="versions.php?type={DETAILS}&amp;month={R_MONTH}" onclick="window.open('versions.php?type={DETAILS}&amp;month={R_MONTH}','versions','width=540,height=400,screenX=0,screenY=0,resizable=yes,scrollbars=yes'); return false;" target="versions">{ROBOT}</a>
+<!-- ELSEIF !(DETAILS) -->
+	{ROBOT}
+<!-- ENDIF DETAILS -->
+       </td>
+       <td style="text-align: right">{QUANTITY}</td>
+       <td style="text-align: right">{PERCENTAGE}%</td>
+       <td>
+	<div class="bar_common_{BAR_No.}" style="width: {GRAPH_PERCENTAGE}%;" title="{ROBOT}: {PERCENTAGE}%"></div>
+       </td>
+      </tr>
+<!-- END BLOCK ROBOTS -->
+<!-- IF BLOCK ROBOTS -->
+      <tr class="row4">
+       <td>&nbsp;</td>
+       <td>&nbsp;</td>
+       <td><b>{L_TOTAL:} {V_TOTAL_ROBOTS}</b></td>
+       <td style="text-align: right">{V_TOTAL_ROBOTS_INCIDENTS}</td>
+       <td style="text-align: right">100%</td>
+       <td>&nbsp;</td>
+      </tr>
+      <tr style="border: 0px;">
+       <td colspan="6" style="text-align:center">
+	<br />
+	<a href="index.php?cat=visitors_details&amp;list_all=robots"><img src="../images/all_entries_{V_LANG_CODE}.png" alt="{L_SHOW_ALL_ENTRIES}" title="{L_SHOW_ALL_ENTRIES}" /></a>
+       </td>
+      </tr>
+<!-- ELSEIF !(BLOCK ROBOTS) -->
+      <tr class="no_entry">
+       <td colspan="6">{L_NO_ENTRY_IN_DATABASE}</td>
+      </tr>
+<!-- ENDIF BLOCK ROBOTS -->
+     </table>
+    </div>
+    <div class="right_box_of_2_centered_boxes">
+     <div class="stats_title">{L_TOP_USER_AGENTS}</div>
+     <div class="stats_start">{V_START_DATE_USER_AGENTS_STATISTIC}</div>
+     <table class="table_stats" cellpadding="0" cellspacing="1">
+      <tr class="row3">
+       <td>#</td>
+       <td>{L_USER_AGENT}</td>
+       <td style="text-align: right">{L_QUANTITY}</td>
+       <td style="text-align: right">{L_PERCENTAGE}</td>
+       <!-- <td><div style="width: 80px;">&nbsp;</div></td> -->
+      </tr>
+<!-- BEGIN BLOCK USER_AGENTS -->
+      <tr class="row{ROW_CLASS_NR}">
+       <td>{No.}</td>
+       <td>{USER_AGENT}</td>
+       <td style="text-align: right">{QUANTITY}</td>
+       <td style="text-align: right">{PERCENTAGE}%</td>
+       <!-- <td>
+	<div class="bar_common_{BAR_No.}" style="width: {GRAPH_PERCENTAGE}%;" title="{USER_AGENT}: {PERCENTAGE}%"></div>
+       </td> -->
+      </tr>
+<!-- END BLOCK USER_AGENTS -->
+<!-- IF BLOCK USER_AGENTS -->
+      <tr class="row4">
+       <td>&nbsp;</td>
+       <td><b>{L_TOTAL:} {V_TOTAL_USER_AGENTS}</b></td>
+       <td style="text-align: right">{V_TOTAL_USER_AGENTS_INCIDENTS}</td>
+       <td style="text-align: right">100%</td>
+       <!-- <td>&nbsp;</td> -->
+      </tr>
+      <tr style="border: 0px;">
+       <td colspan="6" style="text-align:center">
+	<br />
+	<a href="index.php?cat=visitors_details&amp;list_all=user_agents"><img src="../images/all_entries_{V_LANG_CODE}.png" alt="{L_SHOW_ALL_ENTRIES}" title="{L_SHOW_ALL_ENTRIES}" /></a>
+       </td>
+      </tr>
+<!-- ELSEIF !(BLOCK USER_AGENTS) -->
+      <tr class="no_entry">
+       <td colspan="5">{L_NO_ENTRY_IN_DATABASE}</td>
+      </tr>
+<!-- ENDIF BLOCK USER_AGENTS -->
+     </table>
+    </div>
+    <div style="clear: both"><!-- This div is needed, otherwise the IE may cut the left table if it is larger than the right one... --></div>
+   </div>
+   <div class="stats_spacer"></div>
+   <div class="box_containing_2_centered_boxes">
+    <div class="left_box_of_2_centered_boxes">
+     <div class="stats_title" id="clh">{L_TOP_COUNTRIES_LANGUAGES_HOSTS}</div>
+     <div class="stats_start">{V_START_DATE_COUNTRIES_OR_LANGUAGES_OR_HOSTS_STATISTIC}</div>
+     <div style="text-align: center">
+     <!--  <span style="font-weight:normal;">{L_SHOW:}</span> -->
+      <select name="clh">
+<!-- BEGIN BLOCK COUNTRIES_LANGUAGES_HOSTS_SELECT -->
+       <option value="{VALUE}" <!-- IF SELECTED -->selected="selected"<!-- ENDIF SELECTED -->>{NAME}</option>
+<!-- END BLOCK COUNTRIES_LANGUAGES_HOSTS_SELECT -->
+      </select>
+      <select name="clh_month">
+<!-- BEGIN BLOCK CLH_MONTHS -->
+       <option value="{VALUE}" <!-- IF SELECTED -->selected="selected"<!-- ENDIF SELECTED -->> {NAME}</option>
+<!-- END BLOCK CLH_MONTHS -->
+      </select>
+      <input type="submit" value="{L_OK}" onClick="submit_with_anchor('clh');" />
+     </div>
+      <br />
+     <table class="table_stats" cellpadding="0" cellspacing="1">
+
+
+<!-- IF COUNTRIES_STATISTIC -->
+      <tr class="row3">
+       <td>#</td>
+       <td>&nbsp;</td>
+       <td>{L_COUNTRY}</td>
+       <td style="text-align: right">{L_QUANTITY}</td>
+       <td style="text-align: right">{L_PERCENTAGE}</td>
+       <td><div style="width: 80px;">&nbsp;</div></td>
+      </tr>
+<!-- BEGIN BLOCK COUNTRIES -->
+      <tr class="row{ROW_CLASS_NR}">
+       <td>{No.}</td>
+       <td><img src="../images/flags/{FLAG}" alt="" title="{COUNTRY}" /></td>
+       <td>{COUNTRY}</td>
+       <td style="text-align: right">{QUANTITY}</td>
+       <td style="text-align: right">{PERCENTAGE}%</td>
+       <td>
+	<div class="bar_common_{BAR_No.}" style="width: {GRAPH_PERCENTAGE}%;" title="{COUNTRY}: {PERCENTAGE}%"></div>
+       </td>
+      </tr>
+<!-- END BLOCK COUNTRIES -->
+<!-- IF BLOCK COUNTRIES -->
+      <tr class="row4">
+       <td>&nbsp;</td>
+       <td>&nbsp;</td>
+       <td><b>{L_TOTAL:} {V_TOTAL_COUNTRIES}</b></td>
+       <td style="text-align: right">{V_TOTAL_COUNTRIES_INCIDENTS}</td>
+       <td style="text-align: right">100%</td>
+       <td>&nbsp;</td>
+      </tr>
+      <tr style="border: 0px;">
+       <td colspan="6" style="text-align:center">
+	<br />
+	<a href="index.php?cat=visitors_details&amp;list_all=countries&amp;month={CLH_MONTH}"><img src="../images/all_entries_{V_LANG_CODE}.png" alt="{L_SHOW_ALL_ENTRIES}" title="{L_SHOW_ALL_ENTRIES}" /></a>
+       </td>
+      </tr>
+<!-- ELSEIF !(BLOCK COUNTRIES) -->
+      <tr class="row1">
+       <td colspan="6" align="center">{L_NO_ENTRY_IN_DATABASE}</td>
+      </tr>
+<!-- ENDIF BLOCK COUNTRIES -->
+<!-- ENDIF COUNTRIES_STATISTIC -->
+
+
+<!-- IF LANGUAGES_STATISTIC -->
+      <tr class="row3">
+       <td>#</td>
+       <td>{L_LANGUAGE}</td>
+       <td style="text-align: right">{L_QUANTITY}</td>
+       <td style="text-align: right">{L_PERCENTAGE}</td>
+       <td><div style="width: 80px;">&nbsp;</div></td>
+      </tr>
+<!-- BEGIN BLOCK LANGUAGES -->
+      <tr class="row{ROW_CLASS_NR}">
+       <td>{No.}</td>
+       <td>{LANGUAGE}</td>
+       <td style="text-align: right">{QUANTITY}</td>
+       <td style="text-align: right">{PERCENTAGE}%</td>
+       <td>
+	<div class="bar_common_{BAR_No.}" style="width: {GRAPH_PERCENTAGE}%;" title="{LANGUAGE}: {PERCENTAGE}%"></div>
+       </td>
+      </tr>
+<!-- END BLOCK LANGUAGES -->
+<!-- IF BLOCK LANGUAGES -->
+      <tr class="row4">
+       <td>&nbsp;</td>
+       <td><b>{L_TOTAL:} {V_TOTAL_LANGUAGES}</b></td>
+       <td style="text-align: right">{V_TOTAL_LANGUAGES_INCIDENTS}</td>
+       <td style="text-align: right">100%</td>
+       <td>&nbsp;</td>
+      </tr>
+      <tr style="border: 0px;">
+       <td colspan="6" style="text-align:center">
+	<br />
+	<a href="index.php?cat=visitors_details&amp;list_all=languages&amp;month={CLH_MONTH}"><img src="../images/all_entries_{V_LANG_CODE}.png" alt="{L_SHOW_ALL_ENTRIES}" title="{L_SHOW_ALL_ENTRIES}" /></a>
+       </td>
+      </tr>
+<!-- ELSEIF !(BLOCK LANGUAGES) -->
+      <tr class="row1">
+       <td colspan="5" align="center">{L_NO_ENTRY_IN_DATABASE}</td>
+      </tr>
+<!-- ENDIF BLOCK LANGUAGES -->
+<!-- ENDIF LANGUAGES_STATISTIC -->
+
+<!-- IF HOSTS_TLDS_STATISTIC -->
+      <tr class="row3">
+       <td>#</td>
+       <td>&nbsp;</td>
+       <td>{L_HOST_TLD}</td>
+       <td style="text-align: right">{L_QUANTITY}</td>
+       <td style="text-align: right">{L_PERCENTAGE}</td>
+       <td><div style="width: 80px;">&nbsp;</div></td>
+      </tr>
+<!-- BEGIN BLOCK HOSTS_TLDS -->
+      <tr class="row{ROW_CLASS_NR}">
+       <td>{No.}</td>
+       <td><img src="../images/flags/{FLAG}" alt="" title="{TLD}" /></td>
+       <td>{TLD}</td>
+       <td style="text-align: right">{QUANTITY}</td>
+       <td style="text-align: right">{PERCENTAGE}%</td>
+       <td>
+	<div class="bar_common_{BAR_No.}" style="width: {GRAPH_PERCENTAGE}%;" title="{TLD}: {PERCENTAGE}%"></div>
+       </td>
+      </tr>
+<!-- END BLOCK HOSTS_TLDS -->
+<!-- IF BLOCK HOSTS_TLDS -->
+      <tr class="row4">
+       <td>&nbsp;</td>
+       <td>&nbsp;</td>
+       <td><b>{L_TOTAL:} {V_TOTAL_TLDS}</b></td>
+       <td style="text-align: right">{V_TOTAL_TLDS_INCIDENTS}</td>
+       <td style="text-align: right">100%</td>
+       <td>&nbsp;</td>
+      </tr>
+      <tr style="border: 0px;">
+       <td colspan="6" style="text-align:center">
+	<br />
+	<a href="index.php?cat=visitors_details&amp;list_all=hosts_tlds&amp;month={CLH_MONTH}"><img src="../images/all_entries_{V_LANG_CODE}.png" alt="{L_SHOW_ALL_ENTRIES}" title="{L_SHOW_ALL_ENTRIES}" /></a>
+       </td>
+      </tr>
+<!-- ELSEIF !(BLOCK HOSTS_TLDS) -->
+      <tr class="row1">
+       <td colspan="6" style="text-align:center;">{L_NO_ENTRY_IN_DATABASE}</td>
+      </tr>
+<!-- ENDIF BLOCK HOSTS_TLDS -->
+<!-- ENDIF HOSTS_TLDS_STATISTIC -->
+     </table>
+    </div>
+    <div class="right_box_of_2_centered_boxes table">
+     <div class="stats_title">{L_TOP_SCREEN_RESOLUTIONS}</div>
+     <div class="stats_start">{V_START_DATE_RESOLUTIONS_STATISTIC}</div>
+     <div style="text-align: center">
+      <select name="res_month">
+<!-- BEGIN BLOCK RES_MONTHS -->
+       <option value="{VALUE}" <!-- IF SELECTED -->selected="selected"<!-- ENDIF SELECTED -->> {NAME}</option>
+<!-- END BLOCK RES_MONTHS -->
+      </select>
+      <input type="submit" value="{L_OK}" onClick="submit_with_anchor('browsers');" />
+     </div>
+     <br />
+     <table class="table_stats" cellpadding="0" cellspacing="1">
+      <tr class="row3">
+       <td>#</td>
+       <td>{L_RESOLUTION}</td>
+       <td style="text-align: right">{L_QUANTITY}</td>
+       <td style="text-align: right">{L_PERCENTAGE}</td>
+       <td><div style="width: 80px;">&nbsp;</div></td>
+      </tr>
+<!-- BEGIN BLOCK RESOLUTIONS -->
+      <tr class="row{ROW_CLASS_NR}">
+       <td>{No.}</td>
+       <td>{RESOLUTION}</td>
+       <td style="text-align: right">{QUANTITY}</td>
+       <td style="text-align: right">{PERCENTAGE}%</td>
+       <td>
+	<div class="bar_common_{BAR_No.}" style="width: {GRAPH_PERCENTAGE}%;" title="{RESOLUTION}: {PERCENTAGE}%"></div>
+       </td>
+      </tr>
+<!-- END BLOCK RESOLUTIONS -->
+<!-- IF BLOCK RESOLUTIONS -->
+      <tr class="row4">
+       <td>&nbsp;</td>
+       <td><b>{L_TOTAL:} {V_TOTAL_RESOLUTIONS}</b></td>
+       <td style="text-align: right">{V_TOTAL_RESOLUTIONS_INCIDENTS}</td>
+       <td style="text-align: right">100%</td>
+       <td>&nbsp;</td>
+      </tr>
+      <tr style="border: 0px;">
+       <td colspan="6" style="text-align:center">
+	<br />
+	<a href="index.php?cat=visitors_details&amp;list_all=screen_resolutions&amp;month={RES_MONTH}"><img src="../images/all_entries_{V_LANG_CODE}.png" alt="{L_SHOW_ALL_ENTRIES}" title="{L_SHOW_ALL_ENTRIES}" /></a>
+       </td>
+      </tr>
+<!-- ELSEIF !(BLOCK RESOLUTIONS) -->
+      <tr class="no_entry">
+       <td colspan="5">{L_NO_ENTRY_IN_DATABASE}</td>
+      </tr>
+<!-- ENDIF BLOCK RESOLUTIONS -->
+     </table>
+    </div>
+    <div style="clear: both"><!-- This div is needed, otherwise the IE may cut the left table if it is larger than the right one... --></div>    
+   </div>

@@ -1,0 +1,282 @@
+body, textarea
+{
+	font-family: Verdana, Arial, Helvetica;
+	font-size: 8pt;
+	text-align: center;
+	margin: 0px;
+	background-color: #FFFFFF;
+}
+
+input, select
+{
+	border: 1px solid #000000;
+}
+
+.navigation_bar
+{
+	text-align: center;
+	padding: 5px 0px 5px 0px;
+	border: 1px solid #000000;
+	color: #000000;
+}
+
+table
+{
+	margin: 0px;
+	empty-cells: show;
+}
+
+td
+{
+	font-family: Verdana, Arial, Helvetica;
+	font-size: 8pt;
+	padding: 4px;
+}
+
+img
+{
+	border: 0px;
+}
+
+
+
+a:link, a:visited, a:hover, a:active
+{
+	color:#000000;
+	text-decoration: underline;
+}
+
+div.navigation_bar a:link, div.navigation_bar a:visited, div.navigation_bar a:active
+{
+	color: #000000;
+	margin: 1px;
+	text-decoration: none;
+	padding: 1px;
+}
+
+div.navigation_bar a:hover
+{
+	background-color: #88CD88;
+	margin: 0px;
+	border: 1px solid #009900;
+	color: #000000;
+	text-decoration: none;
+	padding: 1px;
+}
+
+span.counter_info a
+{
+	color: #000000;
+	margin: 1px;
+	text-decoration: none;
+	font-size: 7pt;
+	padding: 1px;
+}
+
+span.counter_info a:hover
+{
+	border: 1px solid #009900;
+	color: #000000;
+	text-decoration: none;
+	font-size: 7pt;
+	padding: 1px;
+	margin: 0px;
+}
+
+
+
+
+.row1, cell1
+{
+	background-color: #F2F0F0;
+	color: #000000;
+}
+
+.row2, .cell2
+{
+	background-color: #E0DFDF;
+	color: #000000;
+}
+
+.row3 , .row4, .cell3
+{
+	background-color: #0780BC;
+	color: #D3DDEB;
+}
+
+.no_entry
+{
+	background-color: #F2F0F0;
+	text-align: center;
+}
+
+
+
+.stats_title
+{
+	font-size: 15px;
+	text-align: center;
+	font-weight: bold;
+	font-family: Georgia, Verdana;
+	color: #009900;
+}
+
+.navigation_bar div.stats_title
+{
+	color: #000000;
+}
+
+.stats_title span.unformatted
+{
+	color: #000000;
+	font-weight: normal;
+	font-family: Verdana, Arial, Helvetica;
+	font-size: 8pt;
+}
+
+.stats_start
+{
+	font-style: italic;
+	margin-bottom: 15px;
+	text-align: center;
+	font-weight: normal;
+	font-size: 8pt;
+	font-family: Verdana;
+}
+
+.access_stats_start
+{
+	font-weight: bold;
+	font-size: 10pt;
+	font-family: Georgia, Verdana;
+	font-size: 15px;
+	color: #000000;
+}
+
+.stats_spacer
+{
+	clear: left; 
+	height: 60px;
+}
+
+
+
+.bar_common_1, .bar_common_2
+{
+	height: 10px;
+	background-color: #3486AF;
+	border-right: 1px solid #000000;
+	border-top: 1px solid #000000;
+	border-bottom: 1px solid #000000;
+}
+
+.bar_access_stats_1
+{
+	height: 15px;
+	background-color: #3486AF;
+	border-right: 1px solid #000000;
+	border-top: 1px solid #000000;
+	border-bottom: 1px solid #000000;
+}
+
+.bar_access_stats_2
+{
+	height: 15px;
+	background-color: #FF0000;
+	border-right: 1px solid #000000;
+	border-top: 1px solid #000000;
+	border-bottom: 1px solid #000000;
+}
+
+.number_selected
+{
+	font-weight: bold;
+}
+
+.number_unselected
+{
+}
+
+
+
+.table_data_and_records
+{
+	border: 1px solid #000000;
+	border-spacing: 1px;
+	width: 350px;
+	text-align: left;
+	margin-bottom: 10px;
+}
+
+.box_containing_2_centered_boxes
+{
+	margin-right: auto;
+	margin-left: auto;
+	width: 800px;
+	text-align: center;
+}
+
+
+.left_box_of_2_centered_boxes
+{
+	right: 50%;
+	float: left;
+	width: 385px;
+	margin-right: 30px;
+	text-align: right;
+}
+
+.right_box_of_2_centered_boxes
+{
+	left: 50%;
+	width: auto;
+	text-align: left;
+}
+
+
+div.left_box_of_2_centered_boxes table
+{
+	margin-left: auto;
+	text-align: left;
+	width: 382px;
+	border-spacing: 1px; 
+}
+
+
+div.right_box_of_2_centered_boxes table
+{
+	margin-right: auto;
+	text-align: left;
+	width: 382px;
+	border-spacing: 1px;
+}
+
+
+div.left_box_of_2_centered_boxes.table_stats, div.right_box_of_2_centered_boxes.table_stats
+{
+
+	border: 0px;
+}
+
+
+div.center
+{
+	text-align: center; /* IE Fix */
+}
+div.center table
+{
+	margin-left: auto;
+	margin-right: auto;
+	text-align: left;
+}
+div.center table.table_stats
+{
+	border-spacing: 1px;
+	border: 0px;
+}
+
+
+.counter_info
+{
+	font-size:7pt;
+}

@@ -1,0 +1,163 @@
+   <div class="box_containing_2_centered_boxes">
+    <div class="stats_title">{L_DATA_AND_RECORDS}</div>
+    <div class="stats_start">{V_START_DATE_COUNTER}</div>
+    <div class="left_box_of_2_centered_boxes">
+     <table class="table_data_and_records" cellpadding="0" cellspacing="1">
+      <tr class="row3">
+       <td colspan="2" style="text-align: center;"><b>{L_VISITORS}</b></td>
+      </tr>
+      <tr class="row1">
+       <td>{L_TOTAL}</td>
+       <td style="text-align:right">{V_TOTAL_VISITORS}</td>
+      </tr>
+      <tr class="row2">
+       <td>{L_TODAY}</td>
+       <td style="text-align:right">{V_VISITORS_TODAY}</td>
+      </tr>
+      <tr class="row1">
+       <td>{L_YESTERDAY}</td>
+       <td style="text-align:right">{V_VISITORS_YESTERDAY}</td>
+      </tr>
+      <tr class="row2">
+       <td>{L_PER_DAY}</td>
+       <td style="text-align:right">{V_VISITORS_PER_DAY}</td>
+      </tr>
+      <tr class="row1">
+       <td>{L_MAX_PER_DAY}</td>
+       <td style="text-align:right">{V_MAX_VISITORS_PER_DAY}<br /><i>{V_MAX_VISITORS_PER_DAY_DATE}</i></td>
+      </tr>
+      <tr class="row2">
+       <td>{L_CURRENTLY_ONLINE}</td>
+       <td style="text-align:right">{V_VISITORS_CURRENTLY_ONLINE}</td>
+      </tr>
+      <tr class="row1">
+       <td>{L_MAX_ONLINE}</td>
+       <td style="text-align:right">{V_MAX_VISITORS_ONLINE}<br /><i>{V_MAX_VISITORS_ONLINE_DATE}</i></td>
+      </tr>
+      <tr class="row2">
+       <td>{L_JAVASCRIPT_ACTIVATED}</td>
+       <td style="text-align:right">{V_JS_PERCENTAGE}</td>
+      </tr>
+     </table>
+    </div>
+    <div class="right_box_of_2_centered_boxes">
+     <table class="table_data_and_records" cellpadding="0" cellspacing="1">
+      <tr class="row3">
+       <td colspan="2" style="text-align: center;"><b>{L_PAGE_VIEWS}</b></td>
+      </tr>
+      <tr class="row1">
+       <td>{L_TOTAL}</td>
+       <td style="text-align:right">{V_TOTAL_PAGE_VIEWS}</td>
+      </tr>
+      <tr class="row2">
+       <td>{L_TODAY}</td>
+       <td style="text-align:right">{V_PAGE_VIEWS_TODAY}</td>
+      </tr>
+      <tr class="row1">
+       <td>{L_YESTERDAY}</td>
+       <td style="text-align:right">{V_PAGE_VIEWS_YESTERDAY}</td>
+      </tr>
+      <tr class="row2">
+       <td>{L_PER_DAY}</td>
+       <td style="text-align:right">{V_PAGE_VIEWS_PER_DAY}</td>
+       </tr>
+      <tr class="row1">
+       <td>{L_MAX_PER_DAY}</td>
+       <td style="text-align:right">{V_MAX_PAGE_VIEWS_PER_DAY}<br /><i>{V_MAX_PAGE_VIEWS_PER_DAY_DATE}</i></td>
+      </tr>
+      <tr class="row2">
+       <td>{L_PER_VISITOR}</td>
+       <td style="text-align:right">{V_PAGE_VIEWS_PER_VISITOR}</td>
+      </tr>
+      <tr class="row1">
+       <td>{L_THIS_PAGE}</td>
+       <td style="text-align:right">{V_PAGE_VIEWS_THIS_PAGE}</td>
+      </tr>
+     </table>
+    </div>
+    <div class="stats_spacer"></div>
+    <div class="left_box_of_2_centered_boxes">
+     <div class="stats_title" style="margin-bottom: 10px;" id="latest_x">{L_LATEST_X}
+      <select name="latest">
+<!-- BEGIN BLOCK SELECT_LIST_LATEST -->
+       <option value="{VALUE}" <!-- IF SELECTED -->selected="selected"<!-- ENDIF SELECTED -->>{NAME}</option>
+<!-- END BLOCK SELECT_LIST_LATEST -->
+      </select>
+      <input type="submit" value="{L_OK}" onClick="submit_with_anchor('latest_x');" />
+     </div>
+     <table class="table_stats" cellpadding="0" cellspacing="1">
+      <tr class="row3">
+       <td>{L_No.}</td>
+       <td>{L_TYPE_LATEST}</td>
+       <td style="text-align: right;" align="right">{L_LAST}</td>
+      </tr>
+<!-- BEGIN BLOCK LATEST -->
+      <tr class="row{ROW_CLASS_NR}">
+       <td>{RANK}</td>
+       <td>
+	<!-- IF IMG --><img src="../images/{IMG}" alt="" title="{NAME}" /><!-- ENDIF IMG -->
+<!-- IF URL -->
+<a href="{URL}" target="_blank">{NAME}</a>
+<!-- ELSEIF !(URL) -->
+	{NAME}
+<!-- ENDIF URL -->
+	</td>
+       <td style="text-align: right">{DATE}</td>
+      </tr>
+<!-- END BLOCK LATEST -->
+<!-- IF BLOCK LATEST -->
+      <tr class="row3">
+       <td>&nbsp;</td>
+       <td>&nbsp;</td>
+       <td>&nbsp;</td>
+      </tr>
+<!-- ELSEIF !(BLOCK LATEST) -->
+      <tr class="row1">
+       <td colspan="3" style="text-align: center">{L_NO_ENTRY_IN_DATABASE}</td>
+      </tr>
+<!-- ENDIF BLOCK LATEST -->
+     </table>
+    </div>
+    <div class="right_box_of_2_centered_boxes">
+     <div class="stats_title" style="margin-bottom: 10px;" id="top_x">{L_TOP_X}
+      <select name="top">
+<!-- BEGIN BLOCK SELECT_LIST_TOP -->
+       <option value="{VALUE}" <!-- IF SELECTED -->selected="selected"<!-- ENDIF SELECTED -->>{NAME}</option>
+<!-- END BLOCK SELECT_LIST_TOP -->
+      </select>
+      <input type="submit" value="{L_OK}" onClick="submit_with_anchor('top_x');" />
+     </div>
+     <table class="table_stats" cellpadding="0" cellspacing="1">
+      <tr class="row3">
+       <td>{L_No.}</td>
+       <td>{L_TYPE_TOP}</td>
+       <td style="text-align: right">{L_QUANTITY}</td>
+      </tr>
+<!-- BEGIN BLOCK TOP -->
+      <tr class="row{ROW_CLASS_NR}">
+       <td>{RANK}</td>
+       <td>
+	<!-- IF IMG --><img src="../images/{IMG}" alt="" title="{NAME}" /><!-- ENDIF IMG -->
+<!-- IF URL -->
+<a href="{URL}" target="_blank">{NAME}</a>
+<!-- ELSEIF !(URL) -->
+	{NAME}
+<!-- ENDIF URL -->
+       </td>
+       <td style="text-align: right">{QUANTITY}</td>
+      </tr>
+<!-- END BLOCK TOP -->
+<!-- IF BLOCK TOP -->
+      <tr class="row3">
+       <td>&nbsp;</td>
+       <td>&nbsp;</td>
+       <td>&nbsp;</td>
+      </tr>
+<!-- ELSEIF !(BLOCK TOP) -->
+      <tr class="row1">
+       <td colspan="3" style="text-align: center">{L_NO_ENTRY_IN_DATABASE}</td>
+      </tr>
+<!-- ENDIF BLOCK TOP -->
+     </table>
+    </div>
+   </div>

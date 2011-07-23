@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+  <title>chCounter {V_SCRIPT_VERSION} - {L_CURRENTLY_ONLINE}</title>
+  <link rel="stylesheet" type="text/css" href="../templates/stats/style.css" />
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="robots" content="noindex,nofollow" /> 
+ </head>
+ <body>
+  <!-- The counter output. It's included invisible, but as it may print out a JavaScript, it's noted here. -->
+  {COUNTER}
+  <!-- end counter -->
+  <form method="get" action="online_users.php">
+   <div class="navigation_bar" style="margin-bottom: 30px; height: 25px; background-image:url(../images/bg_top_small.png); background-repeat:repeat-x;">
+   {L_LANGUAGE}
+    <select name="lang">
+<!-- BEGIN BLOCK COUNTER_LANGUAGES -->
+     <option value="{VALUE}" <!-- IF SELECTED -->selected="selected"<!-- ENDIF SELECTED -->>{NAME}</option>
+<!-- END BLOCK COUNTER_LANGUAGES -->
+    </select>
+    <input type="submit" value="{L_OK}" />
+   </div>
+  </form>
+  <div class="center">
+   <div class="stats_title" style="margin-bottom: 15px;">{L_CURRENTLY_ONLINE}</div>
+   <table class="table_stats" style="width: 600px">
+    <tr class="row3">
+     <td>{L_No.}</td>
+     <td>{L_IP}</td>
+     <td style="width: 33px;"><!-- {L_USER_AGENT} --></td>
+     <td>{L_PAGE}</td>
+     <td style="text-align:right;">{L_PAGE_VIEWS}</td>
+     <td style="text-align:right;">{L_FIRST_ACTIVITY}</td>
+     <td style="text-align:right;">{L_LAST_ACTIVITY}</td>
+    </tr>
+<!-- BEGIN BLOCK ONLINE_USERS -->
+    <tr class="row{ROW_CLASS_NR}">
+      <td>
+<!-- IF IS_ADMIN -->
+       <a href="../administration/visitor_details.php?user_nr={PLAIN_No.}" onclick="window.open( '../administration/visitor_details.php?user_nr={PLAIN_No.}', 'visitor_details', 'width=710, height=600, screenX=0, screenY=0, resizable=yes, scrollbars=yes' ); return false;" target="visitor_details">{No.}</a>
+<!-- ELSEIF !(IS_ADMIN) -->
+       {No.}
+<!-- ENDIF IS_ADMIN -->
+      </td>
+     <td>{IP}</td>
+     <td>
+<!-- IF BROWSER -->
+      <img src="../images/browsers/{BROWSER_ICON}" alt="" title="{BROWSER} {BROWSER_VERSION}" />
+<!-- ENDIF BROWSER -->
+<!-- IF ROBOT -->
+      <img src="../images/robots/{ROBOT_ICON}" alt="" title="{ROBOT} {ROBOT_VERSION}" />
+<!-- ENDIF ROBOT -->
+<!-- IF OS -->
+      <img src="../images/os/{OS_ICON}" alt="" title="{OS} {OS_VERSION}" />
+<!-- ENDIF OS -->
+      <!-- {USER_AGENT} -->
+     </td>
+     <td><a href="{PAGE_URL}" target="_blank">{PAGE_TITLE}</a></td>
+     <td style="text-align:right; width: 80px;">{PAGE_VIEWS}</td>
+     <td style="text-align:right">{FIRST_ACTIVITY}</td>
+     <td style="text-align:right">{LAST_ACTIVITY}</td>
+    </tr>
+<!-- END BLOCK ONLINE_USERS -->
+<!-- IF BLOCK ONLINE_USERS -->
+    <tr class="row3">
+     <td colspan="7" style="text-align:center;">{V_TOTAL}</td>
+    </tr>
+<!-- ELSEIF !(BLOCK ONLINE_USERS) -->
+    <tr class="row1">
+     <td colspan="7" style="text-align:center">{L_NO_VISITORS_ONLINE}</td>
+    </tr>
+<!-- ENDIF BLOCK ONLINE_USERS -->
+   </table>
+   <br />
+   <br />
+   <i>{TIME_ZONE}</i><br />
+   <br />  <br />
+   <span style="font-size:7pt;"><a href="javascript:window.close()">{L_CLOSE_WINDOW}</a> | <a href="http://chcounter.org/" target="_blank">chCounter {V_SCRIPT_VERSION}</a></span>
+  </div>
+ </body>
+</html>

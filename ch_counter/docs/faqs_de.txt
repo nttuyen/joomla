@@ -1,0 +1,52 @@
+ FAQs - Häufig gestellte Fragen
+====================
+
+
+- Ich habe den Counter installiert, doch es werden nicht alle
+  gewünschten/keine Seiten gezählt!
+--------------------------------------------------------------------
+Der Counter muss in alle Dateien eingefügt
+werden, die gezählt werden sollen. Nur wenn der Counter in eine Datei
+eingefügt ist, wird das Counter-Script bei einem Aufruf der Datei
+ausgeführt und der Besucher somit gezählt.
+
+
+
+- Der Counter wird mit dem PHP-Code in eine Datei eingefügt, doch
+  der Counter arbeitet nicht, und im Quellcode ist nur der PHP-Code
+  sichtbar!
+--------------------------------------------------------------------
+Bitte schaue in der Datei install_de.txt nach, Kapitel 3.2: Einbau mit
+PHP
+
+
+
+- Es werden keine Referrer, Suchwörter und Suchmaschinen angezeigt!
+--------------------------------------------------------------------
+a) Solltest du Frames benutzen:
+Füge den Counter bitte auch in die Datei mit dem Frameset ein. Ist der
+Counter nur in einem Frame eingebunden, ist die darauf verweisende
+Seite nicht mehr die fremde Homepage, sondern die Datei mit dem
+Frameset und wird deshalb nicht gespeichert.
+b) siehe FAQ "Der Counter zählt falsch, es wird immer nur ein Besucher
+online angezeigt, ..."
+
+
+
+- Der Counter zählt falsch, es wird immer nur ein Besucher online
+   angezeigt, es werden nur Seitenaufrufe gezählt, ...!
+--------------------------------------------------------------------
+Vermutlich hast du den Counter mit vollständiger HTTP-Adresse
+eingebunden, bspw. include("http://www.homepage.tld/counter/counter.php");
+Der Counter kann allerdings aber nur über das Dateisystem des
+Webservers eingebunden werden.
+
+
+
+- Ich habe meinen Benutzernamen/mein Passwort vergessen und kann mich
+  nun nicht mehr in der Administration einloggen!
+--------------------------------------------------------------------
+Mit dem Script set_new_login_data.php (im Verzeichnis "install", kann
+auch nur innerhalb dieses Verzeichnisses ausgeführt werden) kannst du
+einen neuen Benutzernamen und ein neues Passwort in die Datenbank
+schreiben lassen.

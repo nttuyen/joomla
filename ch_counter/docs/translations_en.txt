@@ -1,0 +1,104 @@
+Translations
+==========
+
+Every aid is highly welcome! :-)
+
+
+Correction & improvements
+=====================
+If you have found a translation error or got an improvement
+suggestion, please tell me - http://chcounter.org/index.php?s=kontakt
+Thanks!
+
+
+
+New translations
+==============
+If you want to create a new translation, here is a guide:
+
+
+All language files are located in the directory "languages" and there
+within a sub directory named after the ISO639-1 code of each language
+(see http://de.wikipedia.org/wiki/ISO_639).
+
+Example: English -> "en", German => "de"
+
+Create a new directory named after the ISO639-1 code of the language
+and copy the language files of an already existent translation into it.
+
+
+Format and charset of the language files
+------------------------------------------------
+All files are plan text files and can be opened with every text editor.
+All files must be saved using the UTF-8 charset.
+Regarding Windows: You may use e.g. Notepad2
+(http://www.flos-freeware.ch) or UniRed
+(http://www.esperanto.mv.ru/UniRed/ENG/index.html).
+But Windows' build-in programm Notepad should be capable, too.
+
+
+lang_name.txt
+-----------------
+In this file the name of the language must be noted. This name will be
+used by the select lists for the languages in the administration area
+and in the statistics pages.
+
+
+
+main.lang.php, administration.lang.php, install.lang.php
+-----------------------------------------------------------------
+
+These files contain all strings that have to be translated in the
+following format:
+
+'identifier' => 'string that needs to be translated',
+
+or
+
+'identifier' => "string that needs to be translated",
+
+Please do not change the existent HTML tags of some strings - except of
+line breaks ("<br />") if customisations is needed to keep the layout
+clear.
+
+If one of the following chars occurs within a string, it must be
+escaped with a backslash \:
+
+- double or single quotes - depending on how the string is enclosed.
+  Examples:
+  'word \' word'
+  "word \"word"
+
+- Backslashes:  \
+- dollar signs: $, if the string is enclosed by double quotes
+
+
+Furthermore, there are some special combinations:
+- %s
+- %1$s, %2$s, ...
+These character string will be replaced later with others (the context
+should make their individual meaning clear). In this case (and only
+there), a backslash must NOT be noted before the dollar sign.
+
+
+config.inc.php
+-----------------
+In addition to date formats these settings have to customized:
+
+'translator'	-	Name of the translator (optional). Will be shown (in the
+			default template) next to the copyright notice.
+
+'lang_code'	-	The ISO639-1 code of the language
+
+'decimal_separator' -	Decimal separator of numbers
+'thousands_separator' -	Thousands separator of numbers
+
+
+
+
+images/all_entries_xx.png
+----------------------
+Now a file called "all_entries_xx.png" (xx stands for the ISO639-1-Code
+of the language) must be created using the same layout as the already
+existant images - it is sufficient to send me the translated writing of
+the image.

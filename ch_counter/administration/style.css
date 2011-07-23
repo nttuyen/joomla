@@ -1,0 +1,195 @@
+body
+{
+	color:#000000;
+	font-family: Verdana, Arial, Helvetica;
+	font-size: 8pt;
+	background-color:#E5E5E5;
+	text-align: center;
+}
+
+table
+{
+	margin: 0px;
+	empty-cells: show;
+	text-align: left;
+}
+
+td
+{
+	font-family: Verdana, Arial, Helvetica;
+	font-size: 8pt;
+	padding: 4px;
+}
+
+.options_table
+{
+}
+
+.options_table td
+{
+	font-family: Verdana, Arial, Helvetica;
+	font-size: 8pt;
+	padding: 0px 10px 2px 0px;
+}
+
+.options_table_left_cell
+{
+	width: 200px;
+}
+
+
+a
+{
+	text-decoration: underline;
+	color: #000000;
+}
+
+div.main_navigation a:link, div.main_navigation a:visited, div.sub_navigation a:link, div.sub_navigation a:visited
+{
+	text-decoration: none;
+}
+
+.main_box
+{
+	width: 800px;
+	margin-left: auto;
+	margin-right: auto;
+	background-color: #FFFFFF;
+	border: 1px solid #000000;
+}
+
+.header
+{
+	background-color: #0780BC;
+	border-bottom: 1px solid #000000;
+	color: #D3DDEB;
+	padding-top: 4px;
+	padding-bottom: 4px;
+	text-align: center;
+}
+
+.main_navigation
+{
+	width: 90%;
+	margin: 0px auto 40px auto;
+	text-align: center;
+	border-bottom: 1px solid #000000;
+	padding-top: 15px;
+	padding-bottom: 15px;
+}
+
+.content
+{
+	padding: 20px 10px 20px 10px;
+	overflow: visible;
+	width: 100%;
+	text-align: left;
+}
+
+.footer
+{
+	background-color: #0780BC;
+	color: #D3DDEB;
+	padding: 4px 0px 4px 0px;
+	text-align: right;
+	clear: left;
+}
+
+.sub_navigation
+{
+	width: 200px;
+	border-right: 1px solid #000000;
+	float: left;
+	margin: 20px 20px 0px 0px;
+	text-align:left;
+}
+
+.centered_message_box
+{
+	width: 400px;
+	margin: 10px auto 40px auto;
+	text-align: justify;
+}
+
+.subcat_settings ul
+{
+	margin-bottom: 10px;  margin-top: 4px;
+	list-style-type: circle;
+}
+
+li
+{
+	margin-top: 2px;
+}
+
+
+.cat_settings
+{
+	background-color: #0780BC;
+	color: #D3DDEB;;
+	padding: 4px 4px 4px 10px;
+}
+
+.subcat_settings
+{
+	padding: 8px 4px 16px 8px;
+}
+
+
+.current_subpage
+{
+	font-weight: bold;
+	font-style: italic;
+}
+
+fieldset
+{
+	padding: 0px 8px 8px 8px;
+	margin: 0px 0px 20px 20px;
+}
+
+legend
+{
+	font-weight: bold;
+	font-style: italic;
+}
+
+
+.row1
+{
+	background-color: #F2F0F0;
+}
+
+.row2
+{
+	background-color: #E0DFDF;
+}
+
+.row3
+{
+	background-color: #0780BC;
+	color: #D3DDEB;
+}
+
+.caption_table_log_data
+{
+	text-align: center;
+	border-bottom: 1px solid #000000;
+}
+
+.div_save_settings
+{
+	margin: 20px 0px 0px 20px;
+	text-align: left;
+}
+
+.option_row
+{
+	clear: left;
+}
+
+
+.error_msg
+{
+	color: #FF0000;
+}

@@ -1,0 +1,6 @@
+Links zu Anleitungen für den Einbau in verschiedene Weblogs:
+
+Movable Type:	http://www.pixelgraphix.de/log/2005-02/zugriffe-auf-movable-type-mit-chcounter-tracken.php
+
+Textpattern:	http://www.irox.de/roxomatic/422/textpattern-mit-chcounter
+		http://sebastian-werner.net/2005/03/24/chcounter-in-textpattern-einbauen

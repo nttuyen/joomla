@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module" version="1.6.0" client="site" method="upgrade">
+	<name>mod_ediapps</name>
+	<author>Pham Van An</author>
+	<creationDate>2010-07-03</creationDate>
+	<authorEmail>phaman86@gmail.com</authorEmail>
+	<authorUrl>www.vietwebs.net</authorUrl>
+	<version>1.6.0</version>
+	<description>Wedding Edit Applications Menu for joomla 1.6</description>
+	<files>
+		<filename module="mod_ediapps">mod_ediapps.php</filename>
+		<folder>tmpl</folder>
+		<filename>index.html</filename>
+		<filename>mod_ediapps.xml</filename>
+	</files>
+</extension>

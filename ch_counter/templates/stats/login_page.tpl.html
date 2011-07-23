@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+  <title>chCounter {V_SCRIPT_VERSION} - {V_PAGE_TITLE}</title>
+  <link rel="stylesheet" type="text/css" href="../templates/stats/style.css">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+ </head>
+ <body>
+  <!-- th counter output. It's included invisible, but as it may print out a JavaScript, it's noted here. -->
+  {COUNTER}
+  <!-- end counter -->
+  <form method="get" action="">
+   <div class="navigation_bar" style="margin-bottom: 30px;">
+   {L_LANGUAGE}
+    <select name="lang">
+<!-- BEGIN BLOCK COUNTER_LANGUAGES -->
+     <option value="{VALUE}" <!-- IF SELECTED -->selected="selected"<!-- ENDIF SELECTED -->>{NAME}</option>
+<!-- END BLOCK COUNTER_LANGUAGES -->
+    </select>
+    <input type="submit" value="{L_OK}">
+   </div>
+  </form>
+  <div style="text-align: center;">
+   <br />
+   {LOGIN_FORM}
+   <br />
+   <br />
+   <br />
+   <span style="font-size:7pt;"><a href="javascript: window.close()">{L_CLOSE_WINDOW}</a> | <a href="http://chcounter.org/" target="_blank">chCounter {V_SCRIPT_VERSION}</a></span>
+  </div>
+ </body>
+</html>

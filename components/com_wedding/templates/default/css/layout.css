@@ -1,0 +1,159 @@
+body{
+	width:100%;
+	padding:0;
+	margin:0;
+	background:#3b3b3b;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:12px;
+	color:#333;
+	line-height:150%;
+}
+#wrap{
+	width:776px;
+	margin:0 auto;
+	position:relative;
+}
+#header{
+	width:776px;
+	height:124px;
+	position:relative;
+	
+}
+#tex-header{
+	position:absolute;
+	top:65px;
+	left:20px;
+	color:#FFFFFF;
+}
+#pad-wrap{
+	width:776px;
+	overflow:hidden;
+	background:url(../images/bg-pad.jpg) top left repeat-y;
+}
+#letf{
+	float:left;
+	width:542px;
+	
+}
+#banner{
+	background:url(../images/banner-bg.png) top center no-repeat;
+	text-align:center;
+	height:313px;
+	margin-top:20px;
+	overflow:hidden;
+	padding-top:30px;
+}
+#center{
+	width:161px;
+	padding:0 6px;
+	
+	float:left;
+	
+}
+#count{
+	background:url(../images/bg-count.jpg) top center no-repeat;
+	width:160px;
+	height:151px;
+	
+
+}
+#count p{
+	padding:7px 0;
+	margin:0;
+	text-align:center;
+	color:#fff9f7;
+	font-size:15px;
+	
+	
+}
+#ykien{
+	padding:0 10px;
+}
+#ykien p{
+	padding:0 20px;
+}
+#ykien h3{
+	color:#424242;
+	height:25px;
+	line-height:25px;
+	text-transform:uppercase;
+	font-size:15px;
+	border-bottom: dotted 1px #a8a8a8;
+	text-align:center;
+	margin-top:25px;
+}
+#pad-wrap1{
+
+	background: url(../images/bg-right.jpg) bottom right no-repeat;
+	overflow:hidden;	
+}	
+#menu{
+	padding:25px 0 35px 0;
+	
+}
+#menu ul{
+	margin:0;
+	padding:0 15px;
+}
+#menu ul li{
+	height:25px;
+	line-height:25px;
+	border-bottom: dotted 1px #a8a8a8;
+	background-image: url(../../heart.jpg);
+	color:#93061e;
+	list-style:outside;
+	
+}
+#menu ul li.item{
+	border-bottom:none;
+}
+#menu ul li a{
+	
+	height:20px;
+	line-height:20px;
+	text-decoration:none;
+	font-size:12px;
+	color:#424242;
+	text-transform:uppercase;
+	font-family:Arial, Helvetica, sans-serif;
+}
+#icon{
+	background:url(../images/bg-icon.png) bottom center no-repeat;
+	width:542px;
+	height:28px;
+	padding-top:10px;
+}
+#content{
+	padding:20px;
+	color:#FFFFFF;
+}
+#footer{
+	height:40px;
+	text-align:center;
+	border-top: solid 3px #474747;
+	color:#FFFFFF;
+	font-size:14px;
+	line-height:43px;
+	width:542px;
+}
+div.album-wrap{
+	width:165px;
+	float:left;
+	margin:0 2px 0 0;
+}
+div.album-thumb{
+	padding-bottom:10px;
+}
+div.album-title{
+	width:120px;
+	text-align:center;
+	margin:0 0 10px 0;
+}
+div.album-title a{
+	color:#FFF9F7;
+	font-weight:bold;
+	outline:none;
+}
+#jlightbox img{
+	margin:0 3px 5px 2px;
+}

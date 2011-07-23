@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+	<!-- $Id: banner.xml 18212 2010-07-22 06:02:54Z eddieajau $ -->
+<form>
+	<fieldset name="details"
+		addfieldpath="/administrator/components/com_je_faq/models/fields"
+	>
+		<field name="id" type="text" default="0" required="true"
+			readonly="true" class="readonly"
+			label="JGLOBAL_FIELD_ID_LABEL" 	description ="JGLOBAL_FIELD_ID_DESC" />
+
+		<field name="name" type="text" class="inputbox"
+			size="40" label="Question"
+			description="Question" required="true" />
+
+		<field name="alias" type="text" class="inputbox"
+			size="40" label="JFIELD_ALIAS_LABEL"
+			description="Alias Description" />
+
+		<!-- 
+		<field name="catid" type="category" extension="com_demo"
+			label="Category" description="Category Description"
+			class="inputbox" required="true"
+		>
+		</field>
+		 -->
+
+		<field name="ordering" type="ordering" class="inputbox"
+
+			label="JFIELD_ORDERING_LABEL" description="JFIELD_ORDERING_DESC" />
+
+
+		<field name="description" type="editor" class="inputbox"
+			rows="3" cols="30" label="Answers" filter="safehtml"
+			description="Answers for this question" />
+			
+		
+		<field name="metadesc" type="textarea"
+			rows="3" cols="20" filter="raw"
+			label="Description" description="Description" />
+			
+		<field name="metakey" type="textarea"
+			rows="3" cols="20" filter="raw"
+			label="Keywords" description="Keywords" />
+			
+		
+
+	</fieldset>
+
+	<fieldset name="publish"
+		label="COM_BANNERS_GROUP_LABEL_PUBLISHING_DETAILS"
+	>
+		<field name="state" type="list"
+			label="JGLOBAL_STATE" description="COM_BANNERS_FIELD_STATE_DESC"
+			class="inputbox" size="1" default="1" >
+			<option value="1">JPUBLISHED</option>
+			<option value="0">JUNPUBLISHED</option>
+			<option value="2">JARCHIVED</option>
+			<option value="-2">JTRASH</option>
+		</field>
+
+		<field name="created" type="calendar"
+			label="Created" description="Created Description"
+			class="inputbox" size="20" format="%Y-%m-%d %H:%M:%S"
+			filter="user_utc" />
+
+	</fieldset>
+
+</form>

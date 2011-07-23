@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE install SYSTEM "http://dev.joomla.org/xml/1.5/component-install.dtd">
+<extension type="component" version="1.6.0">
+	<name>com_wedding</name>
+	<creationDate>2010-07-01</creationDate>
+	<author>anpham</author>
+	<authorEmail>phaman86@gmail.com</authorEmail>
+	<authorUrl>http://www.vietwebs.net</authorUrl>
+	<description>COM_WEDDING_DESCRIPTION</description>
+	
+	<install>
+		<sql>
+			<file driver="mysql" charset="utf8">sql/install.sql</file>
+		</sql>
+	</install>
+	
+	<uninstall>
+		<sql>
+			<file driver="mysql">sql/uninstall.sql</file>
+		</sql>
+	</uninstall>
+	
+	<files folder="site">
+		<filename>index.html</filename>
+		<filename>wedding.php</filename>
+		<filename>controller.php</filename>
+		<folder>views</folder>
+		<folder>models</folder>
+		<folder>controllers</folder>
+		<folder>templates</folder>
+		<folder>language</folder>
+	</files>
+	
+	<!-- Site Main Media File Copy Section
+	<media destination="com_helloworld">
+	    <filename>image.png</filename>
+	    <filename>flash.swf</filename>
+	</media>
+	 -->
+	
+	<administration>
+		<menu title="COM_WEDDING">COM_WEDDING</menu>
+		<submenu>
+			<menu link="option=com_wedding&amp;view=users" view="Users" alt="COM_WEDDING_USERS">COM_WEDDING_USERS</menu>
+			<menu link="option=com_wedding&amp;view=apps" view="apps" alt="COM_WEDDING_USERS">COM_WEDDING_APPS</menu>
+			<menu link="option=com_wedding&amp;view=templates" view="templates" alt="COM_WEDDING_TEMPLATES">COM_WEDDING_TEMPLATES</menu>
+		</submenu>
+		
+		<files folder="admin">
+			<filename>index.html</filename>
+			<filename>wedding.php</filename>
+			<filename>controller.php</filename>
+			<folder>controllers</folder>
+			<folder>views</folder>
+			<folder>models</folder>
+			<folder>tables</folder>
+			<folder>sql</folder>
+		</files>
+		
+		<!-- Admin Media File Copy Section
+		<media folder="admin" destination="com_helloworld">
+		    <filename>image.png</filename>
+		    <filename>flash.swf</filename>
+		</media>
+		 -->
+		
+		<languages folder="admin">
+			<language tag="en-GB">language/en-GB.com_wedding.ini</language>
+			<language tag="en-GB">language/en-GB.com_wedding.sys.ini</language>
+		</languages>
+	</administration>	
+</extension>

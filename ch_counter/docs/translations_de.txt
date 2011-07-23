@@ -1,0 +1,113 @@
+Übersetzungen
+==========
+
+Jegliche Mithilfe bei den Übersetzungen ist höchst willkommen! :-)
+
+
+Korrekturen & Verbesserungen
+=====================
+Du hast in einer Übersetzung Fehler gefunden oder aber hast
+Verbesserungsvorschläge? Bitte melde dich bei mir,
+berti2007[at]chCounter[dot]org - vielen Dank!
+
+
+
+Neue Übersetzungen
+==============
+Wenn du eine neue Übersetzung anfertigen möchtest, hier eine Anleitung:
+
+
+Alle Sprachdateien liegen im Verzeichnis "languages" des Counters und
+dort in einem Unterordner mit der ISO639-1-Bezeichnung der Sprache
+(siehe http://de.wiktionary.org/wiki/Wiktionary:Sprachen oder
+http://de.wikipedia.org/wiki/ISO_639).
+
+Bsp: Deutsch -> "de", Englisch => "en"
+
+Erstelle ein neues Verzeichnis mit dem ISO639-1-Sprachcode der Sprache,
+in welche du übersetzen möchtest, und kopiere die Sprachdateien einer
+bereits vorhandenen Übersetzung dort hinein.
+
+
+Format und Zeichensatz der Sprachdateien
+--------------------------------------------------
+Alle Dateien sind reine Textdateien und können mit jedem Texteditor
+geöffnet werden, bei Textverarbeitungsprogrammen muss darauf geachtet
+werden, dass die Datei als "Nur-Text" oder "plain text" gespeichert
+wird.
+Des Weiteren müssen sämtliche Dateien im UTF-8-Zeichensatz gespeichert
+werden.
+Für Windows: zu empfehlen wären z.B. Notepad2
+(http://www.flos-freeware.ch) oder UniRed
+(http://www.esperanto.mv.ru/UniRed/ENG/index.html), das Windows-eigene
+Notepad sollte es aber auch können.
+
+
+lang_name.txt
+-----------------
+In diese Datei muss der Name der jeweiligen Sprache (in selbiger
+Sprache) notiert werden. Dieser Name wird in den Auswahllisten für die
+Sprachen in der Administration und den Statistiken erscheinen.
+
+
+
+main.lang.php, administration.lang.php, install.lang.php
+-----------------------------------------------------------------
+
+Diese Dateien beinhalten sämtliche zu übersetzende Zeichenfolgen
+("Strings") in folgendem Format:
+
+'Bezeichnung' => 'zu übersetzender String',
+
+oder
+
+'Bezeichnung' => "zu übersetzender String",
+
+Bitte ändere keine HTML-Formatierungen - das Umstellen,
+Ergänzen oder Entfernen von Zeilenumbrüchen ("<br />") ist aber zur
+Erhaltung der Lesbarkeit und Optik gegebenenfalls nötig.
+
+Kommt innerhalb einer Zeichenfolge eines der folgenden Zeichen vor,
+muss diesem ein Backslash \ vorgestellt werden:
+
+- Anführungszeichen oder Hochkommata - je nachdem, womit der zu
+  übersetzende String umschlossen ist.
+  Beispiele:
+  'Wort \' Wort'
+  "Wort \"Wort"
+
+- Backslashes:  \
+- Dollarzeichen: $, falls der String mit Anführungszeichen umschlossen
+  ist.
+
+
+Des Weiteren kommen in den Strings folgende Kombinationen vor:
+- %s
+- %1$s, %2$s, ...
+Diese Zeichenfolgen werden später durch andere (aus dem Kontext
+ersichtliche) Werte ersetzt. In diesem Fall muss und darf dem
+Dollarzeichen KEIN Backslash vorangestellt werden.
+
+
+
+config.inc.php
+-----------------
+Neben Datumsformaten sind hier folgende Einstellungen anzupassen:
+
+'translator'	-	Name des Übersetzers (optional). Erscheint (beim
+			Standard-Template) neben dem Copyright-Hinweis.
+
+'lang_code'	-	Wie beim Verzeichnisnamen, der ISO639-1-Code der Sprache
+
+'decimal_separator' -	Dezimaltrennzeichen bei Zahlen
+'thousands_separator' -	Tausendertrennzeichen bei Zahlen
+
+
+
+
+images/all_entries_xx.png
+----------------------
+Nun muss noch eine Datei "all_entries_xx.png" (xx steht für den
+ISO639-1-Code der jeweiligen Sprache) auf Vorlage der bereits
+vorhandenen Grafiken erstellt werden - es genügt dazu, mir einfach den
+übersetzten Schriftzug als Text zu schicken.
