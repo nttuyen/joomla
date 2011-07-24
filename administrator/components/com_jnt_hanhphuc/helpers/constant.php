@@ -1,0 +1,8 @@
+<?php
+define('ORDER_STATE_REMOVED', -2);
+define('ORDER_STATE_CANCELED', 0);
+define('ORDER_STATE_COMPLETED', 1);
+define('ORDER_STATE_CONFIRMED', 2);
+define('ORDER_STATE_SHIPPING', 3);
+
+
