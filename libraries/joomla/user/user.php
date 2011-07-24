@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: user.php 18766 2010-09-03 02:14:59Z ian $
+ * @version		$Id: user.php 20228 2011-01-10 00:52:54Z eddieajau $
  * @package		Joomla.Framework
  * @subpackage	User
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -26,7 +26,7 @@ class JUser extends JObject
 	 * A cached switch for if this user has root access rights.
 	 * @var	boolean
 	 */
-	protected static $isRoot = null;
+	protected $isRoot = null;
 
 	/**
 	 * Unique id
@@ -107,7 +107,7 @@ class JUser extends JObject
 	public $params = null;
 
 	/**
-	 * Associative array of user group ids => names.
+	 * Associative array of user names => group ids
 	 *
 	 * @since	1.6
 	 * @var		array
@@ -125,6 +125,12 @@ class JUser extends JObject
 	 * @var object
 	 */
 	protected $_params	= null;
+
+	/**
+	 * Authorised access groups
+	 * @var array
+	 */
+	protected $_authGroups	= null;
 
 	/**
 	 * Authorised access levels
@@ -271,8 +277,8 @@ class JUser extends JObject
 	public function authorise($action, $assetname = null)
 	{
 		// Make sure we only check for core.admin once during the run.
-		if (self::$isRoot === null) {
-			self::$isRoot = false;
+		if ($this->isRoot === null) {
+			$this->isRoot = false;
 
 			// Check for the configuration file failsafe.
 			$config		= JFactory::getConfig();
@@ -280,24 +286,62 @@ class JUser extends JObject
 
 			// The root_user variable can be a numeric user ID or a username.
 			if (is_numeric($rootUser) && $this->id > 0 && $this->id == $rootUser) {
-				self::$isRoot = true;
+				$this->isRoot = true;
 			}
 			else if ($this->username && $this->username == $rootUser) {
-				self::$isRoot = true;
+				$this->isRoot = true;
 			}
 			else {
 				// Get all groups against which the user is mapped.
-				$identities = JAccess::getGroupsByUser($this->id);
+				$identities = $this->getAuthorisedGroups();
 				array_unshift($identities, $this->id * -1);
 
 				if (JAccess::getAssetRules(1)->allow('core.admin', $identities)) {
-					self::$isRoot = true;
+					$this->isRoot = true;
 					return true;
 				}
 			}
 		}
 
-		return self::$isRoot ? true : JAccess::check($this->id, $action, $assetname);
+		return $this->isRoot ? true : JAccess::check($this->id, $action, $assetname);
+	}
+
+	/**
+	 * @deprecated 1.6	Use the getAuthorisedViewLevels method instead.
+	 */
+	public function authorisedLevels()
+	{
+		return $this->getAuthorisedViewLevels();
+	}
+
+	/**
+	 * Method to return a list of all categories that a user has permission for a given action
+	 *
+	 * @param	string	$component	The component from which to retrieve the categories
+	 * @param	string	$action		The name of the section within the component from which to retrieve the actions.
+	 *
+	 * @return	array	List of categories that this group can do this action to (empty array if none). Categories must be published.
+	 * @since	1.6
+	 */
+	public function getAuthorisedCategories($component, $action) {
+		// Brute force method: get all published category rows for the component and check each one
+		// TODO: Modify the way permissions are stored in the db to allow for faster implementation and better scaling
+		$db = JFactory::getDbo();
+		$query	= $db->getQuery(true)
+			->select('c.id AS id, a.name as asset_name')
+			->from('#__categories c')
+			->innerJoin('#__assets a ON c.asset_id = a.id')
+			->where('c.extension = ' . $db->quote($component))
+			->where('c.published = 1');
+		$db->setQuery($query);
+		$allCategories = $db->loadObjectList('id');
+		$allowedCategories = array();
+		foreach ($allCategories as $category) {
+			if ($this->authorise($action, $category->asset_name)) {
+				$allowedCategories[] = (int) $category->id;
+			}
+		}
+		return $allowedCategories;
 	}
 
 	/**
@@ -306,7 +350,7 @@ class JUser extends JObject
 	 * @return	array
 	 * @since	1.6
 	 */
-	public function authorisedLevels()
+	public function getAuthorisedViewLevels()
 	{
 		if ($this->_authLevels === null) {
 			$this->_authLevels = array();
@@ -318,7 +362,24 @@ class JUser extends JObject
 
 		return $this->_authLevels;
 	}
+	/**
+	 * Gets an array of the authorised user groups
+	 *
+	 * @return	array
+	 * @since	1.6
+	 */
+	public function getAuthorisedGroups()
+	{
+		if ($this->_authGroups === null) {
+			$this->_authGroups = array();
+		}
 
+		if (empty($this->_authGroups)) {
+			$this->_authGroups = JAccess::getGroupsByUser($this->id);
+		}
+
+		return $this->_authGroups;
+	}
 	/**
 	 * Pass through method to the table for setting the last visit date
 	 *
@@ -403,7 +464,7 @@ class JUser extends JObject
 	 * @return	object	The user table object
 	 * @since	1.5
 	 */
-	public function getTable($type = null, $prefix = 'JTable')
+	public static function getTable($type = null, $prefix = 'JTable')
 	{
 		static $tabletype;
 
@@ -494,7 +555,7 @@ class JUser extends JObject
 		}
 
 		// TODO: this will be deprecated as of the ACL implementation
-		$db = JFactory::getDbo();
+//		$db = JFactory::getDbo();
 
 		if (array_key_exists('params', $array)) {
 			$params	= '';
@@ -535,56 +596,110 @@ class JUser extends JObject
 	{
 		// NOTE: $updateOnly is currently only used in the user reset password method.
 		// Create the user table object
-		$table = $this->getTable();
-		$this->params = (string)$this->_params;
+		$table			= $this->getTable();
+		$this->params	= (string) $this->_params;
 		$table->bind($this->getProperties());
-		$table->groups = $this->groups;
 
-		// Check and store the object.
-		if (!$table->check()) {
-			$this->setError($table->getError());
+		// Allow an exception to be thrown.
+		try
+		{
+			// Check and store the object.
+			if (!$table->check()) {
+				$this->setError($table->getError());
+				return false;
+			}
+
+			// If user is made a Super Admin group and user is NOT a Super Admin
+			//
+			// @todo ACL - this needs to be acl checked
+			//
+			$my = JFactory::getUser();
+
+			//are we creating a new user
+			$isNew = empty($this->id);
+
+			// If we aren't allowed to create new users return
+			if ($isNew && $updateOnly) {
+				return true;
+			}
+
+			// Get the old user
+			$oldUser = new JUser($this->id);
+
+			//
+			// Access Checks
+			//
+
+			// The only mandatory check is that only Super Admins can operate on other Super Admin accounts.
+			// To add additional business rules, use a user plugin and throw an Exception with onUserBeforeSave.
+
+			// Check if I am a Super Admin
+			$iAmSuperAdmin	= $my->authorise('core.admin');
+
+			// We are only worried about edits to this account if I am not a Super Admin.
+			if ($iAmSuperAdmin != true) {
+				if ($isNew) {
+					// Check if the new user is being put into a Super Admin group.
+					foreach ($this->groups as $key => $groupId)
+					{
+						if (JAccess::checkGroup($groupId, 'core.admin')) {
+							throw new Exception(JText::_('JLIB_USER_ERROR_NOT_SUPERADMIN'));
+						}
+					}
+				}
+				else {
+					// I am not a Super Admin, and this one is, so fail.
+					if (JAccess::check($this->id, 'core.admin')) {
+						throw new Exception(JText::_('JLIB_USER_ERROR_NOT_SUPERADMIN'));
+					}
+
+					if ($this->groups != null) {
+					// I am not a Super Admin and I'm trying to make one.
+						foreach ($this->groups as $groupId)
+						{
+							if (JAccess::checkGroup($groupId, 'core.admin')) {
+								throw new Exception(JText::_('JLIB_USER_ERROR_NOT_SUPERADMIN'));
+							}
+						}
+					}
+				}
+			}
+
+			// Fire the onUserBeforeSave event.
+			JPluginHelper::importPlugin('user');
+			$dispatcher = JDispatcher::getInstance();
+
+			$result = $dispatcher->trigger('onUserBeforeSave', array($oldUser->getProperties(), $isNew, $this->getProperties()));
+			if (in_array(false, $result, true)) {
+				// Plugin will have to raise it's own error or throw an exception.
+				return false;
+			}
+
+			// Store the user data in the database
+			if (!($result = $table->store())) {
+				throw new Exception($table->getError());
+			}
+
+			// Set the id for the JUser object in case we created a new user.
+			if (empty($this->id)) {
+				$this->id = $table->get('id');
+			}
+
+			if ($my->id == $table->id) {
+				$registry = new JRegistry;
+				$registry->loadJSON($table->params);
+				$my->setParameters($registry);
+			}
+
+			// Fire the onAftereStoreUser event
+			$dispatcher->trigger('onUserAfterSave', array($this->getProperties(), $isNew, $result, $this->getError()));
+		}
+		catch (Exception $e)
+		{
+			$this->setError($e->getMessage());
+
 			return false;
 		}
-
-		// If user is made a Super Admin group and user is NOT a Super Admin
-		//
-		// @todo ACL - this needs to be acl checked
-		//
-		$my = JFactory::getUser();
-
-		//are we creating a new user
-		$isnew = empty($this->id);
-
-		// If we aren't allowed to create new users return
-		if ($isnew && $updateOnly) {
-			return true;
-		}
-
-		// Get the old user
-		$old = new JUser($this->id);
-
-		// Fire the onUserBeforeSave event.
-		JPluginHelper::importPlugin('user');
-		$dispatcher = JDispatcher::getInstance();
-		$dispatcher->trigger('onUserBeforeSave', array($old->getProperties(), $isnew, $this->getProperties()));
-
-		//Store the user data in the database
-		if (!$result = $table->store()) {
-			$this->setError($table->getError());
-		}
-
-		// Set the id for the JUser object in case we created a new user.
-		if (empty($this->id)) {
-			$this->id = $table->get('id');
-		}
-
-		if ($my->id == $table->id) {
-			$registry = new JRegistry;
-			$registry->loadJSON($table->params);
-			$my->setParameters($registry);
-		}
-		// Fire the onAftereStoreUser event
-		$dispatcher->trigger('onUserAfterSave', array($this->getProperties(), $isnew, $result, $this->getError()));
 
 		return $result;
 	}

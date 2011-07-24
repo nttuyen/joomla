@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: router.php 19081 2010-10-10 20:52:07Z chdemko $
+ * @version		$Id: router.php 20757 2011-02-18 04:38:02Z dextercowley $
  * @package		Joomla.Site
  * @subpackage	Application
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -79,7 +79,7 @@ class JRouterSite extends JRouter
 		return $vars;
 	}
 
-	public function &build($url)
+	public function build($url)
 	{
 		$uri = parent::build($url);
 
@@ -114,7 +114,7 @@ class JRouterSite extends JRouter
 		$vars	= array();
 		$app	= JFactory::getApplication();
 		$menu	= $app->getMenu(true);
-
+		 
 		//Handle an empty URL (special case)
 		if (!$uri->getVar('Itemid') && !$uri->getVar('option')) {
 			$item = $menu->getDefault(JFactory::getLanguage()->getTag());
@@ -141,8 +141,9 @@ class JRouterSite extends JRouter
 		//Get the itemid, if it hasn't been set force it to null
 		$this->setVar('Itemid', JRequest::getInt('Itemid', null));
 
-		// Only an Itemid ? Get the full information from the itemid
-		if (count($this->getVars()) == 1) {
+		// Only an Itemid  OR if filter language plugin set? Get the full information from the itemid
+		if (count($this->getVars()) == 1 || ( $app->getLanguageFilter() && count( $this->getVars()) == 2 )) {
+			
 			$item = $menu->getItem($this->getVar('Itemid'));
 			if ($item !== NULL && is_array($item->query)) {
 				$vars = $vars + $item->query;
@@ -189,21 +190,20 @@ class JRouterSite extends JRouter
 		/*
 		 * Parse the application route
 		 */
-		if (substr($route, 0, 9) == 'component') {
-			$segments	= explode('/', $route);
-			$route		= str_replace('component/'.$segments[1], '', $route);
-
+		$segments	= explode('/', $route);
+		if (count($segments) > 1 && $segments[0] == 'component') {
 			$vars['option'] = 'com_'.$segments[1];
 			$vars['Itemid'] = null;
+			$route = implode('/', array_slice($segments, 2));
 		} else {
 			//Need to reverse the array (highest sublevels first)
 			$items = array_reverse($menu->getMenu());
 
 			$found = false;
+			$route_lowercase = JString::strtolower($route);
 			foreach ($items as $item) {
 				$length = strlen($item->route); //get the length of the route
-
-				if ($length > 0 && strpos($route.'/', $item->route.'/') === 0 && $item->type != 'menulink') {
+				if ($length > 0 && JString::strpos($route_lowercase.'/', $item->route.'/') === 0 && $item->type != 'menulink') {
 					$route = substr($route, $length);
 					if ($route) {
 						$route = substr($route, 1);
@@ -233,6 +233,9 @@ class JRouterSite extends JRouter
 		 */
 		if (!empty($route) && isset($this->_vars['option'])) {
 			$segments = explode('/', $route);
+			if (empty($segments[0])) {
+				array_shift($segments);
+			}
 
 			// Handle component	route
 			$component = preg_replace('/[^A-Z0-9_\.-]/i', '', $this->_vars['option']);
@@ -254,13 +257,15 @@ class JRouterSite extends JRouter
 				}
 
 				require_once $path;
-				$function =  substr($component, 4).'ParseRoute';
+				$function = substr($component, 4).'ParseRoute';
+				$function = str_replace(array("-", "."), "", $function);
 				$vars =  $function($segments);
 
 				$this->setVars($vars);
 			}
 		} else {
 			//Set active menu item
+
 			if ($item = $menu->getActive()) {
 				$vars = $item->query;
 			}
@@ -301,6 +306,7 @@ class JRouterSite extends JRouter
 		if (file_exists($path) && !empty($query)) {
 			require_once $path;
 			$function	= substr($component, 4).'BuildRoute';
+			$function   = str_replace(array("-", "."), "", $function);
 			$parts		= $function($query);
 
 			// encode the route segments
@@ -379,6 +385,7 @@ class JRouterSite extends JRouter
 	{
 		// Make sure any menu vars are used if no others are specified
 		if (($this->_mode != JROUTER_MODE_SEF) && $uri->getVar('Itemid') && count($uri->getQuery(true)) == 2) {
+
 			$app	= JFactory::getApplication();
 			$menu	= $app->getMenu();
 

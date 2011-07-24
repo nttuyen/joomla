@@ -1,9 +1,9 @@
 <?php
 /**
  * @version		$Id$
- * @package		Joomla.Framework
- * @subpackage	Form
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @package		Joomla.Administrator
+ * @subpackage	com_plugins
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -16,7 +16,7 @@ jimport('joomla.form.formfield');
  * Supports an HTML select list of plugins
  *
  * @package		Joomla.Administrator
- * @subpackage	com_newsfeeds
+ * @subpackage	com_plugins
  * @since		1.6
  */
 class JFormFieldOrdering extends JFormField
@@ -63,11 +63,11 @@ class JFormFieldOrdering extends JFormField
 		// Create a read-only list (no name) with a hidden input to store the value.
 		if ((string) $this->element['readonly'] == 'true') {
 			$html[] = JHtml::_('list.ordering', '', $query, trim($attr), $this->value, $pluginId ? 0 : 1);
-			$html[] = '<input type="hidden"'.'value="'.$this->ordering.'"/>';
+			$html[] = '<input type="hidden" name="'.$this->name.'" value="'.$this->value.'"/>';
 		}
 		// Create a regular list.
 		else {
-			$html[] = JHtml::_('list.ordering', $this->name, $query, trim($attr), $this->ordering, $pluginId ? 0 : 1);
+			$html[] = JHtml::_('list.ordering', $this->name, $query, trim($attr), $this->value, $pluginId ? 0 : 1);
 		}
 
 		return implode($html);

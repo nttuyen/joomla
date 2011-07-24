@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: media.php 18650 2010-08-26 13:28:49Z ian $
+ * @version		$Id: media.php 20813 2011-02-21 21:08:29Z dextercowley $
  * @package		Joomla.Administrator
  * @subpackage	com_media
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -11,25 +11,36 @@
 defined('_JEXEC') or die;
 
 // Access check.
-if (!JFactory::getUser()->authorise('core.manage', 'com_media')) {
-	return JError::raiseWarning(404, JText::_('JERROR_ALERTNOAUTHOR'));
+
+$user = JFactory::getUser();
+$asset = JRequest::getCmd('asset');
+$author = JRequest::getCmd('author');
+ 
+if (	!$user->authorise('core.manage', 'com_media')
+	&&	(!$asset or (
+			!$user->authorise('core.edit', $asset)
+		&&	!$user->authorise('core.create', $asset) 
+		&& 	count($user->getAuthorisedCategories($asset, 'core.create')) == 0)
+		&&	!($user->id==$author && $user->authorise('core.edit.own', $asset))))
+{
+	return JError::raiseWarning(403, JText::_('JERROR_ALERTNOAUTHOR'));
 }
 
 $params = JComponentHelper::getParams('com_media');
 
 // Load the admin HTML view
-require_once JPATH_COMPONENT.DS.'helpers'.DS.'media.php';
+require_once JPATH_COMPONENT.'/helpers/media.php';
 
 // Set the path definitions
 $popup_upload = JRequest::getCmd('pop_up',null);
 $path = "file_path";
 
-$view = JRequest::getVar('view');
+$view = JRequest::getCmd('view');
 if (substr(strtolower($view),0,6) == "images" || $popup_upload == 1) {
 	$path = "image_path";
 }
 
-define('COM_MEDIA_BASE',	JPATH_ROOT.DS.$params->get($path, 'images'));
+define('COM_MEDIA_BASE',	JPATH_ROOT.'/'.$params->get($path, 'images'));
 define('COM_MEDIA_BASEURL', JURI::root().$params->get($path, 'images'));
 
 // Include dependancies

@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: mod_custom.php 14276 2010-01-18 14:20:28Z louis $
- * @package		Joomla.Site
+ * @version		$Id: mod_custom.php 21097 2011-04-07 15:38:03Z dextercowley $
+ * @package		Joomla.Administrator
  * @subpackage	mod_custom
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 

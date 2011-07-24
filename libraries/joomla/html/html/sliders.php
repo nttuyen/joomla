@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: sliders.php 18370 2010-08-09 15:54:10Z ian $
+ * @version		$Id: sliders.php 21007 2011-03-22 13:23:21Z infograf768 $
  * @package		Joomla.Framework
  * @subpackage	HTML
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -17,7 +17,6 @@
  */
 abstract class JHtmlSliders
 {
-	protected static $opened = array();
 
 	/**
 	 * Creates a panes and loads the javascript behavior for it.
@@ -29,10 +28,8 @@ abstract class JHtmlSliders
 	 */
 	public static function start($group = 'sliders', $params = array())
 	{
-		JHtmlSliders::_loadBehavior($group,$params);
-		array_push(JHtmlSliders::$opened,false);
-
-		return '<div id="'.$group.'" class="pane-sliders">';
+		self::_loadBehavior($group,$params);
+		return '<div id="'.$group.'" class="pane-sliders"><div style="display:none;"><div>';
 	}
 
 	/**
@@ -43,16 +40,7 @@ abstract class JHtmlSliders
 	 */
 	public static function end()
 	{
-		if (array_pop(JHtmlSliders::$opened))
-		{
-			$close = '</div></div>';
-		}
-		else
-		{
-			$close = '';
-		}
-
-		return $close.'</div>';
+		return '</div></div></div>';
 	}
 
 	/**
@@ -65,17 +53,7 @@ abstract class JHtmlSliders
 	 */
 	public static function panel($text, $id)
 	{
-		if (JHtmlSliders::$opened[count(JHtmlSliders::$opened)-1])
-		{
-			$close = '</div></div>';
-		}
-		else
-		{
-			JHtmlSliders::$opened[count(JHtmlSliders::$opened)-1] = true;
-			$close = '';
-		}
-
-		return $close.'<div class="panel"><h3 class="jpane-toggler title" id="'.$id.'"><a href="javascript:void(0);"><span>'.$text.'</span></a></h3><div class="jpane-slider content">';
+		return '</div></div><div class="panel"><h3 class="pane-toggler title" id="'.$id.'"><a href="javascript:void(0);"><span>'.$text.'</span></a></h3><div class="pane-slider content">';
 	}
 
 	/**
@@ -100,8 +78,8 @@ abstract class JHtmlSliders
 			$display = (isset($params['startOffset']) && isset($params['startTransition'])  && $params['startTransition']) ? (int)$params['startOffset'] : null;
 			$show = (isset($params['startOffset']) && !(isset($params['startTransition']) && $params['startTransition'])) ? (int)$params['startOffset'] : null;
 			$options = '{';
-			$opt['onActive']		= 'function(toggler, i) {toggler.addClass(\'jpane-toggler-down\');toggler.removeClass(\'jpane-toggler\');Cookie.write(\'jpanesliders_'.$group.'\',$$(\'div#'.$group.'.pane-sliders .panel h3\').indexOf(toggler));}';
-			$opt['onBackground']	= "function(toggler, i) {toggler.addClass('jpane-toggler');toggler.removeClass('jpane-toggler-down');if($$('div#".$group.".pane-sliders .panel h3').length==$$('div#".$group.".pane-sliders .panel h3.jpane-toggler').length) Cookie.write('jpanesliders_".$group."',-1);}";
+			$opt['onActive']		= "function(toggler, i) {toggler.addClass('pane-toggler-down');toggler.removeClass('pane-toggler');i.addClass('pane-down');i.removeClass('pane-hide');Cookie.write('jpanesliders_".$group."',$$('div#".$group.".pane-sliders > .panel > h3').indexOf(toggler));}";
+			$opt['onBackground']	= "function(toggler, i) {toggler.addClass('pane-toggler');toggler.removeClass('pane-toggler-down');i.addClass('pane-hide');i.removeClass('pane-down');if($$('div#".$group.".pane-sliders > .panel > h3').length==$$('div#".$group.".pane-sliders > .panel > h3.pane-toggler').length) Cookie.write('jpanesliders_".$group."',-1);}";
 			$opt['duration']		= (isset($params['duration'])) ? (int)$params['duration'] : 300;
 			$opt['display']			= (isset($params['useCookie']) && $params['useCookie']) ? JRequest::getInt('jpanesliders_' . $group, $display, 'cookie') : $display ;
 			$opt['show']			= (isset($params['useCookie']) && $params['useCookie']) ? JRequest::getInt('jpanesliders_' . $group, $show, 'cookie') : $show ;
@@ -118,7 +96,7 @@ abstract class JHtmlSliders
 			}
 			$options .= '}';
 
-			$js = '	window.addEvent(\'domready\', function(){ new Accordion($$(\'div#'.$group.'.pane-sliders .panel h3.jpane-toggler\'), $$(\'div#'.$group.'.pane-sliders .panel div.jpane-slider\'), '.$options.'); });';
+			$js = "window.addEvent('domready', function(){ new Fx.Accordion($$('div#".$group.".pane-sliders > .panel > h3.pane-toggler'), $$('div#".$group.".pane-sliders > .panel > div.pane-slider'), ".$options."); });";
 
 			$document->addScriptDeclaration($js);
 		}

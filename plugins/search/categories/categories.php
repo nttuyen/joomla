@@ -1,8 +1,7 @@
 <?php
 /**
- * @version		$Id: categories.php 17851 2010-06-23 17:39:31Z eddieajau $
- * @package		Joomla
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @version		$Id: categories.php 21097 2011-04-07 15:38:03Z dextercowley $
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -16,12 +15,26 @@ require_once JPATH_SITE.'/components/com_content/helpers/route.php';
 /**
  * Categories Search plugin
  *
- * @package		Joomla
- * @subpackage	Search
+ * @package		Joomla.Plugin
+ * @subpackage	Search.categories
  * @since		1.6
  */
 class plgSearchCategories extends JPlugin
 {
+	/**
+	 * Constructor
+	 *
+	 * @access      protected
+	 * @param       object  $subject The object to observe
+	 * @param       array   $config  An array that holds the plugin configuration
+	 * @since       1.5
+	 */
+	public function __construct(& $subject, $config)
+	{
+		parent::__construct($subject, $config);
+		$this->loadLanguage();
+	}
+
 	/**
 	 * @return array An array of search areas
 	 */
@@ -49,7 +62,7 @@ class plgSearchCategories extends JPlugin
 		$db		= JFactory::getDbo();
 		$user	= JFactory::getUser();
 		$app	= JFactory::getApplication();
-		$groups	= implode(',', $user->authorisedLevels());
+		$groups	= implode(',', $user->getAuthorisedViewLevels());
 		$searchText = $text;
 
 		if (is_array($areas)) {

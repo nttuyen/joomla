@@ -1,7 +1,7 @@
 <?php
 /**
- * @version		$Id: item.php 19148 2010-10-17 17:24:04Z infograf768 $
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @version		$Id: item.php 21148 2011-04-14 17:30:08Z ian $
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -55,13 +55,18 @@ class MenusModelItem extends JModelAdmin
 	 */
 	protected function canDelete($record)
 	{
-		$user = JFactory::getUser();
+		if (!empty($record->id)) {
+			if ($record->published != -2) {
+				return ;
+			}	
+			$user = JFactory::getUser();
 
 		return $user->authorise('core.delete', 'com_menus.item.'.(int) $record->id);
+		}	
 	}
 
 	/**
-	 * Method to test whether a record can be deleted.
+	 * Method to test whether a record can have its state edited.
 	 *
 	 * @param	object	A record object.
 	 *
@@ -147,6 +152,12 @@ class MenusModelItem extends JModelAdmin
 	 */
 	protected function batchAccess($value, $pks)
 	{
+		// Check that user has edit permission for menus
+		$user	= JFactory::getUser();
+		if (!$user->authorise('core.edit', 'com_menus')) {
+			$this->setError(JText::_('JGLOBAL_BATCH_MENU_ITEM_CANNOT_EDIT'));
+			return false;
+		}
 		$table = $this->getTable();
 
 		foreach ($pks as $pk)
@@ -161,10 +172,8 @@ class MenusModelItem extends JModelAdmin
 			}
 		}
 
-		// Clear the component's cache
-		$cache = JFactory::getCache();
-		$cache->clean('com_modules');
-		$cache->clean('mod_menu');
+		// Clean the cache
+		$this->cleanCache();
 
 		return true;
 	}
@@ -211,6 +220,13 @@ class MenusModelItem extends JModelAdmin
 				return false;
 			}
 		}
+		
+		// Check that user has create permission for menus
+		$user	= JFactory::getUser();
+		if (!$user->authorise('core.create', 'com_menus')) {
+			$this->setError(JText::_('JGLOBAL_BATCH_MENU_ITEM_CANNOT_CREATE'));
+			return false;
+		}
 
 		// We need to log the parent ID
 		$parents = array();
@@ -219,7 +235,7 @@ class MenusModelItem extends JModelAdmin
 		$db->setQuery(
 			'SELECT COUNT(id)' .
 			' FROM #__menu'
-		);
+			);
 		$count = $db->loadResult();
 
 		if ($error = $db->getErrorMsg()) {
@@ -251,9 +267,9 @@ class MenusModelItem extends JModelAdmin
 
 			// Copy is a bit tricky, because we also need to copy the children
 			$db->setQuery(
-				'SELECT id' .
-				' FROM #__menu' .
-				' WHERE lft > '.(int) $table->lft.' AND rgt < '.(int) $table->rgt
+			'SELECT id' .
+			' FROM #__menu' .
+			' WHERE lft > '.(int) $table->lft.' AND rgt < '.(int) $table->rgt
 			);
 			$childIds = $db->loadResultArray();
 
@@ -276,12 +292,26 @@ class MenusModelItem extends JModelAdmin
 			// otherwise it's a new top level item
 			$table->parent_id	= isset($parents[$oldParentId]) ? $parents[$oldParentId] : $parentId;
 			$table->menutype	= $menuType;
+
+			// Set the new location in the tree for the node.
+			$table->setLocation($table->parent_id, 'last-child');
+
 			// TODO: Deal with ordering?
 			//$table->ordering	= 1;
 			$table->level		= null;
 			$table->lft		= null;
 			$table->rgt	= null;
 
+			// Alter the title & alias
+			list($title,$alias) = $this->generateNewTitle($table->parent_id, $table->alias, $table->title);
+			$table->title   = $title;
+			$table->alias   = $alias;
+
+			// Check the row.
+			if (!$table->check()) {
+				$this->setError($table->getError());
+				return false;
+			}
 			// Store the row.
 			if (!$table->store()) {
 				$this->setError($table->getError());
@@ -305,11 +335,9 @@ class MenusModelItem extends JModelAdmin
 			return false;
 		}
 
-		// Clear the component's cache
-		$cache = JFactory::getCache('com_modules');
-		$cache->clean();
-		$cache->clean('mod_menu');
-
+		// Clean the cache
+		$this->cleanCache();
+				
 		return true;
 	}
 
@@ -348,6 +376,18 @@ class MenusModelItem extends JModelAdmin
 				}
 			}
 		}
+		
+		// Check that user has create and edit permission for menus
+		$user	= JFactory::getUser();
+		if (!$user->authorise('core.create', 'com_menus')) {
+			$this->setError(JText::_('JGLOBAL_BATCH_MENU_ITEM_CANNOT_CREATE'));
+			return false;
+		}
+
+		if (!$user->authorise('core.edit', 'com_menus')) {
+			$this->setError(JText::_('JGLOBAL_BATCH_MENU_ITEM_CANNOT_EDIT'));
+			return false;
+		}
 
 		// We are going to store all the children and just moved the menutype
 		$children = array();
@@ -372,6 +412,9 @@ class MenusModelItem extends JModelAdmin
 			// Set the new location in the tree for the node.
 			$table->setLocation($parentId, 'last-child');
 
+			// Set the new Parent Id
+			$table->parent_id = $parentId;
+
 			// Check if we are moving to a different menu
 			if ($menuType != $table->menutype) {
 				// Add the child node ids to the children array.
@@ -381,6 +424,12 @@ class MenusModelItem extends JModelAdmin
 					' WHERE `lft` BETWEEN '.(int) $table->lft.' AND '.(int) $table->rgt
 				);
 				$children = array_merge($children, (array) $db->loadResultArray());
+			}
+
+			// Check the row.
+			if (!$table->check()) {
+				$this->setError($table->getError());
+				return false;
 			}
 
 			// Store the row.
@@ -407,21 +456,19 @@ class MenusModelItem extends JModelAdmin
 				'UPDATE `#__menu`' .
 				' SET `menutype` = '.$db->quote($menuType).
 				' WHERE `id` IN ('.implode(',', $children).')'
-			);
-			$db->query();
+				);
+				$db->query();
 
-			// Check for a database error.
-			if ($db->getErrorNum()) {
-				$this->setError($db->getErrorMsg());
-				return false;
-			}
+				// Check for a database error.
+				if ($db->getErrorNum()) {
+					$this->setError($db->getErrorMsg());
+					return false;
+				}
 		}
 
-		// Clear the component's cache
-		$cache = JFactory::getCache('com_modules');
-		$cache->clean();
-		$cache->clean('mod_menu');
-
+		// Clean the cache
+		$this->cleanCache();
+				
 		return true;
 	}
 
@@ -490,13 +537,7 @@ class MenusModelItem extends JModelAdmin
 	protected function loadFormData()
 	{
 		// Check the session for previously entered form data.
-		$data = JFactory::getApplication()->getUserState('com_menus.edit.item.data', array());
-
-		if (empty($data)) {
-			$data = $this->getItem();
-		}
-
-		return $data;
+		return array_merge((array)$this->getItem(), (array)JFactory::getApplication()->getUserState('com_menus.edit.item.data', array()));
 	}
 
 	/**
@@ -518,7 +559,7 @@ class MenusModelItem extends JModelAdmin
 	 * @return	mixed	Menu item data object on success, false on failure.
 	 * @since	1.6
 	 */
-	public function &getItem($pk = null)
+	public function getItem($pk = null)
 	{
 		// Initialise variables.
 		$pk = (!empty($pk)) ? $pk : (int)$this->getState('item.id');
@@ -588,7 +629,7 @@ class MenusModelItem extends JModelAdmin
 				if (isset($args['option'])) {
 					// Load the language file for the component.
 					$lang = JFactory::getLanguage();
-						$lang->load($args['option'], JPATH_ADMINISTRATOR, null, false, false)
+					$lang->load($args['option'], JPATH_ADMINISTRATOR, null, false, false)
 					||	$lang->load($args['option'], JPATH_ADMINISTRATOR.'/components/'.$args['option'], null, false, false)
 					||	$lang->load($args['option'], JPATH_ADMINISTRATOR, $lang->getDefault(), false, false)
 					||	$lang->load($args['option'], JPATH_ADMINISTRATOR.'/components/'.$args['option'], $lang->getDefault(), false, false);
@@ -606,7 +647,8 @@ class MenusModelItem extends JModelAdmin
 		$this->setState('item.type', $table->type);
 
 		// Convert to the JObject before adding the params.
-		$result = JArrayHelper::toObject($table->getProperties(1), 'JObject');
+		$properties = $table->getProperties(1);
+		$result = JArrayHelper::toObject($properties, 'JObject');
 
 		// Convert the params field to an array.
 		$registry = new JRegistry;
@@ -654,7 +696,10 @@ class MenusModelItem extends JModelAdmin
 		// Join on the module-to-menu mapping table.
 		// We are only interested if the module is displayed on ALL or THIS menu item (or the inverse ID number).
 		$query->select('map.menuid');
+		$query->select('map2.menuid < 0 as except');
 		$query->join('LEFT', '#__modules_menu AS map ON map.moduleid = a.id AND (map.menuid = 0 OR ABS(map.menuid) = '.(int) $this->getState('item.id').')');
+		$query->join('LEFT', '#__modules_menu AS map2 ON map2.moduleid = a.id AND map2.menuid < 0');
+		$query->group('a.id');
 
 		// Join on the asset groups table.
 		$query->select('ag.title AS access_title');
@@ -697,7 +742,7 @@ class MenusModelItem extends JModelAdmin
 	 *
 	 * @return	JTable	A database object
 	 * @since	1.6
-	*/
+	 */
 	public function getTable($type = 'Menu', $prefix = 'JTable', $config = array())
 	{
 		return JTable::getInstance($type, $prefix, $config);
@@ -716,9 +761,7 @@ class MenusModelItem extends JModelAdmin
 		$app = JFactory::getApplication('administrator');
 
 		// Load the User state.
-		if (!($pk = (int) $app->getUserState('com_menus.edit.item.id'))) {
-			$pk = (int) JRequest::getInt('item_id');
-		}
+		$pk = (int) JRequest::getInt('id');
 		$this->setState('item.id', $pk);
 
 		if (!($parentId = $app->getUserState('com_menus.edit.item.parent_id'))) {
@@ -755,7 +798,7 @@ class MenusModelItem extends JModelAdmin
 	 * @since	1.6
 	 * @throws	Exception if there is an error in the form event.
 	 */
-	protected function preprocessForm($form, $data)
+	protected function preprocessForm(JForm $form, $data, $group = 'content')
 	{
 		jimport('joomla.filesystem.file');
 		jimport('joomla.filesystem.folder');
@@ -763,6 +806,7 @@ class MenusModelItem extends JModelAdmin
 		// Initialise variables.
 		$link = $this->getState('item.link');
 		$type = $this->getState('item.type');
+		$formFile = false;
 
 		// Initialise form with component view params if available.
 		if ($type == 'component') {
@@ -775,6 +819,7 @@ class MenusModelItem extends JModelAdmin
 
 			// Confirm that the option is defined.
 			$option = '';
+			$base = '';
 			if (isset($args['option'])) {
 				// The option determines the base path to work with.
 				$option = $args['option'];
@@ -803,66 +848,76 @@ class MenusModelItem extends JModelAdmin
 				}
 
 				// if custom layout, get the xml file from the template folder
-				// TODO: only look in the template folder for the menu item's template
-				if (!$formFile) {
-					$folders = JFolder::folders(JPATH_SITE.'/templates','',false,true);
-
-					foreach($folders as $folder)
+				// template folder is first part of file name -- template:folder
+				if (!$formFile && (strpos($layout, ':') > 0 ))
+				{
+					$temp = explode(':', $layout);
+					$templatePath = JPATH::clean(JPATH_SITE.'/templates/'.$temp[0].'/html/'.$option.'/'.$view.'/'.$temp[1].'.xml');
+					if (JFile::exists($templatePath))
 					{
-						if (JFile::exists($folder.'/html/'.$option.'/'.$view.'/'.$layout.'.xml')) {
-							$formFile = $folder.'/html/'.$option.'/'.$view.'/'.$layout.'.xml';
-							break;
-						}
+						$formFile = $templatePath;
 					}
 				}
-
-				// TODO: Now check for a view manifest file
-				// TODO: Now check for a component manifest file
 			}
 
-			if ($formFile) {
-				// If an XML file was found in the component, load it first.
-				// We need to qualify the full path to avoid collisions with component file names.
+			//Now check for a view manifest file
+			if (!$formFile) {
+				$path = JPath::clean($base.'/views/metadata.xml');
+				if (JFile::exists($path)) {
+					$formFile = $path;
+				} else {
+					//Now check for a component manifest file
+					$path = JPath::clean($base.'/metadata.xml');
+					if (JFile::exists($path)) {
+						$formFile = $path;
+					}						
+				}			
+			}	
+		}
 
-				if ($form->loadFile($formFile, false, '/metadata') == false) {
-					throw new Exception(JText::_('JERROR_LOADFILE_FAILED'));
-				}
+		if ($formFile) {
+			// If an XML file was found in the component, load it first.
+			// We need to qualify the full path to avoid collisions with component file names.
 
-				// Attempt to load the xml file.
-				if (!$xml = simplexml_load_file($formFile)) {
-					throw new Exception(JText::_('JERROR_LOADFILE_FAILED'));
-				}
-
-				// Get the help data from the XML file if present.
-				$help = $xml->xpath('/metadata/layout/help');
-				if (!empty($help)) {
-					$helpKey = trim((string) $help[0]['key']);
-					$helpURL = trim((string) $help[0]['url']);
-					$helpLoc = trim((string) $help[0]['local']);
-
-					$this->helpKey = $helpKey ? $helpKey : $this->helpKey;
-					$this->helpURL = $helpURL ? $helpURL : $this->helpURL;
-					$this->helpLocal = (($helpLoc == 'true') || ($helpLoc == '1') || ($helpLoc == 'local')) ? true : false;
-				}
-
+			if ($form->loadFile($formFile, true, '/metadata') == false) {
+				throw new Exception(JText::_('JERROR_LOADFILE_FAILED'));
 			}
 
-			// Now load the component params.
-			// TODO: Work out why 'fixing' this breaks JForm
-			if ($isNew = false) {
-				$path = JPath::clean(JPATH_ADMINISTRATOR.'/components/'.$option.'/config.xml');
-			}
-			else {
-				$path='null';
+			// Attempt to load the xml file.
+			if (!$xml = simplexml_load_file($formFile)) {
+				throw new Exception(JText::_('JERROR_LOADFILE_FAILED'));
 			}
 
-			if (JFile::exists($path)) {
-				// Add the component params last of all to the existing form.
-				if (!$form->load($path, true, '/config')) {
-					throw new Exception(JText::_('JERROR_LOADFILE_FAILED'));
-				}
+			// Get the help data from the XML file if present.
+			$help = $xml->xpath('/metadata/layout/help');
+			if (!empty($help)) {
+				$helpKey = trim((string) $help[0]['key']);
+				$helpURL = trim((string) $help[0]['url']);
+				$helpLoc = trim((string) $help[0]['local']);
+
+				$this->helpKey = $helpKey ? $helpKey : $this->helpKey;
+				$this->helpURL = $helpURL ? $helpURL : $this->helpURL;
+				$this->helpLocal = (($helpLoc == 'true') || ($helpLoc == '1') || ($helpLoc == 'local')) ? true : false;
+			}
+
+		}
+
+		// Now load the component params.
+		// TODO: Work out why 'fixing' this breaks JForm
+		if ($isNew = false) {
+			$path = JPath::clean(JPATH_ADMINISTRATOR.'/components/'.$option.'/config.xml');
+		}
+		else {
+			$path='null';
+		}
+
+		if (JFile::exists($path)) {
+			// Add the component params last of all to the existing form.
+			if (!$form->load($path, true, '/config')) {
+				throw new Exception(JText::_('JERROR_LOADFILE_FAILED'));
 			}
 		}
+		
 
 		// Load the specific type file
 		if (!$form->loadFile('item_'.$type, false, false)) {
@@ -923,11 +978,9 @@ class MenusModelItem extends JModelAdmin
 			unset($registry);
 		}
 
-		// Clear the component's cache
-		$cache = JFactory::getCache();
-		$cache->clean('com_modules');
-		$cache->clean('mod_menu');
-
+		// Clean the cache
+		$this->cleanCache();
+				
 		return true;
 	}
 
@@ -953,8 +1006,8 @@ class MenusModelItem extends JModelAdmin
 			$isNew = false;
 		}
 
-		// Set the new parent id if set.
-		if ($table->parent_id != $data['parent_id']) {
+		// Set the new parent id if parent id not matched OR while New/Save as Copy .
+		if ($table->parent_id != $data['parent_id'] || $data['id'] == 0) {
 			$table->setLocation($data['parent_id'], 'last-child');
 		}
 
@@ -962,6 +1015,13 @@ class MenusModelItem extends JModelAdmin
 		if (!$table->bind($data)) {
 			$this->setError($table->getError());
 			return false;
+		}
+
+		// Alter the title & alias for save as copy.
+		if(!$isNew && $data['id'] == 0){
+			list($title,$alias) = $this->generateNewTitle($table->parent_id, $table->alias, $table->title);
+			$table->title = $title;
+			$table->alias = $alias;
 		}
 
 		// Check the data.
@@ -985,16 +1045,16 @@ class MenusModelItem extends JModelAdmin
 		$this->setState('item.id', $table->id);
 		$this->setState('item.menutype', $table->menutype);
 
-		// Clear the component's cache
-		$cache = JFactory::getCache('com_modules');
-		$cache->clean();
-		$cache->clean('mod_menu');
-
+		// Clean the cache
+		$this->cleanCache();
+				
 		if (isset($data['link'])) {
-			$base = JURI::base();
-			$juri = JURI::getInstance($base.$data['link']);
-			$com = $juri->getVar('option');
-			$cache->clean($com);
+			$base 	= JURI::base();
+			$juri 	= JURI::getInstance($base.$data['link']);
+			$option = $juri->getVar('option');
+
+			// Clean the cache
+			parent::cleanCache($option);
 		}
 
 		return true;
@@ -1010,7 +1070,7 @@ class MenusModelItem extends JModelAdmin
 	 *
 	 * @return	boolean false on failuer or error, true otherwise
 	 * @since	1.6
-	*/
+	 */
 	public function saveorder($idArray = null, $lft_array = null)
 	{
 		// Get an instance of the table object.
@@ -1021,11 +1081,9 @@ class MenusModelItem extends JModelAdmin
 			return false;
 		}
 
-		// Clear the component's cache
-		$cache = JFactory::getCache();
-		$cache->clean('com_modules');
-		$cache->clean('mod_menu');
-
+		// Clean the cache
+		$this->cleanCache();
+				
 		return true;
 	}
 
@@ -1093,11 +1151,9 @@ class MenusModelItem extends JModelAdmin
 			}
 		}
 
-		// Clear the component's cache
-		$cache = JFactory::getCache();
-		$cache->clean('com_modules');
-		$cache->clean('mod_menu');
-
+		// Clean the cache
+		$this->cleanCache();
+				
 		return true;
 	}
 
@@ -1122,41 +1178,57 @@ class MenusModelItem extends JModelAdmin
 			{
 				if ($table->load($pk) && $table->home && $table->language == '*') {
 					// Prune items that you can't change.
-					JError::raiseWarning(403, JText::_('COM_MENUS_ERROR_UNPUBLISH_DEFAULT_HOME'));
+					JError::raiseWarning(403, JText::_('JLIB_DATABASE_ERROR_MENU_UNPUBLISH_DEFAULT_HOME'));
 					unset($pks[$i]);
 					break;
 				}
 			}
 		}
 
-		// Clear the component's cache
-		$cache = JFactory::getCache();
-		$cache->clean('com_modules');
-		$cache->clean('mod_menu');
-
+		// Clean the cache
+		$this->cleanCache();
+				
 		return parent::publish($pks,$value);
 	}
 
 	/**
-	 * Method to adjust the ordering of a row.
+	 * Method to change the title & alias.
 	 *
-	 * Returns NULL if the user did not have edit
-	 * privileges for any of the selected primary keys.
-	 *
-	 * @param	int				$pks	The ID of the primary key to move.
-	 * @param	integer			$delta	Increment, usually +1 or -1
-	 *
-	 * @return	boolean|null	False on failure or error, true on success.
+	 * @param	int     The value of the menu Parent Id.
+	 * @param   sting   The value of the menu Alias.
+	 * @param   sting   The value of the menu Title.
+	 * @return	array   Contains title and alias.
 	 * @since	1.6
 	 */
+	function generateNewTitle(&$parent_id, &$alias, &$title)
+	{
+		// Alter the title & alias
+		$MenuTable = JTable::getInstance('Menu','JTable');
+		while($MenuTable->load(array('alias'=>$alias,'parent_id'=>$parent_id))){
+			$m = null;
+			if (preg_match('#-(\d+)$#', $alias, $m)) {
+				$alias = preg_replace('#-(\d+)$#', '-'.($m[1] + 1).'', $alias);
+			} else {
+				$alias .= '-2';
+			}
+			if (preg_match('#\((\d+)\)$#', $title, $m)) {
+				$title = preg_replace('#\(\d+\)$#', '('.($m[1] + 1).')', $title);
+			} else {
+				$title .= ' (2)';
+			}
+		}
 
-	public function reorder($pks, $delta = 0) {
-
-		// Clear the component's cache
-		$cache = JFactory::getCache();
-		$cache->clean('com_modules');
-		$cache->clean('mod_menu');
-
-		return parent::reorder($pks, $delta);
+		return array($title ,$alias);
 	}
+	
+	/**
+	 * Custom clean cache method
+	 *
+	 * @since	1.6
+	 */
+	function cleanCache() {
+		parent::cleanCache('com_modules');
+		parent::cleanCache('mod_menu');
+	}	
+	
 }

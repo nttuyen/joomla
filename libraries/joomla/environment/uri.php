@@ -1,14 +1,16 @@
 <?php
 /**
- * @version		$Id: uri.php 18101 2010-07-12 13:07:05Z ian $
+ * @version		$Id: uri.php 21057 2011-04-03 00:59:20Z dextercowley $
  * @package		Joomla.Framework
  * @subpackage	Environment
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
 // No direct access
 defined('JPATH_BASE') or die;
+
+jimport('joomla.utilities.string');
 
 /**
  * JURI Class
@@ -136,7 +138,10 @@ class JURI extends JObject
 					// Since we do not have REQUEST_URI to work with, we will assume we are
 					// running on IIS and will therefore need to work some magic with the SCRIPT_NAME and
 					// QUERY_STRING environment variables.
-					//
+					
+					if (strlen($_SERVER['QUERY_STRING']) && strpos($_SERVER['REQUEST_URI'], $_SERVER['QUERY_STRING']) === false) {
+						$theURI .= '?'.$_SERVER['QUERY_STRING'];
+					}
 				}
 				else
 				{
@@ -148,14 +153,6 @@ class JURI extends JObject
 						$theURI .= '?' . $_SERVER['QUERY_STRING'];
 					}
 				}
-
-				// Now we need to clean what we got since we can't trust the server var
-				$theURI = urldecode($theURI);
-				$theURI = str_replace('"', '&quot;',$theURI);
-				$theURI = str_replace('<', '&lt;',$theURI);
-				$theURI = str_replace('>', '&gt;',$theURI);
-				$theURI = preg_replace('/eval\((.*)\)/', '', $theURI);
-				$theURI = preg_replace('/[\\\"\\\'][\\s]*javascript:(.*)[\\\"\\\']/', '""', $theURI);
 			}
 			else
 			{
@@ -288,7 +285,7 @@ class JURI extends JObject
 		 * Parse the URI and populate the object fields.  If URI is parsed properly,
 		 * set method return value to true.
 		 */
-		if ($_parts = parse_url($uri)) {
+		if ($_parts = JString::parse_url($uri)) {
 			$retval = true;
 		}
 
@@ -374,11 +371,12 @@ class JURI extends JObject
 	/**
 	 * Returns a query variable by name.
 	 *
-	 * @param	string $name Name of the query variable to get.
+	 * @param	string $name	Name of the query variable to get.
+	 * @param	string $default	Default value to return if the variable is not set.
 	 * @return	array Query variables.
 	 * @since	1.5
 	 */
-	public function getVar($name = null, $default=null)
+	public function getVar($name, $default=null)
 	{
 		if (array_key_exists($name, $this->_vars)) {
 			return $this->_vars[$name];
@@ -461,31 +459,7 @@ class JURI extends JObject
 			return false;
 		}
 
-		$out = array();
-
-		//reset in case we are looping
-		if (!isset($akey) && !count($out))  {
-			unset($out);
-			$out = array();
-		}
-
-		foreach ($params as $key => $val)
-		{
-			if (is_array($val))
-			{
-				if (!is_null($akey)) {
-                    $out[] = self::buildQuery($val,$akey.'['.$key.']');
-                } else {
-                    $out[] = self::buildQuery($val,$key);
-                }
-				continue;
-			}
-
-			$thekey = (!$akey) ? $key : $akey.'['.$key.']';
-			$out[] = $thekey."=".urlencode($val);
-		}
-
-		return implode("&",$out);
+		return urldecode(http_build_query($params, '', '&'));
 	}
 
 	/**

@@ -1,8 +1,9 @@
 <?php
 /**
- * @version		$Id: loadmodule.php 19098 2010-10-13 00:53:42Z eddieajau $
- * @package		Joomla
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @version		$Id: loadmodule.php 21097 2011-04-07 15:38:03Z dextercowley $
+ * @package		Joomla.Plugin
+ * @subpackage	Content.loadmodule
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -13,8 +14,7 @@ jimport('joomla.plugin.plugin');
 
 class plgContentLoadmodule extends JPlugin
 {
-	static $test = 0;
-
+	protected static $modules=array();
 	/**
 	 * Plugin that loads module positions within content
 	 *
@@ -29,11 +29,7 @@ class plgContentLoadmodule extends JPlugin
 		if (strpos($article->text, 'loadposition') === false) {
 			return true;
 		}
-
-		if (self::$test == 1) {
-			return;
-		}
-
+		
 		// expression to search for
 		$regex		= '/{loadposition\s+(.*?)}/i';
 		$matches	= array();
@@ -48,25 +44,24 @@ class plgContentLoadmodule extends JPlugin
 			// We should replace only first occurrence in order to allow positions with the same name to regenerate their content:
 			$article->text = preg_replace("|$match[0]|", $output, $article->text, 1);
 		}
-
-		self::$test = 1;
 	}
 
 	protected function _load($position, $style = 'none')
 	{
-		//if (isset(self::$test[$position]) && self::$test[$position] == 1) return;
-		$document	= JFactory::getDocument();
-		$renderer	= $document->loadRenderer('module');
-		$modules	= JModuleHelper::getModules($position);
-		$params		= array('style' => $style);
-		$best = self::$test;
-		ob_start();
-		foreach ($modules as $module) {
-			echo $renderer->render($module, $params);
-		}
-		$output = ob_get_clean();
-		//self::$test[$position] = 1;
+		if (!isset(self::$modules[$position])) {
+			self::$modules[$position] = '';
+			$document	= JFactory::getDocument();
+			$renderer	= $document->loadRenderer('module');
+			$modules	= JModuleHelper::getModules($position);
+			$params		= array('style' => $style);
+			ob_start();
+		
+			foreach ($modules as $module) {
+				echo $renderer->render($module, $params);
+			}
 
-		return $output;
+			self::$modules[$position] = ob_get_clean();
+		}
+		return self::$modules[$position];
 	}
 }

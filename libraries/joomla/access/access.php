@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: access.php 19130 2010-10-14 16:08:02Z louis $
+ * @version		$Id: access.php 21147 2011-04-14 16:49:40Z dextercowley $
  * @package		Joomla.Framework
  * @subpackage	Access
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -121,6 +121,12 @@ class JAccess
 			$db->setQuery($query);
 			$groups = $db->loadObjectList('id');
 		}
+
+		// Make sure groupId is valid
+		if (!array_key_exists($groupId, $groups)) 
+		{
+			return array();
+		}
 		
 		// Get parent groups and leaf group
 		if (!isset($paths[$groupId])) {
@@ -155,16 +161,13 @@ class JAccess
 		$query	= $db->getQuery(true);
 		$query->select($recursive ? 'b.rules' : 'a.rules');
 		$query->from('#__assets AS a');
-		$query->group($recursive ? 'b.id' : 'a.id');
 
 		// If the asset identifier is numeric assume it is a primary key, else lookup by name.
 		if (is_numeric($asset)) {
-			// Get the root even if the asset is not found
-			$query->where('(a.id = '.(int) $asset.($recursive ? ' OR a.parent_id=0':'').')');
+			$query->where('a.id = '.(int) $asset);
 		}
 		else {
-			// Get the root even if the asset is not found
-			$query->where('(a.name = '.$db->quote($asset).($recursive ? ' OR a.parent_id=0':'').')');
+			$query->where('a.name = '.$db->quote($asset));
 		}
 
 		// If we want the rules cascading up to the global asset node we need a self-join.
@@ -176,6 +179,16 @@ class JAccess
 		// Execute the query and load the rules from the result.
 		$db->setQuery($query);
 		$result	= $db->loadResultArray();
+
+		// Get the root even if the asset is not found and in recursive mode
+		if ($recursive && empty($result)) {
+			$query = $db->getQuery(true);
+			$query->select('rules');
+			$query->from('#__assets');
+			$query->where('parent_id=0');
+			$db->setQuery($query);
+			$result	= $db->loadResultArray();
+		}
 
 		// Instantiate and return the JRules object for the asset rules.
 		$rules	= new JRules;
@@ -199,38 +212,47 @@ class JAccess
 	{
 		static $results = array();
 
-		// Get the database connection object.
-		$db = JFactory::getDbo();
-
 		// Creates a simple unique string for each parameter combination:
 		$storeId = $userId.':'.(int) $recursive;
 
-		if (!isset($results[$storeId])) {
-			// Build the database query to get the rules for the asset.
-			$query	= $db->getQuery(true);
-			$query->select($recursive ? 'b.id' : 'a.id');
-			$query->from('#__user_usergroup_map AS map');
-			$query->where('map.user_id = '.(int) $userId);
-			$query->leftJoin('#__usergroups AS a ON a.id = map.group_id');
-
-			// If we want the rules cascading up to the global asset node we need a self-join.
-			if ($recursive) {
-				$query->leftJoin('#__usergroups AS b ON b.lft <= a.lft AND b.rgt >= a.rgt');
-			}
-
-			// Execute the query and load the rules from the result.
-			$db->setQuery($query);
-			$result	= $db->loadResultArray();
-
-			// Clean up any NULL or duplicate values, just in case
-			JArrayHelper::toInteger($result);
-
-			if (empty($result)) {
-				$result = array('1');
-			}
-			else {
-				$result = array_unique($result);
-			}
+		if (!isset($results[$storeId]))
+		{
+			// Guest user
+			if (empty($userId))
+			{
+				$result = array(JComponentHelper::getParams('com_users')->get('guest_usergroup', 1));
+ 			}
+ 			// Registered user
+ 			else
+ 			{			
+				$db = JFactory::getDbo();
+				
+				// Build the database query to get the rules for the asset.
+				$query	= $db->getQuery(true);
+				$query->select($recursive ? 'b.id' : 'a.id');
+				$query->from('#__user_usergroup_map AS map');
+				$query->where('map.user_id = '.(int) $userId);
+				$query->leftJoin('#__usergroups AS a ON a.id = map.group_id');
+	
+				// If we want the rules cascading up to the global asset node we need a self-join.
+				if ($recursive) {
+					$query->leftJoin('#__usergroups AS b ON b.lft <= a.lft AND b.rgt >= a.rgt');
+				}
+	
+				// Execute the query and load the rules from the result.
+				$db->setQuery($query);
+				$result	= $db->loadResultArray();
+	
+				// Clean up any NULL or duplicate values, just in case
+				JArrayHelper::toInteger($result);
+	
+				if (empty($result)) {
+					$result = array('1');
+				}
+				else {
+					$result = array_unique($result);
+				}
+ 			}
 
 			$results[$storeId] = $result;
 		}

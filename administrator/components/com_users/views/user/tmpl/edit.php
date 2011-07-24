@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: edit.php 19073 2010-10-09 15:44:28Z chdemko $
+ * @version		$Id: edit.php 21020 2011-03-27 06:52:01Z infograf768 $
  * @package		Joomla.Administrator
  * @subpackage	com_users
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -30,7 +30,7 @@ $fieldsets = $this->form->getFieldsets();
 	}
 </script>
 
-<form action="<?php echo JRoute::_('index.php?option=com_users'); ?>" method="post" name="adminForm" id="user-form" class="form-validate">
+<form action="<?php echo JRoute::_('index.php?option=com_users&layout=edit&id='.(int) $this->item->id); ?>" method="post" name="adminForm" id="user-form" class="form-validate">
 	<div class="width-60 fltlft">
 		<fieldset class="adminform">
 			<legend><?php echo JText::_('COM_USERS_USER_ACCOUNT_DETAILS'); ?></legend>
@@ -42,23 +42,22 @@ $fieldsets = $this->form->getFieldsets();
 			</ul>
 		</fieldset>
 
+		<?php if ($this->grouplist) :?>
 		<fieldset id="user-groups" class="adminform">
 			<legend><?php echo JText::_('COM_USERS_ASSIGNED_GROUPS'); ?></legend>
-				<?php if ($this->grouplist) :
-					echo $this->loadTemplate('groups');
-				endif; ?>
+			<?php echo $this->loadTemplate('groups');?>
 		</fieldset>
-
+		<?php endif; ?>
 	</div>
 
 	<div class="width-40 fltrt">
 		<?php
-		echo JHTML::_('sliders.start');
+		echo JHtml::_('sliders.start');
 		foreach ($fieldsets as $fieldset) :
 			if ($fieldset->name == 'user_details') :
 				continue;
 			endif;
-			echo JHTML::_('sliders.panel', JText::_($fieldset->label), $fieldset->name);
+			echo JHtml::_('sliders.panel', JText::_($fieldset->label), $fieldset->name);
 		?>
 		<fieldset class="panelform">
 		<ul class="adminformlist">
@@ -73,7 +72,7 @@ $fieldsets = $this->form->getFieldsets();
 		</ul>
 		</fieldset>
 		<?php endforeach; ?>
-		<?php echo JHTML::_('sliders.end'); ?>
+		<?php echo JHtml::_('sliders.end'); ?>
 
 		<input type="hidden" name="task" value="" />
 		<?php echo JHtml::_('form.token'); ?>

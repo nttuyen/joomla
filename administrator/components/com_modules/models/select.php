@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: select.php 18922 2010-09-15 15:57:48Z infograf768 $
+ * @version		$Id: select.php 21097 2011-04-07 15:38:03Z dextercowley $
  * @package		Joomla.Administrator
- * @subpackage	Modules
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @subpackage	com_modules
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -28,7 +28,7 @@ class ModulesModelSelect extends JModelList
 	 *
 	 * @since	1.6
 	 */
-	protected function populateState()
+	protected function populateState($ordering = null, $direction = null)
 	{
 		// Initialise variables.
 		$app = JFactory::getApplication('administrator');
@@ -131,7 +131,16 @@ class ModulesModelSelect extends JModelList
 			||	$lang->load($item->module.'.sys', $client->path.'/modules/'.$item->module, null, false, false)
 			||	$lang->load($item->module.'.sys', $client->path, $lang->getDefault(), false, false)
 			||	$lang->load($item->module.'.sys', $client->path.'/modules/'.$item->module, $lang->getDefault(), false, false);
+			$item->name	= JText::_($item->name);
+
+			if (isset($item->xml) && $text = trim($item->xml->description)) {
+				$item->desc = JText::_($text);
+			}
+			else {
+				$item->desc = JText::_('COM_MODULES_NODESCRIPTION');
+			}
 		}
+		$items = JArrayHelper::sortObjects($items, 'name', 1, true, $lang->getLocale());
 
 		// TODO: Use the cached XML from the extensions table?
 

@@ -1,7 +1,7 @@
 <?php
 /**
- * @version		$Id: newsfeed.php 16608 2010-04-30 02:35:55Z infograf768 $
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @version		$Id: newsfeed.php 21020 2011-03-27 06:52:01Z infograf768 $
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -22,7 +22,7 @@ class JHtmlNewsfeed
 	 * @param	int $value	The state value
 	 * @param	int $i
 	 */
-	function state($value = 0, $i)
+	public static function state($value = 0, $i)
 	{
 		// Array of image, task, title, action
 		$states	= array(
@@ -30,8 +30,8 @@ class JHtmlNewsfeed
 			0	=> array('publish_x.png',	'newsfeeds.publish',		'JUNPUBLISHED',		'COM_NEWSFEEDS_PUBLISH_ITEM')
 		);
 		$state	= JArrayHelper::getValue($states, (int) $value, $states[0]);
-		$html	= '<a href="javascript:void(0);" onclick="return listItemTask(\'cb'.$i.'\',\''.$state[1].'\')" title="'.JText::_($state[3]).'">'
-				. JHTML::_('image','admin/'.$state[0], JText::_($state[2]), NULL, true).'</a>';
+		$html	= '<a href="#" onclick="return listItemTask(\'cb'.$i.'\',\''.$state[1].'\')" title="'.JText::_($state[3]).'">'
+				. JHtml::_('image','admin/'.$state[0], JText::_($state[2]), NULL, true).'</a>';
 
 		return $html;
 	}
@@ -43,7 +43,7 @@ class JHtmlNewsfeed
 	 * @return	string			The HTML code for the select tag
 	 * @since	1.6
 	 */
-	function filterstate($selected)
+	public static function filterstate($selected)
 	{
 		// Build the active state filter options.
 		$options	= array();
@@ -52,7 +52,7 @@ class JHtmlNewsfeed
 		$options[]	= JHtml::_('select.option', '0', JText::_('JUNPUBLISHED'));
 
 
-		return JHTML::_('select.genericlist', $options, 'filter_published',
+		return JHtml::_('select.genericlist', $options, 'filter_published',
 			array(
 				'list.attr' => 'class="inputbox" onchange="this.form.submit();"',
 				'list.select' => $selected

@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: newsfeed.php 18287 2010-07-28 19:09:44Z ian $
+ * @version		$Id: newsfeed.php 21097 2011-04-07 15:38:03Z dextercowley $
  * @package		Joomla.Administrator
- * @subpackage	Newsfeeds
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @subpackage	com_newsfeeds
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -12,7 +12,7 @@ defined('_JEXEC') or die;
 
 /**
  * @package		Joomla.Administrator
- * @subpackage	Newsfeeds
+ * @subpackage	com_newsfeeds
  */
 class NewsfeedsTableNewsfeed extends JTable
 {

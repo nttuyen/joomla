@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: cache.php 18650 2010-08-26 13:28:49Z ian $
+ * @version		$Id: cache.php 21032 2011-03-29 16:38:31Z dextercowley $
  * @package		Joomla.Framework
  * @subpackage	Cache
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -34,7 +34,7 @@ class JCache extends JObject
 	 * @var		object	Storage Handler
 	 * @since	1.5
 	 */
-	public static $_handler = array();
+	public $_handler = null;
 
 	/**
 	 * @since	1.6
@@ -51,7 +51,7 @@ class JCache extends JObject
 		$conf = JFactory::getConfig();
 
 		$this->_options = array(
-			'cachebase'		=> $conf->get('cache_path', JPATH_ROOT.DS.'cache'),
+			'cachebase'		=> $conf->get('cache_path', JPATH_CACHE),
 			'lifetime'		=> (int)$conf->get('cachetime'),
 			'language'		=> $conf->get('language', 'en-GB'),
 			'storage'		=> $conf->get('cache_handler',''),
@@ -378,14 +378,12 @@ class JCache extends JObject
 	 * @return	object	A JCacheStorage object
 	 * @since	1.5
 	 */
-	public function _getStorage()
+	public function &_getStorage()
 	{
-		if (isset(self::$_handler[$this->_options['storage']]) && self::$_handler[$this->_options['storage']] instanceof JCacheStorage) {
-			return self::$_handler[$this->_options['storage']];
+		if (!isset($this->_handler)) {
+			$this->_handler = JCacheStorage::getInstance($this->_options['storage'], $this->_options);
 		}
-
-		self::$_handler[$this->_options['storage']] = JCacheStorage::getInstance($this->_options['storage'], $this->_options);
-		return self::$_handler[$this->_options['storage']];
+		return $this->_handler;
 	}
 
 	/**

@@ -1,8 +1,6 @@
 <?php
 /**
- * @version		$Id: example.php 18330 2010-08-04 10:34:07Z eddieajau $
- * @package		Joomla
- * @subpackage	JFramework
+ * @version		$Id: example.php 21097 2011-04-07 15:38:03Z dextercowley $
  * @copyright	Copyright (C) 2005 - 2009 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
@@ -15,8 +13,8 @@ jimport('joomla.plugin.plugin');
 /**
  * Example User Plugin
  *
- * @package		Joomla
- * @subpackage	JFramework
+ * @package		Joomla.Plugin
+ * @subpackage	User.example
  * @since		1.5
  */
 class plgUserExample extends JPlugin
@@ -32,10 +30,13 @@ class plgUserExample extends JPlugin
 	 *
 	 * @return	void
 	 * @since	1.6
+	 * @throws	Exception on error.
 	 */
 	public function onUserBeforeSave($user, $isnew, $new)
 	{
 		$app = JFactory::getApplication();
+
+		// throw new Exception('Some error occurred. Please do not save me');
 	}
 
 	/**
@@ -50,6 +51,7 @@ class plgUserExample extends JPlugin
 	 *
 	 * @return	void
 	 * @since	1.6
+	 * @throws	Exception on error.
 	 */
 	public function onUserAfterSave($user, $isnew, $success, $msg)
 	{

@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: error.php 18650 2010-08-26 13:28:49Z ian $
+ * @version		$Id: error.php 20650 2011-02-10 10:14:12Z infograf768 $
  * @package		Joomla.Framework
  * @subpackage	Document
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -138,9 +138,9 @@ class JDocumentError extends JDocument
 		{
 			ob_start();
 			$j	=	1;
-			echo	'<table border="0" cellpadding="0" cellspacing="0" class="Table">';
+			echo	'<table cellpadding="0" cellspacing="0" class="Table">';
 			echo	'	<tr>';
-			echo	'		<td colspan="3" align="left" class="TD"><strong>Call stack</strong></td>';
+			echo	'		<td colspan="3" class="TD"><strong>Call stack</strong></td>';
 			echo	'	</tr>';
 			echo	'	<tr>';
 			echo	'		<td class="TD"><strong>#</strong></td>';

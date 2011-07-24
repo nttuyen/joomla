@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: default.php 19047 2010-10-05 17:51:57Z eddieajau $
+ * @version		$Id: default.php 20899 2011-03-07 20:56:09Z ian $
  * @package		Joomla.Administrator
  * @subpackage	com_users
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -16,41 +16,27 @@ JHtml::addIncludePath(JPATH_COMPONENT.'/helpers/html');
 // Load the tooltip behavior.
 JHtml::_('behavior.tooltip');
 
-$listOrder	= $this->state->get('list.ordering');
-$listDirn	= $this->state->get('list.direction');
+$listOrder	= $this->escape($this->state->get('list.ordering'));
+$listDirn	= $this->escape($this->state->get('list.direction'));
 ?>
-<style>
-	.check-0,
-	table.adminlist tbody td.check-0 {
-		background-color: #FFFFCF;
-	}
-
-	.check-a,
-	table.adminlist tbody td.check-a {
-		background-color: #CFFFDA;
-	}
-
-	.check-d,
-	table.adminlist tbody td.check-d {
-		background-color: #FFCFCF;
-	}
-
-	.swatch {
-		text-align: center;
-		padding: 0 15px 0 15px;
-	}
-</style>
 
 <form action="<?php echo JRoute::_('index.php?option=com_users&view=debuguser&user_id='.(int) $this->state->get('filter.user_id'));?>" method="post" name="adminForm" id="adminForm">
 	<fieldset id="filter-bar">
 		<div class="filter-search fltlft">
 			<label class="filter-search-lbl" for="filter_search"><?php echo JText::_('COM_USERS_SEARCH_ASSETS'); ?></label>
-			<input type="text" name="filter_search" id="filter_search" value="<?php echo $this->state->get('filter.search'); ?>" title="<?php echo JText::_('COM_USERS_SEARCH_USERS'); ?>" />
+			<input type="text" name="filter_search" id="filter_search" value="<?php echo $this->escape($this->state->get('filter.search')); ?>" title="<?php echo JText::_('COM_USERS_SEARCH_USERS'); ?>" />
 			<button type="submit"><?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?></button>
 			<button type="button" onclick="document.id('filter_search').value='';this.form.submit();"><?php echo JText::_('JSEARCH_RESET'); ?></button>
 		</div>
 
 		<div class="filter-select fltrt">
+			<select name="filter_component" class="inputbox" onchange="this.form.submit()">
+				<option value=""><?php echo JText::_('COM_USERS_OPTION_SELECT_COMPONENT');?></option>
+				<?php if (!empty($this->components)) {
+					echo JHtml::_('select.options', $this->components, 'value', 'text', $this->state->get('filter.component'));
+				}?>
+			</select>
+
 			<select name="filter_level_start" class="inputbox" onchange="this.form.submit()">
 				<option value=""><?php echo JText::_('COM_USERS_OPTION_SELECT_LEVEL_START');?></option>
 				<?php echo JHtml::_('select.options', $this->levels, 'value', 'text', $this->state->get('filter.level_start'));?>
@@ -84,7 +70,7 @@ $listDirn	= $this->state->get('list.direction');
 				</th>
 				<?php foreach ($this->actions as $key => $action) : ?>
 				<th width="5%">
-					<?php echo JText::_($key); ?>
+					<span class="hasTip" title="<?php echo htmlspecialchars(JText::_($key).'::'.JText::_($action[1]), ENT_COMPAT, 'UTF-8'); ?>"><?php echo JText::_($key); ?></span>
 				</th>
 				<?php endforeach; ?>
 				<th class="nowrap" width="5%">
@@ -127,7 +113,7 @@ $listDirn	= $this->state->get('list.direction');
 						$text	= '-';
 					else :
 						$class	= '';
-						$text	= '&nbsp;';
+						$text	= '&#160;';
 					endif;
 					?>
 				<td class="center <?php echo $class;?>">

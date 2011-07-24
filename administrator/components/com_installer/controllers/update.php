@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: update.php 17858 2010-06-23 17:54:28Z eddieajau $
+ * @version		$Id: update.php 21170 2011-04-18 21:33:11Z dextercowley $
  * @package		Joomla.Administrator
  * @subpackage	com_installer
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License, see LICENSE.php
  */
 
@@ -66,6 +66,7 @@ class InstallerControllerUpdate extends JController {
 		JRequest::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 		$model = $this->getModel('update');
 		$model->purge();
+		$model->enableSites();
 		$this->setRedirect(JRoute::_('index.php?option=com_installer&view=update',false), $model->_message);
 	}
 }

@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: helper.php 17852 2010-06-23 17:40:30Z eddieajau $
+ * @version		$Id: helper.php 20926 2011-03-09 06:59:31Z infograf768 $
  * @package		Joomla.Site
  * @subpackage	mod_feed
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -12,7 +12,7 @@ defined('_JEXEC') or die;
 
 class modFeedHelper
 {
-	function getFeed($params)
+	static function getFeed($params)
 	{
 		// module params
 		$rssurl	= $params->get('rssurl', '');
@@ -27,7 +27,7 @@ class modFeedHelper
 			$options['cache_time'] = null;
 		}
 
-		$rssDoc = JFactory::getXMLparser('RSS', $options);
+		$rssDoc = JFactory::getXMLParser('RSS', $options);
 
 		$feed = new stdclass();
 

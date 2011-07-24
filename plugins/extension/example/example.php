@@ -1,9 +1,7 @@
 <?php
 /**
- * @version		$Id: example.php 16794 2010-05-04 19:29:08Z eddieajau $
- * @package		Joomla.Plugin
- * @subpackage	Extension.Example
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @version		$Id: example.php 21097 2011-04-07 15:38:03Z dextercowley $
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 

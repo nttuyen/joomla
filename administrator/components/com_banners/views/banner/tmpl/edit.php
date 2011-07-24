@@ -1,16 +1,16 @@
 <?php
 /**
- * @version		$Id: edit.php 19073 2010-10-09 15:44:28Z chdemko $
+ * @version		$Id: edit.php 20649 2011-02-10 09:15:04Z chdemko $
  * @package		Joomla.Administrator
  * @subpackage	com_banners
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-// no direct access
+// No direct access.
 defined('_JEXEC') or die;
 
-JHtml::addIncludePath(JPATH_COMPONENT.DS.'helpers'.DS.'html');
+JHtml::addIncludePath(JPATH_COMPONENT.'/helpers/html');
 JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
 ?>
@@ -29,7 +29,7 @@ JHtml::_('behavior.formvalidation');
 		});
 		document.id('jform_type1').addEvent('click', function(e){
 			document.id('image').setStyle('display', 'none');
-			document.id('url').setStyle('display', 'none');
+			document.id('url').setStyle('display', 'block');
 			document.id('custom').setStyle('display', 'block');
 		});
 		if(document.id('jform_type0').checked==true) {
@@ -40,7 +40,7 @@ JHtml::_('behavior.formvalidation');
 	});
 </script>
 
-<form action="<?php echo JRoute::_('index.php?option=com_banners'); ?>" method="post" name="adminForm" id="banner-form" class="form-validate">
+<form action="<?php echo JRoute::_('index.php?option=com_banners&layout=edit&id='.(int) $this->item->id); ?>" method="post" name="adminForm" id="banner-form" class="form-validate">
 	<div class="width-60 fltlft">
 		<fieldset class="adminform">
 			<legend><?php echo empty($this->item->id) ? JText::_('COM_BANNERS_NEW_BANNER') : JText::sprintf('COM_BANNERS_BANNER_DETAILS', $this->item->id); ?></legend>
@@ -56,12 +56,12 @@ JHtml::_('behavior.formvalidation');
 
 				<li><?php echo $this->form->getLabel('catid'); ?>
 				<?php echo $this->form->getInput('catid'); ?></li>
-
-				<li><?php echo $this->form->getLabel('type'); ?>
-				<?php echo $this->form->getInput('type'); ?></li>
-
+				
 				<li><?php echo $this->form->getLabel('state'); ?>
 				<?php echo $this->form->getInput('state'); ?></li>
+
+				<li><?php echo $this->form->getLabel('type'); ?>
+				<?php echo $this->form->getInput('type'); ?></li> 
 
 				<li>
 				<div id="image">
@@ -88,8 +88,6 @@ JHtml::_('behavior.formvalidation');
 
 				<li><?php echo $this->form->getLabel('description'); ?>
 				<?php echo $this->form->getInput('description'); ?></li>
-
-
 
 				<li><?php echo $this->form->getLabel('language'); ?>
 				<?php echo $this->form->getInput('language'); ?></li>

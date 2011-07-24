@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: cache.php 19039 2010-10-04 21:24:17Z chdemko $
+ * @version		$Id: cache.php 21097 2011-04-07 15:38:03Z dextercowley $
  * @package		Joomla.Administrator
- * @subpackage	Cache
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @subpackage	com_cache
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -16,7 +16,7 @@ jimport('joomla.application.component.modellist');
  * Cache Model
  *
  * @package		Joomla.Administrator
- * @subpackage	Cache
+ * @subpackage	com_cache
  * @since		1.6
  */
 class CacheModelCache extends JModelList
@@ -49,11 +49,11 @@ class CacheModelCache extends JModelList
 	 *
 	 * @since	1.6
 	 */
-	protected function populateState()
+	protected function populateState($ordering = null, $direction = null)
 	{
 		$app = JFactory::getApplication();
 		
-		$clientId = $app->getUserStateFromRequest($this->context.'.filter.client_id', 'filter_client_id', 0, 'int');
+		$clientId = $this->getUserStateFromRequest($this->context.'.filter.client_id', 'filter_client_id', 0, 'int');
 		$this->setState('clientId', $clientId == 1 ? 1 : 0);
 
 		$client	= JApplicationHelper::getClientInfo($clientId);
@@ -76,7 +76,7 @@ class CacheModelCache extends JModelList
 
 			if ($data != false) {
 				$this->_data = $data;
-				$this->_total = sizeof($data);
+				$this->_total = count($data);
 
 				if ($this->_total) {
 					// Apply custom ordering
@@ -113,15 +113,12 @@ class CacheModelCache extends JModelList
 			'defaultgroup'	=> '',
 			'storage' 		=> $conf->get('cache_handler', ''),
 			'caching'		=> true,
-			'cachebase'		=> ($this->getState('clientId') == 1) ? JPATH_ROOT.DS.'administrator'.DS.'cache' : $conf->get('cache_path', JPATH_ROOT.DS.'cache')
+			'cachebase'		=> ($this->getState('clientId') == 1) ? JPATH_ADMINISTRATOR.DS.'cache' : $conf->get('cache_path', JPATH_SITE.DS.'cache')
 		);
 
 		jimport('joomla.cache.cache');
-
-		// We need to clear the previously used cache handlers, otherwise backend cachebase can't be used
-		JCache::$_handler = array();
-
 		$cache = JCache::getInstance('', $options);
+		
 		return $cache;
 	}
 

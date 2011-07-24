@@ -1,7 +1,7 @@
 <?php
 /**
- * @version		$Id: templates.php 18212 2010-07-22 06:02:54Z eddieajau $
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @version		$Id: templates.php 21097 2011-04-07 15:38:03Z dextercowley $
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -12,7 +12,7 @@ defined('_JEXEC') or die;
  * Templates component helper.
  *
  * @package		Joomla.Administrator
- * @subpackage	Templates
+ * @subpackage	com_templates
  * @since		1.6
  */
 class TemplatesHelper
@@ -62,7 +62,7 @@ class TemplatesHelper
 	 *
 	 * @return	array	An array of JHtmlOption elements.
 	 */
-	static function getClientOptions()
+	public static function getClientOptions()
 	{
 		// Build the filter options.
 		$options	= array();
@@ -77,7 +77,7 @@ class TemplatesHelper
 	 *
 	 * @return	array	An array of JHtmlOption elements.
 	 */
-	static function getTemplateOptions($clientId = '*')
+	public static function getTemplateOptions($clientId = '*')
 	{
 		// Build the filter options.
 		$db = JFactory::getDbo();
@@ -98,7 +98,7 @@ class TemplatesHelper
 		return $options;
 	}
 
-	function parseXMLTemplateFile($templateBaseDir, $templateDir)
+	public static function parseXMLTemplateFile($templateBaseDir, $templateDir)
 	{
 		$data = new JObject;
 

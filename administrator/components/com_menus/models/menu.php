@@ -1,7 +1,7 @@
 <?php
 /**
- * @version		$Id: menu.php 18607 2010-08-24 02:02:21Z ian $
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @version		$Id: menu.php 21032 2011-03-29 16:38:31Z dextercowley $
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -87,9 +87,7 @@ class MenusModelMenu extends JModelForm
 		$app = JFactory::getApplication('administrator');
 
 		// Load the User state.
-		if (!($id = (int)$app->getUserState('com_menus.edit.menu.id'))) {
-			$id = (int)JRequest::getInt('item_id');
-		}
+		$id = (int) JRequest::getInt('id');
 		$this->setState('menu.id', $id);
 
 		// Load the parameters.
@@ -122,7 +120,8 @@ class MenusModelMenu extends JModelForm
 			return $false;
 		}
 
-		$value = JArrayHelper::toObject($table->getProperties(1), 'JObject');
+		$properties = $table->getProperties(1);
+		$value = JArrayHelper::toObject($properties, 'JObject');
 		return $value;
 	}
 
@@ -203,11 +202,9 @@ class MenusModelMenu extends JModelForm
 
 		$this->setState('menu.id', $table->id);
 
-		// Clear the component's cache
-		$cache = JFactory::getCache('com_modules');
-		$cache->clean();
-		$cache->clean('mod_menu');
-
+		// Clean the cache
+		$this->cleanCache();
+		
 		return true;
 	}
 
@@ -237,11 +234,9 @@ class MenusModelMenu extends JModelForm
 			}
 		}
 
-		// Clear the component's cache
-		$cache = JFactory::getCache('com_modules');
-		$cache->clean();
-		$cache->clean('mod_menu');
-
+		// Clean the cache
+		$this->cleanCache();
+		
 		return true;
 	}
 
@@ -279,4 +274,14 @@ class MenusModelMenu extends JModelForm
 
 		return $result;
 	}
+
+	/**
+	 * Custom clean cache method
+	 *
+	 * @since	1.6
+	 */
+	function cleanCache() {
+		parent::cleanCache('com_modules');
+		parent::cleanCache('mod_menu');
+	}	
 }

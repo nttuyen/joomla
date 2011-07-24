@@ -1,6 +1,6 @@
 /**
- * @version		$Id: popup-imagemanager.js 16235 2010-04-20 04:13:25Z pasamio $
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @version		$Id: popup-imagemanager.js 20828 2011-02-22 04:22:21Z dextercowley $
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -12,36 +12,36 @@
  * @since		1.5
  */
 
-(function($) {
+(function() {
 var ImageManager = this.ImageManager = {
 	initialize: function()
 	{
 		o = this._getUriObject(window.self.location.href);
 		//console.log(o);
-		q = $H(this._getQueryObject(o.query));
+		q = new Hash(this._getQueryObject(o.query));
 		this.editor = decodeURIComponent(q.get('e_name'));
 
 		// Setup image manager fields object
 		this.fields			= new Object();
-		this.fields.url		= $("f_url");
-		this.fields.alt		= $("f_alt");
-		this.fields.align	= $("f_align");
-		this.fields.title	= $("f_title");
-		this.fields.caption	= $("f_caption");
+		this.fields.url		= document.id("f_url");
+		this.fields.alt		= document.id("f_alt");
+		this.fields.align	= document.id("f_align");
+		this.fields.title	= document.id("f_title");
+		this.fields.caption	= document.id("f_caption");
 
 		// Setup image listing objects
-		this.folderlist = $('folderlist');
+		this.folderlist = document.id('folderlist');
 
 		this.frame		= window.frames['imageframe'];
 		this.frameurl	= this.frame.location.href;
 
 		// Setup imave listing frame
-		this.imageframe = $('imageframe');
+		this.imageframe = document.id('imageframe');
 		this.imageframe.manager = this;
 		this.imageframe.addEvent('load', function(){ ImageManager.onloadimageview(); });
 
 		// Setup folder up button
-		this.upbutton = $('upbutton');
+		this.upbutton = document.id('upbutton');
 		this.upbutton.removeEvents('click');
 		this.upbutton.addEvent('click', function(){ ImageManager.upFolder(); });
 	},
@@ -60,9 +60,9 @@ var ImageManager = this.ImageManager = {
 			}
 		}
 
-		a = this._getUriObject($('uploadForm').getProperty('action'));
+		a = this._getUriObject(document.id('uploadForm').getProperty('action'));
 		//console.log(a);
-		q = $H(this._getQueryObject(a.query));
+		q = new Hash(this._getQueryObject(a.query));
 		q.set('folder', folder);
 		var query = [];
 		q.each(function(v, k){
@@ -71,7 +71,11 @@ var ImageManager = this.ImageManager = {
 			}
 		}, query);
 		a.query = query.join('&');
-		$('uploadForm').setProperty('action', a.scheme+'://'+a.domain+a.path+'?'+a.query);
+		var portString = '';
+		if (typeof(a.port) !== 'undefined' && a.port != 80) {
+			portString = ':'+a.port;
+		}
+		document.id('uploadForm').setProperty('action', a.scheme+'://'+a.domain+portString+a.path+'?'+a.query);
 	},
 
 	getImageFolder: function()
@@ -119,7 +123,7 @@ var ImageManager = this.ImageManager = {
 		return false;
 	},
 
-	setFolder: function(folder)
+	setFolder: function(folder,asset,author)
 	{
 		//this.showMessage('Loading');
 
@@ -130,7 +134,7 @@ var ImageManager = this.ImageManager = {
 				break;
 			}
 		}
-		this.frame.location.href='index.php?option=com_media&view=imagesList&tmpl=component&folder=' + folder;
+		this.frame.location.href='index.php?option=com_media&view=imagesList&tmpl=component&folder=' + folder + '&asset=' + asset + '&author=' + author;
 	},
 
 	getFolder: function() {
@@ -172,13 +176,13 @@ var ImageManager = this.ImageManager = {
 
 	populateFields: function(file)
 	{
-		$("f_url").value = image_base_path+file;
+		document.id("f_url").value = image_base_path+file;
 	},
 
 	showMessage: function(text)
 	{
-		var message  = $('message');
-		var messages = $('messages');
+		var message  = document.id('message');
+		var messages = document.id('messages');
 
 		if(message.firstChild)
 			message.removeChild(message.firstChild);
@@ -214,7 +218,7 @@ var ImageManager = this.ImageManager = {
 
 	_setFrameUrl: function(url)
 	{
-		if ($chk(url)) {
+		if (url != null) {
 			this.frameurl = url;
 		}
 		this.frame.location.href = this.frameurl;

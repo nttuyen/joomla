@@ -1,7 +1,7 @@
 <?php
 /**
- * @version		$Id: languages.php 18328 2010-08-04 05:40:37Z eddieajau $
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @version		$Id: languages.php 21032 2011-03-29 16:38:31Z dextercowley $
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -20,6 +20,30 @@ jimport('joomla.application.component.modellist');
 class LanguagesModelLanguages extends JModelList
 {
 	/**
+	 * Constructor.
+	 *
+	 * @param	array	An optional associative array of configuration settings.
+	 * @see		JController
+	 * @since	1.6
+	 */
+	public function __construct($config = array())
+	{
+		if (empty($config['filter_fields'])) {
+			$config['filter_fields'] = array(
+				'lang_id', 'a.lang_id',
+				'lang_code', 'a.lang_code',
+				'title', 'a.title',
+				'title_native', 'a.title_native',
+				'sef', 'a.sef',
+				'image', 'a.image',
+				'published', 'a.published',
+			);
+		}
+
+		parent::__construct($config);
+	}
+
+	/**
 	 * Method to auto-populate the model state.
 	 *
 	 * Note. Calling getState in this method will result in recursion.
@@ -27,16 +51,16 @@ class LanguagesModelLanguages extends JModelList
 	 * @return	void
 	 * @since	1.6
 	 */
-	protected function populateState()
+	protected function populateState($ordering = null, $direction = null)
 	{
 		// Initialise variables.
 		$app = JFactory::getApplication('administrator');
 
 		// Load the filter state.
-		$search = $app->getUserStateFromRequest($this->context.'.search', 'filter_search');
+		$search = $this->getUserStateFromRequest($this->context.'.search', 'filter_search');
 		$this->setState('filter.search', $search);
 
-		$published = $app->getUserStateFromRequest($this->context.'.published', 'filter_published', '');
+		$published = $this->getUserStateFromRequest($this->context.'.published', 'filter_published', '');
 		$this->setState('filter.published', $published);
 
 		// Load the parameters.
@@ -117,10 +141,6 @@ class LanguagesModelLanguages extends JModelList
 	 */
 	public function setPublished($cid, $value = 0)
 	{
-		// Clean the cache.
-		$cache = JFactory::getCache('com_languages');
-		$cache->clean();
-
 		return JTable::getInstance('Language')->publish($cid, $value);
 	}
 
@@ -151,9 +171,21 @@ class LanguagesModelLanguages extends JModelList
 		}
 
 		// Clean the cache.
-		$cache = JFactory::getCache('com_languages');
-		$cache->clean();
+		$this->cleanCache();
 
 		return true;
 	}
+
+	/**
+	 * Custom clean cache method, 2 places for 2 clients
+	 *
+	 * @since	1.6
+	 */
+	function cleanCache() {
+		parent::cleanCache('_system', 0);
+		parent::cleanCache('_system', 1);
+		parent::cleanCache('com_languages', 0);
+		parent::cleanCache('com_languages', 1);
+	}	
+
 }

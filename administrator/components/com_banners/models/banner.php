@@ -1,7 +1,7 @@
 <?php
 /**
- * @version		$Id: banner.php 19091 2010-10-12 15:48:56Z infograf768 $
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @version		$Id: banner.php 21148 2011-04-14 17:30:08Z ian $
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -34,18 +34,23 @@ class BannersModelBanner extends JModelAdmin
 	 */
 	protected function canDelete($record)
 	{
-		$user = JFactory::getUser();
+		if (!empty($record->id)) {
+			if ($record->state != -2) {
+				return ;
+			}
+			$user = JFactory::getUser();
 
-		if (!empty($record->catid)) {
-			return $user->authorise('core.delete', 'com_banners.category.'.(int) $record->catid);
-		}
-		else {
-			return parent::canDelete($record);
-		}
+			if (!empty($record->catid)) {
+				return $user->authorise('core.delete', 'com_banners.category.'.(int) $record->catid);
+			}
+			else {
+				return parent::canDelete($record);
+			}
+		}	
 	}
 
 	/**
-	 * Method to test whether a record can be deleted.
+	 * Method to test whether a record can have its state changed.
 	 *
 	 * @param	object	A record object.
 	 * @return	boolean	True if allowed to change the state of the record. Defaults to the permission set in the component.
@@ -138,6 +143,12 @@ class BannersModelBanner extends JModelAdmin
 
 		if (empty($data)) {
 			$data = $this->getItem();
+
+			// Prime some default values.
+			if ($this->getState('banner.id') == 0) {
+				$app = JFactory::getApplication();
+				$data->set('catid', JRequest::getInt('catid', $app->getUserState('com_banners.banners.filter.category_id')));
+			}
 		}
 
 		return $data;
@@ -164,7 +175,7 @@ class BannersModelBanner extends JModelAdmin
 				if (!$this->canEditState($table)) {
 					// Prune items that you can't change.
 					unset($pks[$i]);
-					JError::raiseWarning(403, JText::_('JLIB_APPLICATION_ERROR_EDIT_STATE_NOT_PERMITTED'));
+					JError::raiseWarning(403, JText::_('JLIB_APPLICATION_ERROR_EDITSTATE_NOT_PERMITTED'));
 				}
 			}
 		}
@@ -185,7 +196,7 @@ class BannersModelBanner extends JModelAdmin
 	 * @return	array	An array of conditions to add to add to ordering queries.
 	 * @since	1.6
 	 */
-	protected function getReorderConditions($table = null)
+	protected function getReorderConditions($table)
 	{
 		$condition = array();
 		$condition[] = 'catid = '. (int) $table->catid;

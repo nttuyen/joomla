@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: edit_assignment.php 19089 2010-10-12 09:06:57Z infograf768 $
+ * @version		$Id: edit_assignment.php 20986 2011-03-17 20:31:11Z chdemko $
  * @package		Joomla.Administrator
  * @subpackage	com_modules
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -14,7 +14,7 @@ defined('_JEXEC') or die;
 require_once JPATH_ADMINISTRATOR.'/components/com_menus/helpers/menus.php';
 $menuTypes = MenusHelper::getMenuLinks();
 ?>
-		<script>
+		<script type="text/javascript">
 			window.addEvent('domready', function(){
 				validate();
 				document.getElements('select').addEvent('change', function(e){validate();});
@@ -44,7 +44,7 @@ $menuTypes = MenusHelper::getMenuLinks();
 
 		<fieldset class="adminform">
 			<legend><?php echo JText::_('COM_MODULES_MENU_ASSIGNMENT'); ?></legend>
-			<label id="jform_menus-lbl" class="hasTip" for="jform_menus"><?php echo JText::_('COM_MODULES_MODULE_ASSIGN'); ?></label>
+			<label id="jform_menus-lbl" for="jform_menus"><?php echo JText::_('COM_MODULES_MODULE_ASSIGN'); ?></label>
 
 			<fieldset id="jform_menus" class="radio">
 				<select name="jform[assignment]" id="jform_assignment">
@@ -53,7 +53,7 @@ $menuTypes = MenusHelper::getMenuLinks();
 
 			</fieldset>
 
-			<label id="jform_menuselect-lbl" class="hasTip" for="jform_menuselect"><?php echo JText::_('JGLOBAL_MENU_SELECTION'); ?></label>
+			<label id="jform_menuselect-lbl" for="jform_menuselect"><?php echo JText::_('JGLOBAL_MENU_SELECTION'); ?></label>
 
 			<button type="button" id="jform_toggle" class="jform-rightbtn" onclick="$$('.chk-menulink').each(function(el) { el.checked = !el.checked; });">
 				<?php echo JText::_('JGLOBAL_SELECTION_INVERT'); ?>
@@ -68,7 +68,7 @@ $menuTypes = MenusHelper::getMenuLinks();
 			<?php foreach ($menuTypes as &$type) : 
 				echo JHtml::_('tabs.panel', $type->title ? $type->title : $type->menutype, $type->menutype.'-details');
 				
-				$count 	= sizeof($type->links);
+				$count 	= count($type->links);
 				$i		= 0;
 				if ($count) :
 				?>					

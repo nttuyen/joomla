@@ -2,7 +2,7 @@
 /**
  * @version		$Id: default.php 17017 2010-05-13 10:48:48Z eddieajau $
  * @package		Joomla.Site
- * @subpackage	com_content
+ * @subpackage	Templates.beez5
  * @copyright	Copyright (C) 2005 - 2009 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
@@ -21,10 +21,8 @@ JHtml::addIncludePath(JPATH_COMPONENT.DS.'helpers');
 
 // If the page class is defined, add to class as suffix.
 // It will be a separate class if the user starts it with a space
-$pageClass = $this->params->get('pageclass_sfx');
 ?>
-
-<section class="blog-featured<?php echo $pageClass;?>">
+<section class="blog-featured<?php echo $this->pageclass_sfx;?>">
 <?php if ( $this->params->get('show_page_heading')!=0) : ?>
 	<h1>
 	<?php echo $this->escape($this->params->get('page_heading')); ?>

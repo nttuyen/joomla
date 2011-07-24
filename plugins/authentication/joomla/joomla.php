@@ -1,9 +1,7 @@
 <?php
 /**
- * @version		$Id: joomla.php 17959 2010-06-29 12:02:40Z infograf768 $
- * @package		Joomla
- * @subpackage	JFramework
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @version		$Id: joomla.php 21097 2011-04-07 15:38:03Z dextercowley $
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -15,8 +13,8 @@ jimport('joomla.plugin.plugin');
 /**
  * Joomla Authentication plugin
  *
- * @package		Joomla
- * @subpackage	JFramework
+ * @package		Joomla.Plugin
+ * @subpackage	Authentication.joomla
  * @since 1.5
  */
 class plgAuthenticationJoomla extends JPlugin
@@ -67,6 +65,12 @@ class plgAuthenticationJoomla extends JPlugin
 				$user = JUser::getInstance($result->id); // Bring this in line with the rest of the system
 				$response->email = $user->email;
 				$response->fullname = $user->name;
+				if (JFactory::getApplication()->isAdmin()) {
+					$response->language = $user->getParam('admin_language');
+				}
+				else {
+					$response->language = $user->getParam('language');
+				}
 				$response->status = JAUTHENTICATE_STATUS_SUCCESS;
 				$response->error_message = '';
 			} else {

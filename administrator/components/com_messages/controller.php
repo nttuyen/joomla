@@ -1,7 +1,7 @@
 <?php
 /**
- * @version		$Id: controller.php 17858 2010-06-23 17:54:28Z eddieajau $
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @version		$Id: controller.php 20952 2011-03-11 16:09:38Z infograf768 $
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -32,9 +32,23 @@ class MessagesController extends JController
 	{
 		require_once JPATH_COMPONENT.'/helpers/messages.php';
 
+		$view		= JRequest::getCmd('view', 'messages');
+		$layout 	= JRequest::getCmd('layout', 'default');
+		$id			= JRequest::getInt('id');
+
+		// Check for edit form.
+		if ($view == 'message' && $layout == 'edit' && !$this->checkEditId('com_messages.edit.message', $id)) {
+			// Somehow the person just went to the form - we don't allow that.
+			$this->setError(JText::sprintf('JLIB_APPLICATION_ERROR_UNHELD_ID', $id));
+			$this->setMessage($this->getError(), 'error');
+			$this->setRedirect(JRoute::_('index.php?option=com_messages&view=messages', false));
+
+			return false;
+		}
+
 		parent::display();
 
 		// Load the submenu.
-		//MessagesHelper::addSubmenu(JRequest::getWord('view', 'messages'));
+		MessagesHelper::addSubmenu(JRequest::getCmd('view', 'messages'));
 	}
 }

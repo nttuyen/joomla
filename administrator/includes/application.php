@@ -1,8 +1,8 @@
 <?php
 /**
- * @version		$Id: application.php 19129 2010-10-14 16:05:24Z louis $
+ * @version		$Id: application.php 21169 2011-04-18 19:52:28Z dextercowley $
  * @package		Joomla.Administrator
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -36,7 +36,7 @@ class JAdministrator extends JApplication
 		parent::__construct($config);
 
 		//Set the root in the URI based on the application name
-		JURI::root(null, str_replace('/'.$this->getName(), '', JURI::base(true)));
+		JURI::root(null, str_ireplace('/'.$this->getName(), '', JURI::base(true)));
 	}
 
 	/**
@@ -129,32 +129,41 @@ class JAdministrator extends JApplication
 	 */
 	public function dispatch($component = null)
 	{
-		if ($component === null) {
-			$component = JAdministratorHelper::findOption();
+		try
+		{
+			if ($component === null) {
+				$component = JAdministratorHelper::findOption();
+			}
+
+			$document	= JFactory::getDocument();
+			$user		= JFactory::getUser();
+
+			switch ($document->getType()) {
+				case 'html':
+					$document->setMetaData('keywords', $this->getCfg('MetaKeys'));
+					JHtml::_('behavior.framework', true);
+					break;
+
+				default:
+					break;
+			}
+
+			$document->setTitle($this->getCfg('sitename'). ' - ' .JText::_('JADMINISTRATION'));
+			$document->setDescription($this->getCfg('MetaDesc'));
+
+			$contents = JComponentHelper::renderComponent($component);
+			$document->setBuffer($contents, 'component');
+
+			// Trigger the onAfterDispatch event.
+			JPluginHelper::importPlugin('system');
+			$this->triggerEvent('onAfterDispatch');
 		}
-
-		$document	= JFactory::getDocument();
-		$user		= JFactory::getUser();
-
-		switch ($document->getType()) {
-			case 'html':
-				$document->setMetaData('keywords', $this->getCfg('MetaKeys'));
-				JHtml::_('behavior.framework', true);
-				break;
-
-			default:
-				break;
+		// Mop up any uncaught exceptions.
+		catch (Exception $e)
+		{
+			$code = $e->getCode();
+			JError::raiseError($code ? $code : 500, $e->getMessage());
 		}
-
-		$document->setTitle(htmlspecialchars_decode($this->getCfg('sitename')). ' - ' .JText::_('JADMINISTRATION'));
-		$document->setDescription($this->getCfg('MetaDesc'));
-
-		$contents = JComponentHelper::renderComponent($component);
-		$document->setBuffer($contents, 'component');
-
-		// Trigger the onAfterDispatch event.
-		JPluginHelper::importPlugin('system');
-		$this->triggerEvent('onAfterDispatch');
 	}
 
 	/**
@@ -178,7 +187,7 @@ class JAdministrator extends JApplication
 		$rootUser	= $config->get('root_user');
 		if (property_exists('JConfig', 'root_user') &&
 			(JFactory::getUser()->get('username') == $rootUser || JFactory::getUser()->id === (string) $rootUser)) {
-			JError::raiseNotice(200, JText::_('JWARNING_REMOVE_ROOT_USER'));
+			JError::raiseNotice(200, JText::sprintf('JWARNING_REMOVE_ROOT_USER', 'index.php?option=com_config&task=application.removeroot&'. JUtility::getToken() .'=1'));			
 		}
 
 		$params = array(
@@ -249,13 +258,21 @@ class JAdministrator extends JApplication
 
 		if (!isset($template))
 		{
+			$admin_style = JFactory::getUser()->getParam('admin_style');
 			// Load the template name from the database
 			$db = JFactory::getDbo();
 			$query = $db->getQuery(true);
 			$query->select('template, params');
 			$query->from('#__template_styles');
 			$query->where('client_id = 1');
-			$query->where('home = 1');
+			if ($admin_style)
+			{
+				$query->where('id = '.(int)$admin_style);
+			}
+			else
+			{
+				$query->where('home = 1');
+			}
 			$db->setQuery($query);
 			$template = $db->loadObject();
 

@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: login.php 18611 2010-08-24 02:17:02Z ian $
+ * @version		$Id: login.php 21097 2011-04-07 15:38:03Z dextercowley $
  * @package		Joomla.Administrator
- * @subpackage	templates.bluestork
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @subpackage	Templates.bluestork
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -11,6 +11,8 @@
 defined('_JEXEC') or die;
 
 $app = JFactory::getApplication();
+JHtml::_('behavior.noframes');
+JHtml::_('behavior.framework');
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->language; ?>" lang="<?php echo $this->language; ?>" dir="<?php echo $this->direction; ?>" >
@@ -28,10 +30,6 @@ $app = JFactory::getApplication();
 <link href="templates/<?php echo  $this->template ?>/css/ie7.css" rel="stylesheet" type="text/css" />
 <![endif]-->
 
-<!--[if lte IE 6]>
-<link href="templates/<?php echo  $this->template ?>/css/ie6.css" rel="stylesheet" type="text/css" />
-<![endif]-->
-
 <?php  if ($this->params->get('useRoundedCorners')) : ?>
 	<link rel="stylesheet" type="text/css" href="templates/<?php echo $this->template ?>/css/rounded.css" />
 <?php  else : ?>
@@ -39,13 +37,13 @@ $app = JFactory::getApplication();
 <?php  endif; ?>
 
 <script type="text/javascript">
-	function setFocus() {
+	window.addEvent('domready', function () {
 		document.getElementById('form-login').username.select();
 		document.getElementById('form-login').username.focus();
-	}
+	});
 </script>
 </head>
-<body onload="javascript:setFocus()">
+<body>
 	<div id="border-top" class="h_blue">
 		<div>
 			<div>
@@ -87,7 +85,7 @@ $app = JFactory::getApplication();
 </div>
 <div id="footer">
 	<p class="copyright">
-		<?php $joomla= '<a href="http://www.joomla.org">Joomla!</a>';
+		<?php $joomla= '<a href="http://www.joomla.org">Joomla!&#174;</a>';
 		echo JText::sprintf('JGLOBAL_ISFREESOFTWARE', $joomla) ?>
 	</p>
 </div>

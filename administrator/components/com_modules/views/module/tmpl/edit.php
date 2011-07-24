@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: edit.php 19089 2010-10-12 09:06:57Z infograf768 $
+ * @version		$Id: edit.php 20330 2011-01-15 18:57:08Z infograf768 $
  * @package		Joomla.Administrator
  * @subpackage	com_modules
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -18,12 +18,6 @@ $hasContent = empty($this->item->module) || $this->item->module == 'custom' || $
 
 $script = "Joomla.submitbutton = function(task)
 	{
-		if (task != 'module.cancel' && $('jform_custom_position').get('value') == '' && $('jform_position').get('value') == '') {
-			$('jform_custom_position').addClass('invalid');
-			$('jform_position').addClass('invalid');
-			alert('".$this->escape(JText::_('JGLOBAL_VALIDATION_FORM_FAILED'))."');
-			return false;
-		} else {
 			if (task == 'module.cancel' || document.formvalidator.isValid(document.id('module-form'))) {";
 if ($hasContent) {
 	$script .= $this->form->getField('content')->save();
@@ -35,12 +29,11 @@ $script .= "	Joomla.submitform(task, document.getElementById('module-form'));
 			} else {
 				alert('".$this->escape(JText::_('JGLOBAL_VALIDATION_FORM_FAILED'))."');
 			}
-		}
 	}";
 
 JFactory::getDocument()->addScriptDeclaration($script);
 ?>
-<form action="<?php echo JRoute::_('index.php?option=com_modules'); ?>" method="post" name="adminForm" id="module-form" class="form-validate">
+<form action="<?php echo JRoute::_('index.php?option=com_modules&layout=edit&id='.(int) $this->item->id); ?>" method="post" name="adminForm" id="module-form" class="form-validate">
 	<div class="width-60 fltlft">
 		<fieldset class="adminform">
 			<legend><?php echo JText::_('JDETAILS'); ?></legend>
@@ -49,11 +42,12 @@ JFactory::getDocument()->addScriptDeclaration($script);
 			<li><?php echo $this->form->getLabel('title'); ?>
 			<?php echo $this->form->getInput('title'); ?></li>
 
+			<li><?php echo $this->form->getLabel('showtitle'); ?>
+			<?php echo $this->form->getInput('showtitle'); ?></li>
+
 			<li><?php echo $this->form->getLabel('position'); ?>
-			<?php echo $this->form->getInput('custom_position'); ?>
 			<?php echo $this->form->getInput('position'); ?></li>
-			<script type="text/javascript">$('jform_position-lbl').addClass('required');</script>
-			
+
 			<?php if ((string) $this->item->xml->name != 'Login Form'): ?>
 			<li><?php echo $this->form->getLabel('published'); ?>
 			<?php echo $this->form->getInput('published'); ?></li>
@@ -64,9 +58,6 @@ JFactory::getDocument()->addScriptDeclaration($script);
 
 			<li><?php echo $this->form->getLabel('ordering'); ?>
 			<?php echo $this->form->getInput('ordering'); ?></li>
-
-			<li><?php echo $this->form->getLabel('showtitle'); ?>
-			<?php echo $this->form->getInput('showtitle'); ?></li>
 
 			<?php if ((string) $this->item->xml->name != 'Login Form'): ?>
 			<li><?php echo $this->form->getLabel('publish_up'); ?>
@@ -89,7 +80,7 @@ JFactory::getDocument()->addScriptDeclaration($script);
 
 			<li><?php echo $this->form->getLabel('module'); ?>
 			<?php echo $this->form->getInput('module'); ?>
-			<input type="text" size="35" value="<?php if ($this->item->xml) echo ($text = (string) $this->item->xml->name) ? JText::_($text) : $this->item->module;else echo JText::_(MODULES_ERR_XML);?>" class="readonly" readonly="readonly" /></li>
+			<input type="text" size="35" value="<?php if ($this->item->xml) echo ($text = (string) $this->item->xml->name) ? JText::_($text) : $this->item->module;else echo JText::_(COM_MODULES_ERR_XML);?>" class="readonly" readonly="readonly" /></li>
 
 			<li><?php echo $this->form->getLabel('client_id'); ?>
 			<input type="text" size="35" value="<?php echo $this->item->client_id == 0 ? JText::_('JSITE') : JText::_('JADMINISTRATOR'); ?>	" class="readonly" readonly="readonly" />

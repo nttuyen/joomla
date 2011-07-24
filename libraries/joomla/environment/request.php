@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: request.php 17972 2010-06-30 10:18:39Z ian $
+ * @version		$Id: request.php 21603 2011-06-21 18:31:49Z dextercowley $
  * @package		Joomla.Framework
  * @subpackage	Environment
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -156,7 +156,7 @@ class JRequest
 
 	/**
 	 * Fetches and returns a given filtered variable. The integer
-	 * filter will allow only digits to be returned. This is currently
+	 * filter will allow only digits and the - sign to be returned. This is currently
 	 * only a proxy function for getVar().
 	 *
 	 * See getVar() for more in-depth documentation on the parameters.
@@ -170,6 +170,25 @@ class JRequest
 	public static function getInt($name, $default = 0, $hash = 'default')
 	{
 		return self::getVar($name, $default, $hash, 'int');
+	}
+
+	/**
+	 * Fetches and returns a given filtered variable. The unsigned integer
+	 * filter will allow only digits to be returned. This is currently
+	 * only a proxy function for getVar().
+	 *
+	 * See getVar() for more in-depth documentation on the parameters.
+	 *
+	 * @param	string	$name		Variable name.
+	 * @param	string	$default	Default value if the variable does not exist.
+	 * @param	string	$hash		Where the var should come from (POST, GET, FILES, COOKIE, METHOD).
+	 *
+	 * @return	integer	Requested variable.
+	 * @since	11.1
+	 */
+	public static function getUInt($name, $default = 0, $hash = 'default')
+	{
+		return self::getVar($name, $default, $hash, 'uint');
 	}
 
 	/**

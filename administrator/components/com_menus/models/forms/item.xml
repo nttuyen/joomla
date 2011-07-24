@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-	<!-- $Id: item.xml 18781 2010-09-06 03:00:50Z eddieajau $ -->
+	<!-- $Id: item.xml 20991 2011-03-19 06:09:37Z infograf768 $ -->
 <form>
 	<fieldset>
 		<field
@@ -25,9 +25,13 @@
 			name="alias"
 			type="alias"
 			label="JFIELD_ALIAS_LABEL"
-			description="COM_MENUS_ITEM_FIELD_ALIAS_DESC"
+			description="JFIELD_ALIAS_DESC"
 			class="inputbox"
 			size="40"/>
+		
+		<field name="aliastip"
+			type="spacer"
+			label="COM_MENUS_TIP_ALIAS_LABEL"/>
 
 		<field
 			name="note"
@@ -53,6 +57,7 @@
 			description="COM_MENUS_ITEM_FIELD_ASSIGNED_DESC"
 			class="inputbox"
 			required="true"
+			onchange="Joomla.submitbutton('item.setMenuType',this.value);"
 			size="1" />
 
 		<field
@@ -69,7 +74,7 @@
 			type="list"
 			id="published"
 			class="inputbox"
-			label="JGLOBAL_STATE"
+			label="JSTATUS"
 			description="JFIELD_PUBLISHED_DESC"
 			size="1"
 			default="1"
@@ -91,10 +96,13 @@
 			type="menuparent"
 			label="COM_MENUS_ITEM_FIELD_PARENT_LABEL"
 			description="COM_MENUS_ITEM_FIELD_PARENT_DESC"
-			default="MENU_ITEM_ROOT"
+			default="1"
 			filter="int"
 			class="inputbox"
-			size="1"/>
+			size="1">
+			<option
+				value="1">COM_MENUS_ITEM_ROOT</option>
+		</field>
 
 		<field
 			name="component_id"
@@ -161,7 +169,7 @@
 			name="language"
 			type="contentlanguage"
 			label="JFIELD_LANGUAGE_LABEL"
-			description="JFIELD_MODULE_LANGUAGE_DESC"
+			description="COM_MENUS_ITEM_FIELD_LANGUAGE_DESC"
 			class="inputbox">
 			<option value="*">JALL</option>
 		</field>

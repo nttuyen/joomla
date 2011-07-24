@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: index.php 19070 2010-10-09 13:59:50Z chdemko $
+ * @version		$Id: index.php 21097 2011-04-07 15:38:03Z dextercowley $
  * @package		Joomla.Administrator
- * @subpackage	templates.hathor
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @subpackage	Templates.hathor
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  * @since		1.6
  */
@@ -23,27 +23,22 @@ $app = JFactory::getApplication();
 
 <!-- Load Template CSS -->
 <link href="templates/<?php echo  $this->template ?>/css/template.css" rel="stylesheet" type="text/css" />
-<?php if ($this->params->get('altMenu')) : ?>
-	<link href="templates/<?php echo  $this->template ?>/css/menu2.css" rel="stylesheet" type="text/css" />
-<?php else : ?>
-	<link href="templates/<?php echo  $this->template ?>/css/menu.css" rel="stylesheet" type="text/css" />
-<?php endif; ?>
+
+<!-- Load additional CSS styles for colors -->
+<?php 
+	if (!$this->params->get('colourChoice')) : 
+		$colour = 'standard';
+	else :
+		$colour = htmlspecialchars($this->params->get('colourChoice'));
+	endif; 
+?>
+<link href="templates/<?php echo $this->template ?>/css/colour_<?php echo $colour; ?>.css" rel="stylesheet" type="text/css" />
 
 <!-- Load additional CSS styles for rtl sites -->
 <?php if ($this->direction == 'rtl') : ?>
 	<link href="templates/<?php echo  $this->template ?>/css/template_rtl.css" rel="stylesheet" type="text/css" />
-	<?php if ($this->params->get('altMenu')) : ?>
-		<link href="templates/<?php echo  $this->template ?>/css/menu2_rtl.css" rel="stylesheet" type="text/css" />
-	<?php else : ?>
-		<link href="templates/<?php echo  $this->template ?>/css/menu_rtl.css" rel="stylesheet" type="text/css" />
-	<?php endif; ?>
+	<link href="templates/<?php echo $this->template ?>/css/colour_<?php echo $colour; ?>_rtl.css" rel="stylesheet" type="text/css" />
 <?php endif; ?>
-
-<!-- Load additional CSS styles for High Contrast colors -->
-<?php if ($this->params->get('highContrast')) : ?>
-	<link href="templates/<?php echo $this->template ?>/css/highcontrast.css" rel="stylesheet" type="text/css" />
-	<link href="templates/<?php echo $this->template ?>/css/menu_hc.css" rel="stylesheet" type="text/css" />
-<?php  endif; ?>
 
 <!-- Load additional CSS styles for bold Text -->
 <?php if ($this->params->get('boldText')) : ?>
@@ -51,19 +46,15 @@ $app = JFactory::getApplication();
 <?php  endif; ?>
 
 <!-- Load additional CSS styles for Internet Explorer -->
+<!--[if IE 8]>
+	<link href="templates/<?php echo  $this->template ?>/css/ie8.css" rel="stylesheet" type="text/css" />
+<![endif]-->
 <!--[if IE 7]>
 	<link href="templates/<?php echo  $this->template ?>/css/ie7.css" rel="stylesheet" type="text/css" />
 <![endif]-->
 <!--[if lte IE 6]>
 	<link href="templates/<?php echo  $this->template ?>/css/ie6.css" rel="stylesheet" type="text/css" />
 <![endif]-->
-
-<!-- Load JavaScript for menu -->
-<?php if ($this->params->get('altMenu')) : ?>
-	<script type="text/javascript" src="templates/<?php  echo  $this->template  ?>/js/menu2.js"></script>
-<?php else : ?>
-	<script type="text/javascript" src="templates/<?php  echo  $this->template  ?>/js/menu.js"></script>
-<?php endif; ?>
 
 <!-- Load Template JavaScript -->
 <script type="text/javascript" src="templates/<?php  echo  $this->template  ?>/js/template.js"></script>
@@ -102,7 +93,7 @@ $app = JFactory::getApplication();
 			if ($task == 'edit' || $task == 'editA' || JRequest::getInt('hidemainmenu')) {
 				$logoutLink = '';
 			} else {
-				$logoutLink = JRoute::_('index.php?option=com_login&task=logout');
+				$logoutLink = JRoute::_('index.php?option=com_login&task=logout&'. JUtility::getToken() .'=1');
 			}
 			$hideLinks	= JRequest::getBool('hidemainmenu');
 			$output = array();
@@ -141,7 +132,7 @@ $app = JFactory::getApplication();
 
 		<!-- Toolbar Icon Buttons -->
 		<div class="toolbar-box">
-			<jdoc:include type="modules" name="toolbar" />
+			<jdoc:include type="modules" name="toolbar" style="xhtml" />
 			<div class="clr"></div>
 		</div>
 
@@ -169,7 +160,8 @@ $app = JFactory::getApplication();
 <!-- Footer -->
 <div id="footer">
 	<p class="copyright">
-		<?php $joomla= '<a href="http://www.joomla.org">Joomla!</a>';
+		<jdoc:include type="modules" name="footer" style="none"  />
+		<?php $joomla= '<a href="http://www.joomla.org">Joomla!&#174;</a>';
 			echo JText::sprintf('JGLOBAL_ISFREESOFTWARE', $joomla) ?>
 		<span class="version"><?php echo  JText::_('JVERSION') ?> <?php echo  JVERSION; ?></span>
 	</p>

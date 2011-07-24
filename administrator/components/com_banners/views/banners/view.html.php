@@ -1,7 +1,7 @@
 <?php
 /**
- * @version		$Id: view.html.php 18759 2010-09-02 11:04:00Z infograf768 $
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @version		$Id: view.html.php 21148 2011-04-14 17:30:08Z ian $
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -56,20 +56,23 @@ class BannersViewBanners extends JView
 		require_once JPATH_COMPONENT.'/helpers/banners.php';
 
 		$canDo	= BannersHelper::getActions($this->state->get('filter.category_id'));
-
+		$user	= JFactory::getUser();
 		JToolBarHelper::title(JText::_('COM_BANNERS_MANAGER_BANNERS'), 'banners.png');
-		if ($canDo->get('core.create')) {
+		if (count($user->getAuthorisedCategories('com_banners', 'core.create')) > 0) {
 			JToolBarHelper::addNew('banner.add','JTOOLBAR_NEW');
 		}
-		if ($canDo->get('core.edit')) {
+
+		if (($canDo->get('core.edit'))) {
 			JToolBarHelper::editList('banner.edit','JTOOLBAR_EDIT');
 		}
+
 		if ($canDo->get('core.edit.state')) {
 			if ($this->state->get('filter.state') != 2){
 				JToolBarHelper::divider();
 				JToolBarHelper::custom('banners.publish', 'publish.png', 'publish_f2.png','JTOOLBAR_PUBLISH', true);
 				JToolBarHelper::custom('banners.unpublish', 'unpublish.png', 'unpublish_f2.png', 'JTOOLBAR_UNPUBLISH', true);
 			}
+
 			if ($this->state->get('filter.state') != -1 ) {
 				JToolBarHelper::divider();
 				if ($this->state->get('filter.state') != 2) {
@@ -80,14 +83,17 @@ class BannersViewBanners extends JView
 				}
 			}
 		}
+
 		if ($canDo->get('core.edit.state')) {
 			JToolBarHelper::custom('banners.checkin', 'checkin.png', 'checkin_f2.png', 'JTOOLBAR_CHECKIN', true);
 		}
-		if ($this->state->get('filter.state') == -2 && $canDo->get('core.delete')) {
-			JToolBarHelper::deleteList('', 'banners.delete','JTOOLBAR_EMPTY_TRASH');
-			JToolBarHelper::divider();
-		} else if ($canDo->get('core.edit.state')) {
+
+
+		if ($canDo->get('core.edit.state')) {
 			JToolBarHelper::trash('banners.trash','JTOOLBAR_TRASH');
+		}
+		if ( $canDo->get('core.delete')) {
+			JToolBarHelper::deleteList('', 'banners.delete','JTOOLBAR_EMPTY_TRASH');
 			JToolBarHelper::divider();
 		}
 		if ($canDo->get('core.admin')) {

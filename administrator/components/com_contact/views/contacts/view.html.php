@@ -1,7 +1,9 @@
 <?php
 /**
- * @version		$Id: view.html.php 18867 2010-09-13 09:10:15Z infograf768 $
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @version		$Id: view.html.php 20989 2011-03-18 09:19:41Z infograf768 $
+ * @package		Joomla.Administrator
+ * @subpackage	com_contact
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -11,11 +13,11 @@ defined('_JEXEC') or die;
 jimport('joomla.application.component.view');
 
 /**
- * HTML View class for the Contacts component
+ * View class for a list of contacts.
  *
  * @package		Joomla.Administrator
- * @subpackage	com_weblinks
- * @since		1.5
+ * @subpackage	com_contact
+ * @since		1.6
  */
 class ContactViewContacts extends JView
 {
@@ -30,9 +32,9 @@ class ContactViewContacts extends JView
 	 */
 	public function display($tpl = null)
 	{
-		$this->items		= $this->get('items');
-		$this->pagination	= $this->get('pagination');
-		$this->state		= $this->get('state');
+		$this->items		= $this->get('Items');
+		$this->pagination	= $this->get('Pagination');
+		$this->state		= $this->get('State');
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) {
@@ -60,15 +62,17 @@ class ContactViewContacts extends JView
 	{
 		require_once JPATH_COMPONENT.'/helpers/contact.php';
 		$canDo	= ContactHelper::getActions($this->state->get('filter.category_id'));
-
+		$user	= JFactory::getUser();
 		JToolBarHelper::title(JText::_('COM_CONTACT_MANAGER_CONTACTS'), 'contact.png');
 
-		if ($canDo->get('core.create')) {
+		if ($canDo->get('core.create') || (count($user->getAuthorisedCategories('com_contact', 'core.create'))) > 0) {
 			JToolBarHelper::addNew('contact.add','JTOOLBAR_NEW');
 		}
-		if ($canDo->get('core.edit')) {
+
+		if (($canDo->get('core.edit')) || ($canDo->get('core.edit.own'))) {
 			JToolBarHelper::editList('contact.edit','JTOOLBAR_EDIT');
 		}
+
 		if ($canDo->get('core.edit.state')) {
 			JToolBarHelper::divider();
 			JToolBarHelper::custom('contacts.publish', 'publish.png', 'publish_f2.png','JTOOLBAR_PUBLISH', true);
@@ -77,18 +81,21 @@ class ContactViewContacts extends JView
 			JToolBarHelper::archiveList('contacts.archive','JTOOLBAR_ARCHIVE');
 			JToolBarHelper::custom('contacts.checkin', 'checkin.png', 'checkin_f2.png', 'JTOOLBAR_CHECKIN', true);
 		}
+
 		if ($this->state->get('filter.published') == -2 && $canDo->get('core.delete')) {
 			JToolBarHelper::deleteList('', 'contacts.delete','JTOOLBAR_EMPTY_TRASH');
 			JToolBarHelper::divider();
-		} else if ($canDo->get('core.edit.state')) {
+		}
+		else if ($canDo->get('core.edit.state')) {
 			JToolBarHelper::trash('contacts.trash','JTOOLBAR_TRASH');
 			JToolBarHelper::divider();
 		}
-		if ($canDo->get('core.admin')) {
 
+		if ($canDo->get('core.admin')) {
 			JToolBarHelper::preferences('com_contact');
 			JToolBarHelper::divider();
 		}
+
 		JToolBarHelper::help('JHELP_COMPONENTS_CONTACTS_CONTACTS');
 	}
 }

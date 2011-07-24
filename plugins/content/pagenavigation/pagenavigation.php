@@ -1,7 +1,7 @@
 <?php
 /**
- * @version		$Id: pagenavigation.php 19022 2010-10-02 14:51:33Z infograf768 $
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @version		$Id: pagenavigation.php 21147 2011-04-14 16:49:40Z dextercowley $
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -13,8 +13,8 @@ jimport('joomla.plugin.plugin');
 /**
  * Pagenavigation plugin class.
  *
- * @package		Joomla
- * @subpackage	plg_pagenavigation
+ * @package		Joomla.Plugin
+ * @subpackage	Content.pagenavigation
  */
 class plgContentPagenavigation extends JPlugin
 {
@@ -30,7 +30,7 @@ class plgContentPagenavigation extends JPlugin
 			return false;
 		}
 
-		if ($params->get('show_item_navigation') && ($context == 'com_content.article')) {
+		if ($params->get('show_item_navigation') && ($context == 'com_content.article') && ($view == 'article')) {
 			$html = '';
 			$db		= JFactory::getDbo();
 			$user	= JFactory::getUser();
@@ -42,7 +42,7 @@ class plgContentPagenavigation extends JPlugin
 
 			$uid	= $row->id;
 			$option	= 'com_content';
-			$canPublish = $user->authorise('core.edit.state', $option.'.'.$view.'.'.$row->id);
+			$canPublish = $user->authorise('core.edit.state', $option.'.article.'.$row->id);
 
 			// The following is needed as different menu items types utilise a different param to control ordering.
 			// For Blogs the `orderby_sec` param is the order controlling param.
@@ -162,8 +162,8 @@ class plgContentPagenavigation extends JPlugin
 				;
 				if ($row->prev) {
 					$html .= '
-					<li class="pagenav_prev">
-						<a href="'. $row->prev .'">'
+					<li class="pagenav-prev">
+						<a href="'. $row->prev .'" rel="next">'
 							. JText::_('JGLOBAL_LT') . $pnSpace . JText::_('JPREV') . '</a>
 					</li>'
 					;
@@ -173,14 +173,14 @@ class plgContentPagenavigation extends JPlugin
 
 				if ($row->next) {
 					$html .= '
-					<li class="pagenav_next">
-						<a href="'. $row->next .'">'
+					<li class="pagenav-next">
+						<a href="'. $row->next .'" rel="prev">'
 							. JText::_('JNEXT') . $pnSpace . JText::_('JGLOBAL_GT') .'</a>
 					</li>'
 					;
 				}
 				$html .= '
-				<ul>'
+				</ul>'
 				;
 
 				$position	= $this->params->get('position', 1);

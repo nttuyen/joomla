@@ -1,7 +1,7 @@
 <?php
 /**
- * @version		$Id: language.php 17130 2010-05-17 05:52:36Z eddieajau $
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @version		$Id: language.php 21097 2011-04-07 15:38:03Z dextercowley $
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -13,82 +13,12 @@ jimport('joomla.database.table');
 /**
  * Languages table.
  *
- * @package		Joomla.Administrator
- * @subpackage	com_languages
+ * @package		Joomla.Framework
+ * @subpackage	Table
  * @since		1.6
  */
 class JTableLanguage extends JTable
 {
-	/**
-	 * The primary key.
-	 *
-	 * @var	unsigned int
-	 */
-	public $lang_id;
-
-	/**
-	 * The language code: xx-XX through to yyy-YYY.
-	 *
-	 * @var	char
-	 */
-	public $lang_code;
-
-	/**
-	 * The SEF prefix.
-	 *
-	 * @var	char
-	 */
-	public $sef;
-
-	/**
-	 * The image prefix.
-	 *
-	 * @var	char
-	 */
-	public $image;
-
-	/**
-	 * The english name for the language.
-	 *
-	 * @var	varchar
-	 */
-	public $title;
-
-	/**
-	 * The native name for the language.
-	 *
-	 * @var	varchar
-	 */
-	public $title_native;
-
-	/**
-	 * A description for the language.
-	 *
-	 * @var	varchar
-	 */
-	public $description;
-
-	/**
-	 * A Meta Description for the language.
-	 *
-	 * @var	varchar
-	 */
-	public $metadesc;
-
-	/**
-	 * The Meta keywords for the language.
-	 *
-	 * @var	varchar
-	 */
-	public $metakey;
-
-	/**
-	 * The published state of the language.
-	 *
-	 * @var	int
-	 */
-	public $published;
-
 	/**
 	 * Constructor
 	 *

@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: edit.php 19073 2010-10-09 15:44:28Z chdemko $
+ * @version		$Id: edit.php 21097 2011-04-07 15:38:03Z dextercowley $
  * @package		Joomla.Administrator
- * @subpackage	templates.hathor
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @subpackage	Templates.hathor
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -13,7 +13,6 @@ defined('_JEXEC') or die;
 JHtml::addIncludePath(JPATH_COMPONENT.'/helpers/html');
 JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
-$canDo		= BannersHelper::getActions();
 ?>
 <script type="text/javascript">
 	Joomla.submitbutton = function(task)
@@ -41,7 +40,7 @@ $canDo		= BannersHelper::getActions();
 	});
 </script>
 
-<form action="<?php JRoute::_('index.php?option=com_banners'); ?>" method="post" name="adminForm" id="banner-form" class="form-validate">
+<form action="<?php echo JRoute::_('index.php?option=com_banners&layout=edit&id='.(int) $this->item->id); ?>" method="post" name="adminForm" id="banner-form" class="form-validate">
 	<div class="col main-section">
 		<fieldset class="adminform">
 			<legend><?php echo empty($this->item->id) ? JText::_('COM_BANNERS_NEW_BANNER') : JText::sprintf('COM_BANNERS_BANNER_DETAILS', $this->item->id); ?></legend>
@@ -54,24 +53,24 @@ $canDo		= BannersHelper::getActions();
 
 				<li><?php echo $this->form->getLabel('access'); ?>
 				<?php echo $this->form->getInput('access'); ?></li>
-				<?php if ($canDo->get('core.create')) { ?>	
-					<li><?php echo $this->form->getLabel('catid'); ?>
-					<?php echo $this->form->getInput('catid'); ?></li>
-				<?php }?>
-					
+				
+				<li><?php echo $this->form->getLabel('catid'); ?>
+				<?php echo $this->form->getInput('catid'); ?></li>
+
 				<li><?php echo $this->form->getLabel('type'); ?>
 				<?php echo $this->form->getInput('type'); ?></li>
-
-				<li>
-				<div id="image">
-					<?php foreach($this->form->getFieldset('image') as $field): ?>
-						<?php if (!$field->hidden): ?>
-							<?php echo $field->label; ?>
-						<?php endif; ?>
-						<?php echo $field->input; ?>
-					<?php endforeach; ?>
-				</div>
-				</li>
+				
+				<li><?php echo $this->form->getLabel('state'); ?>
+				<?php echo $this->form->getInput('state'); ?></li>
+				
+				<?php foreach($this->form->getFieldset('image') as $field): ?>
+					<li>
+					<?php if (!$field->hidden): ?>
+						<?php echo $field->label; ?>
+					<?php endif; ?>
+					<?php echo $field->input; ?>
+					</li>
+				<?php endforeach; ?>
 
 				<li><div id="custom">
 					<?php echo $this->form->getLabel('custombannercode'); ?>
@@ -88,10 +87,8 @@ $canDo		= BannersHelper::getActions();
 				<li><?php echo $this->form->getLabel('description'); ?>
 				<?php echo $this->form->getInput('description'); ?></li>
 
-				<?php if ($canDo->get('core.edit.state')) { ?>
-						<li><?php echo $this->form->getLabel('state'); ?>
+				<li><?php echo $this->form->getLabel('state'); ?>
 				<?php echo $this->form->getInput('state'); ?></li>
-				<?php }?>
 
 				<li><?php echo $this->form->getLabel('language'); ?>
 				<?php echo $this->form->getInput('language'); ?></li>

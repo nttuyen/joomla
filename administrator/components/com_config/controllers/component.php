@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: component.php 18786 2010-09-07 01:52:35Z ian $
+ * @version		$Id: component.php 20756 2011-02-18 04:34:38Z dextercowley $
  * @package		Joomla.Administrator
  * @subpackage	com_config
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -50,7 +50,7 @@ class ConfigControllerComponent extends JController
 		$form	= $model->getForm();
 		$data	= JRequest::getVar('jform', array(), 'post', 'array');
 		$id		= JRequest::getInt('id');
-		$option	= JRequest::getWord('component');
+		$option	= JRequest::getCmd('component');
 
 		// Check if the user is authorized to do this.
 		if (!JFactory::getUser()->authorise('core.admin', $option))
@@ -103,8 +103,21 @@ class ConfigControllerComponent extends JController
 			$this->setRedirect('index.php?option=com_config&view=component&component='.$option.'&tmpl=component', $message, 'error');
 			return false;
 		}
+		
+		// Set the redirect based on the task.
+		switch ($this->getTask())
+		{
+			case 'apply':
+				$message = JText::_('COM_CONFIG_SAVE_SUCCESS');
+				$this->setRedirect('index.php?option=com_config&view=component&component='.$option.'&tmpl=component', $message);
+				break;
 
-		$this->setRedirect('index.php?option=com_config&view=close&tmpl=component');
+			case 'save':
+			default:
+				$this->setRedirect('index.php?option=com_config&view=close&tmpl=component');
+				break;
+		}
+		
 		return true;
 	}
 }

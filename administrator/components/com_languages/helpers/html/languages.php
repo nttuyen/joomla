@@ -1,7 +1,7 @@
 <?php
 /**
- * @version		$Id: languages.php 18240 2010-07-25 07:56:02Z infograf768 $
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @version		$Id: languages.php 21020 2011-03-27 06:52:01Z infograf768 $
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -26,7 +26,7 @@ abstract class JHtmlLanguages {
 	public static function published($published)
 	{
 		if ($published) {
-			return JHTML::_('image','menu/icon-16-default.png', JText::_('COM_LANGUAGES_HEADING_DEFAULT'), NULL, true);
+			return JHtml::_('image','menu/icon-16-default.png', JText::_('COM_LANGUAGES_HEADING_DEFAULT'), NULL, true);
 		}
 		else {
 			return '&#160;';
@@ -43,7 +43,7 @@ abstract class JHtmlLanguages {
 	 */
 	public static function id($rowNum,$language)
 	{
-		return '<input type="radio" id="cb'.$rowNum.'" name="cid" value="'.$language.'" onclick="isChecked(this.checked);" title="'.($rowNum+1).'"/>';
+		return '<input type="radio" id="cb'.$rowNum.'" name="cid" value="'.htmlspecialchars($language).'" onclick="isChecked(this.checked);" title="'.($rowNum+1).'"/>';
 	}
 
 	public static function clients()
@@ -66,7 +66,7 @@ abstract class JHtmlLanguages {
 		$options	= array();
 		$options[]	= JHtml::_('select.option', '1', 'JPUBLISHED');
 		$options[]	= JHtml::_('select.option', '0', 'JUNPUBLISHED');
-		$options[]	= JHtml::_('select.option', '-2', 'JTRASH');
+		$options[]	= JHtml::_('select.option', '-2', 'JTRASHED');
 		$options[]	= JHtml::_('select.option', '*', 'JALL');
 
 		return $options;

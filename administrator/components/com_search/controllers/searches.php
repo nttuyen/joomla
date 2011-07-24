@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: searches.php 15672 2010-03-29 03:11:49Z infograf768 $
+ * @version		$Id: searches.php 21097 2011-04-07 15:38:03Z dextercowley $
  * @package		Joomla.Administrator
- * @subpackage	Search
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @subpackage	com_search
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 

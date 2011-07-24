@@ -1,7 +1,7 @@
 <?php
 /**
- * @version		$Id: installer.php 18650 2010-08-26 13:28:49Z ian $
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @version		$Id: installer.php 21749 2011-07-06 11:51:20Z chdemko $
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -527,14 +527,18 @@ class JInstaller extends JAdapter
 			{
 				$this->_adapters[$type]->loadLanguage($path);
 			}
+
 			// Fire the onExtensionBeforeUpdate event.
-            JPluginHelper::importPlugin('extension');
-            $dispatcher = JDispatcher::getInstance();
+            		JPluginHelper::importPlugin('extension');
+			$dispatcher = JDispatcher::getInstance();
 			$dispatcher->trigger('onExtensionBeforeUpdate', array('type'=>$type, 'manifest'=>$this->manifest));
+
 			// Run the update
 			$result = $this->_adapters[$type]->update();
+
 			// Fire the onExtensionAfterUpdate
 			$dispatcher->trigger('onExtensionAfterUpdate', array('installer'=>clone $this, 'eid'=> $result));
+
 			if ($result !== false) {
 				return true;
 			}
@@ -798,7 +802,7 @@ class JInstaller extends JAdapter
 	 */
 	public function setSchemaVersion($schema, $eid)
 	{
-		if( ! $eid || ! $schema)
+		if($eid && $schema)
 		{
 			$db = JFactory::getDBO();
 			$schemapaths = $schema->children();
@@ -826,15 +830,15 @@ class JInstaller extends JAdapter
 
 				if(strlen($schemapath))
 				{
-					$files = str_replace('.sql','', JFolder::files($this->getPath('extension_root').DS.$schemapath));
-					sort($files);
+					$files = str_replace('.sql','', JFolder::files($this->getPath('extension_root').DS.$schemapath,'\.sql$'));
+					usort($files,'version_compare');
 					// Update the database
 					$query = $db->getQuery(true);
 					$query->delete()->from('#__schemas')->where('extension_id = ' . $eid);
 					$db->setQuery($query);
 					if($db->Query()) {
 						$query->clear();
-						$query->insert('#__schemas')->set('extension_id = '. $eid)->set('version_id = '. end($files));
+						$query->insert('#__schemas')->set('extension_id = '. $eid)->set('version_id = '. $db->quote(end($files)));
 						$db->setQuery($query);
 						$db->Query();
 					}
@@ -883,8 +887,8 @@ class JInstaller extends JAdapter
 				if(strlen($schemapath))
 				{
 
-					$files = str_replace('.sql','', JFolder::files($this->getPath('extension_root').DS.$schemapath));
-					sort($files);
+					$files = str_replace('.sql','', JFolder::files($this->getPath('extension_root').DS.$schemapath,'\.sql$'));
+					usort($files,'version_compare');
 
 					if(!count($files))
 					{
@@ -901,7 +905,7 @@ class JInstaller extends JAdapter
 						// we have a version!
 						foreach($files as $file)
 						{
-							if($file > $version)
+							if(version_compare($file,$version)>0)
 							{
 								$buffer = file_get_contents($this->getPath('extension_root').DS.$schemapath.DS.$file.'.sql');
 
@@ -947,7 +951,7 @@ class JInstaller extends JAdapter
 					$db->setQuery($query);
 					if($db->Query()) {
 						$query->clear();
-						$query->insert('#__schemas')->set('extension_id = '. $eid)->set('version_id = '. end($files));
+						$query->insert('#__schemas')->set('extension_id = '. $eid)->set('version_id = '. $db->quote(end($files)));
 						$db->setQuery($query);
 						$db->Query();
 					}
@@ -1018,12 +1022,12 @@ class JInstaller extends JAdapter
 		}
 
 		// Work out what files have been deleted
-		if ($oldFiles && is_a($oldFiles, 'JXMLElement'))
+		if ($oldFiles && ($oldFiles instanceof JXMLElement)) 
 		{
 			$oldEntries = $oldFiles->children();
 			if (count($oldEntries))
 			{
-				$deletions = $this->findDeletedFiles($oldEntries, $element);
+				$deletions = $this->findDeletedFiles($oldEntries, $element->children());
 				foreach ($deletions['folders'] as $deleted_folder) {
 					JFolder::delete($destination.DS.$deleted_folder);
 				}
@@ -1357,7 +1361,7 @@ class JInstaller extends JAdapter
 					JError::raiseWarning(1, JText::sprintf('JLIB_INSTALLER_ERROR_NO_FILE', $filesource));
 					return false;
 				}
-				elseif (file_exists($filedest) && !$overwrite)
+				elseif (($exists = file_exists($filedest)) && !$overwrite)
 				{
 					/*
 					 * It's okay if the manifest already exists
@@ -1401,7 +1405,9 @@ class JInstaller extends JAdapter
 					 * Since we copied a file/folder, we want to add it to the installation step stack so that
 					 * in case we have to roll back the installation we can remove the files copied.
 					 */
-					$this->_stepStack[] = $step;
+					if (!$exists) {
+						$this->_stepStack[] = $step;
+					}
 				}
 			}
 		}
@@ -1686,7 +1692,7 @@ class JInstaller extends JAdapter
 	 */
 	public function generateManifestCache()
 	{
-		return serialize(JApplicationHelper::parseXMLInstallFile($this->getPath('manifest')));
+		return json_encode(JApplicationHelper::parseXMLInstallFile($this->getPath('manifest')));
 	}
 
 	/**
@@ -1792,18 +1798,5 @@ class JInstaller extends JAdapter
 			$retval[$results[1]] = $results[0]; // throw into the array
 		}
 		return $retval;
-	}
-
-	/**
-	 * Get a group ID from a given name
-	 * @param string $groupname Name of group to find
-	 * @return int the group id of the user, false on error
-	 * @todo Find the right place to put this function
-	 */
-	function getGroupIDFromName($groupname)
-	{
-		$dbo = $this->getDBO();
-		$dbo->setQuery('SELECT id FROM #__usergroups WHERE title = "'. $dbo->getEscaped($groupname) .'"');
-		return $dbo->loadResult();
 	}
 }

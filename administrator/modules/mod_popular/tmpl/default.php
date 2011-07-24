@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: default.php 17203 2010-05-20 17:16:37Z infograf768 $
+ * @version		$Id: default.php 21020 2011-03-27 06:52:01Z infograf768 $
  * @package		Joomla.Administrator
  * @subpackage	mod_popular
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -42,7 +42,7 @@ defined('_JEXEC') or die;
 				endif; ?>
 			</td>
 			<td class="center">
-				<?php echo JHTML::_('date',$item->created, 'Y-m-d H:i:s'); ?>
+				<?php echo JHtml::_('date',$item->created, 'Y-m-d H:i:s'); ?>
 			</td>
 			<td class="center">
 				<?php echo $item->hits;?>

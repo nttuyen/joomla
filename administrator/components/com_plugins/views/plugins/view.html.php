@@ -1,7 +1,7 @@
 <?php
 /**
- * @version		$Id: view.html.php 18586 2010-08-22 20:11:14Z ian $
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @version		$Id: view.html.php 21097 2011-04-07 15:38:03Z dextercowley $
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -14,7 +14,7 @@ jimport('joomla.application.component.view');
  * View class for a list of plugins.
  *
  * @package		Joomla.Administrator
- * @subpackage	Plugins
+ * @subpackage	com_plugins
  * @since		1.5
  */
 class PluginsViewPlugins extends JView

@@ -1,132 +1,75 @@
+/*global window, localStorage, fontSizeTitle, bigger, reset, smaller, biggerTitle, resetTitle, smallerTitle, Cookie */
 var prefsLoaded = false;
-var defaultFontSize =100;
+var defaultFontSize = 100;
 var currentFontSize = defaultFontSize;
+var fontSizeTitle;
+var bigger;
+var smaller;
+var reset;
+var biggerTitle;
+var smallerTitle;
+var resetTitle;
 
-if (document.addEventListener) {
-	document.addEventListener("DOMContentLoaded", onLoadEvents, false)
-} else {
-	window.onload = onLoadEvents;
-}
-
-window.onunload = saveSettings;
-
-function onLoadEvents() {
-	setUserOptions();
-	addControls();
-};
-
-function revertStyles() {
-        currentFontSize = defaultFontSize;
-        changeFontSize(0);
-};
-
-function toggleColors() {
-        if(currentStyle == "White"){
-                setColor("Black");
-        }else{
-                setColor("White");
-        }
-};
-
-function changeFontSize(sizeDifference) {
-        currentFontSize = parseInt(currentFontSize) + parseInt(sizeDifference * 5);
-
-        if(currentFontSize > 180){
-                currentFontSize = 180;
-        }else if(currentFontSize < 60){
-                currentFontSize = 60;
-        }
-
-        setFontSize(currentFontSize);
-
-};
+Object.append(Browser.Features, {
+	localstorage: (function() {
+		return ('localStorage' in window) && window.localStorage !== null;
+	})()
+});
 
 function setFontSize(fontSize) {
-        var stObj = (document.getElementById) ? document.getElementById('content_area') : document.all('content_area');
-        document.body.style.fontSize = fontSize + '%';
-        $('header').style.fontSize=fontSize + '%';
-};
+	document.body.style.fontSize = fontSize + '%';
+}
 
+function changeFontSize(sizeDifference) {
+	currentFontSize = parseInt(currentFontSize, 10) + parseInt(sizeDifference * 5, 10);
+	if (currentFontSize > 180) {
+		currentFontSize = 180;
+	} else if (currentFontSize < 60) {
+		currentFontSize = 60;
+	}
+	setFontSize(currentFontSize);
+}
 
-function createCookie(name,value,days) {
-  if (days) {
-    var date = new Date();
-    date.setTime(date.getTime()+(days*24*60*60*1000));
-    var expires = "; expires="+date.toGMTString();
-  }
-  else expires = "";
-  document.cookie = name+"="+value+expires+"; path=/";
-};
+function revertStyles() {
+	currentFontSize = defaultFontSize;
+	changeFontSize(0);
+}
 
-function readCookie(name) {
-  var nameEQ = name + "=";
-  var ca = document.cookie.split(';');
-  for(var i=0;i < ca.length;i++) {
-    var c = ca[i];
-    while (c.charAt(0)==' ') c = c.substring(1,c.length);
-    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
-  }
-  return null;
-};
+function writeFontSize(value) {
+	if (Browser.Features.localstorage) {
+		localStorage.fontSize = value;
+	} else {
+		Cookie.write("fontSize", value, {duration: 180});
+	}
+}
 
-function setUserOptions(){
-        if(!prefsLoaded){
-                cookie = readCookie("fontSize");
-                currentFontSize = cookie ? cookie : defaultFontSize;
-                setFontSize(currentFontSize);
+function readFontSize() {
+	if (Browser.Features.localstorage) {
+		return localStorage.fontSize;
+	} else {
+		return Cookie.read("fontSize");
+	}
+}
 
-                prefsLoaded = true;
-        }
-};
+function setUserOptions() {
+	if (!prefsLoaded) {
+		var size = readFontSize();
+		currentFontSize = size ? size : defaultFontSize;
+		setFontSize(currentFontSize);
+		prefsLoaded = true;
+	}
+}
 
 function addControls() {
-	var container = document.getElementById('fontsize');
-	
-	var link = new Array(4);
-	var linkClass = new Array("larger", "reset", "smaller");
-	var linkTitle = new Array(biggerTitle, resetTitle, smallerTitle);
-	var linkAction = new Array("changeFontSize(2); return false;", "revertStyles(); return false;", "changeFontSize(-2); return false;");
-	var linkContent = new Array(document.createTextNode(bigger), document.createTextNode(reset), document.createTextNode(smaller));
-	
-	var headingText = document.createTextNode(fontSizeTitle);
-	
-	if (document.createElementNS) {
-		var heading = document.createElementNS("http://www.w3.org/1999/xhtml","h3");
-		var p = document.createElementNS("http://www.w3.org/1999/xhtml","p");
-		link[3] = document.createElementNS("http://www.w3.org/1999/xhtml","a");
-		var span = document.createElementNS("http://www.w3.org/1999/xhtml","span");
-	} else {
-		var heading = document.createElement("h3");
-		var p = document.createElement("p");
-		link[3] = document.createElement("a");
-		var span = document.createElement("span");
-	}
-	
-	p.setAttribute("class", "fontsize");
-	span.setAttribute("class", "unseen");
-	link[3].setAttribute("href", "index.php");
-
-	for (var x = 0; x < 3; x++) {
-		link[x] = link[3].cloneNode(true);
-		link[x].setAttribute("class", linkClass[x]);
-		link[x].setAttribute("title", linkTitle[x]);
-		link[x].setAttribute("onclick", linkAction[x]);
-		link[x].appendChild(linkContent[x]);
-	}
-	
-	span.appendChild(document.createTextNode('\u00a0'));	//This is a nbsp
-	heading.appendChild(headingText);
-	
-	p.appendChild(link[0]);
-	p.appendChild(span.cloneNode(true));
-	p.appendChild(link[1]);
-	p.appendChild(link[2]);
-	p.appendChild(span);
-	
-	container.appendChild(heading);
-	container.appendChild(p);
-};
+	var container = document.id('fontsize');
+	var content = '<h3>'+ fontSizeTitle +'</h3><p><a title="'+ biggerTitle +'"  href="#" onclick="changeFontSize(2); return false">'+ bigger +'</a><span class="unseen">.</span><a href="#" title="'+resetTitle+'" onclick="revertStyles(); return false">'+ reset +'</a><span class="unseen">.</span><a href="#"  title="'+ smallerTitle +'" onclick="changeFontSize(-2); return false">'+ smaller +'</a></p>';
+	container.set('html', content);
+}
 
 function saveSettings() {
-	createCookie("fontSize", currentFontSize, 365);
-};
+	writeFontSize(currentFontSize);
+}
+
+window.addEvent('domready', setUserOptions);
+window.addEvent('domready', addControls);
+window.addEvent('unload', saveSettings);

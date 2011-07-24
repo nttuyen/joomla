@@ -1,8 +1,8 @@
 <?php
 /**
- * @version		$Id: methods.php 18563 2010-08-21 06:43:30Z infograf768 $
+ * @version		$Id: methods.php 21603 2011-06-21 18:31:49Z dextercowley $
  * @package		Joomla.Framework
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -68,7 +68,7 @@ class JRoute
 			}
 
 			// Determine which scheme we want.
-			$scheme	= ($ssl === 1) ? 'https' : 'http';
+			$scheme	= ((int)$ssl === 1) ? 'https' : 'http';
 
 			// Make sure our URL path begins with a slash.
 			if (!preg_match('#^/#', $url)) {
@@ -80,7 +80,7 @@ class JRoute
 		}
 
 		if ($xhtml) {
-			$url = str_replace('&', '&amp;', $url);
+			$url = htmlspecialchars($url);
 		}
 
 		return $url;
@@ -141,6 +141,30 @@ class JText
 		}
 	}
 
+	/**
+	 * Translates a string into the current language.
+	 *
+	 * @param	string			The string to translate.
+	 * @param	string			The alternate option for global string
+	 * @param	boolean|array	boolean: Make the result javascript safe. array an array of option as described in the JText::sprintf function
+	 * @param	boolean			To interprete backslashes (\\=\, \n=carriage return, \t=tabulation)
+	 * @param	boolean			To indicate that the string will be pushed in the javascript language store
+	 * @return	string			The translated string or the key if $script is true
+	 * @example	<?php echo JText::alt("JALL","language");?> it will generate a 'All' string in English but a "Toutes" string in French
+	 * @example	<?php echo JText::alt("JALL","module");?> it will generate a 'All' string in English but a "Tous" string in French
+	 * @since	1.5
+	 *
+	 */
+	public static function alt($string, $alt, $jsSafe = false, $interpreteBackSlashes = true, $script = false)
+	{
+		$lang = JFactory::getLanguage();
+		if ($lang->hasKey($string.'_'.$alt)) {
+			return self::_($string.'_'.$alt, $jsSafe, $interpreteBackSlashes);
+		}
+		else {
+			return self::_($string, $jsSafe, $interpreteBackSlashes);
+		}
+	}
 	/**
 	 * Like JText::sprintf but tries to pluralise the string.
 	 *

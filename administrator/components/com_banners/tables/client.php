@@ -1,7 +1,7 @@
 <?php
 /**
- * @version		$Id: client.php 16235 2010-04-20 04:13:25Z pasamio $
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @version		$Id: client.php 21097 2011-04-07 15:38:03Z dextercowley $
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -11,27 +11,12 @@ defined('_JEXEC') or die;
 /**
  * Client table
  *
- * @package		Joomla.Framework
+ * @package		Joomla.Administrator
  * @subpackage	com_banners
  * @since		1.6
  */
 class BannersTableClient extends JTable
 {
-	var	$id					= null;
-	var $name				= '';
-	var $contact			= '';
-	var $email				= '';
-	var $extrainfo			= '';
-	var $state				= 1;
-	var $checked_out		= 0;
-	var $checked_out_time	= 0;
-	var $metakey			= null;
-	var $own_prefix			= 0;
-	var $metakey_prefix		= null;
-	var $purchase_type		= 0;
-	var $track_clicks		= 0;
-	var $track_impressions	= 0;
-
 	function __construct(&$_db)
 	{
 		parent::__construct('#__banner_clients', 'id', $_db);

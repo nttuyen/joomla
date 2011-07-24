@@ -1,8 +1,7 @@
 <?php
 /**
- * @version		$Id: content.php 18052 2010-07-08 04:56:08Z infograf768 $
- * @package		Joomla
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @version		$Id: content.php 21097 2011-04-07 15:38:03Z dextercowley $
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -16,8 +15,8 @@ require_once JPATH_SITE.'/components/com_content/router.php';
 /**
  * Content Search plugin
  *
- * @package		Joomla
- * @subpackage	Search
+ * @package		Joomla.Plugin
+ * @subpackage	Search.content
  * @since		1.6
  */
 class plgSearchContent extends JPlugin
@@ -47,7 +46,7 @@ class plgSearchContent extends JPlugin
 		$db		= JFactory::getDbo();
 		$app	= JFactory::getApplication();
 		$user	= JFactory::getUser();
-		$groups	= implode(',', $user->authorisedLevels());
+		$groups	= implode(',', $user->getAuthorisedViewLevels());
 		$tag = JFactory::getLanguage()->getTag();
 
 		require_once JPATH_SITE.'/components/com_content/helpers/route.php';
@@ -200,11 +199,20 @@ class plgSearchContent extends JPlugin
 			$db->setQuery($query, 0, $limit);
 			$list3 = $db->loadObjectList();
 
+			// find an itemid for archived to use if there isn't another one
+			$item	= $app->getMenu()->getItems('link', 'index.php?option=com_content&view=archive', true);
+			$itemid = isset($item) ? '&Itemid='.$item->id : '';
+
 			if (isset($list3))
 			{
 				foreach($list3 as $key => $item)
 				{
-					$list3[$key]->href = ContentHelperRoute::getArticleRoute($item->slug, $item->catslug);
+					$date = JFactory::getDate($item->created);
+
+					$created_month	= $date->format("n");
+					$created_year	= $date->format("Y");
+
+					$list3[$key]->href	= JRoute::_('index.php?option=com_content&view=archive&year='.$created_year.'&month='.$created_month.$itemid);
 				}
 			}
 

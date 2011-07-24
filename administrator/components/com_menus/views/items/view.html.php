@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: view.html.php 18919 2010-09-15 11:05:06Z infograf768 $
+ * @version		$Id: view.html.php 21148 2011-04-14 17:30:08Z ian $
  * @package		Joomla.Administrator
  * @subpackage	com_menus
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -86,7 +86,24 @@ class MenusViewItems extends JView
 										$vars['layout'] = isset($vars['layout']) ? $vars['layout'] : 'default';
 
 										// Attempt to load the layout xml file.
-										$file = JPATH_SITE.'/components/'.$item->componentname.'/views/'.$vars['view'].'/tmpl/'.$vars['layout'].'.xml';
+										// If Alternative Menu Item, get template folder for layout file
+										if (strpos($vars['layout'], ':') > 0)
+										{
+											// Use template folder for layout file
+											$temp = explode(':', $vars['layout']);
+											$file = JPATH_SITE.'/templates/'.$temp[0].'/html/'.$item->componentname.'/'.$vars['view'].'/'.$temp[1].'.xml';
+											// Load template language file
+											$lang->load('tpl_'.$temp[0].'.sys', JPATH_SITE, null, false, false)
+											||	$lang->load('tpl_'.$temp[0].'.sys', JPATH_SITE.'/templates/'.$temp[0], null, false, false)
+											||	$lang->load('tpl_'.$temp[0].'.sys', JPATH_SITE, $lang->getDefault(), false, false)
+											||	$lang->load('tpl_'.$temp[0].'.sys', JPATH_SITE.'/templates/'.$temp[0], $lang->getDefault(), false, false);
+											
+										}
+										else
+										{
+											// Get XML file from component folder for standard layouts
+											$file = JPATH_SITE.'/components/'.$item->componentname.'/views/'.$vars['view'].'/tmpl/'.$vars['layout'].'.xml';
+										}
 										if (JFile::exists($file) && $xml = simplexml_load_file($file)) {
 											// Look for the first view node off of the root node.
 											if ($layout = $xml->xpath('layout[1]')) {
@@ -95,7 +112,7 @@ class MenusViewItems extends JView
 												}
 											}
 											if (!empty($layout[0]->message[0])) {
-												$items->item_type_desc = JText::_(trim((string) $layout[0]->message[0]));
+												$item->item_type_desc = JText::_(trim((string) $layout[0]->message[0]));
 											}
 										}
 									}
@@ -168,13 +185,13 @@ class MenusViewItems extends JView
 			JToolBarHelper::divider();
 			JToolBarHelper::custom('items.checkin', 'checkin.png', 'checkin_f2.png', 'JTOOLBAR_CHECKIN', true);
 		}
-		
+		if ($canDo->get('core.edit.state')) {
+			JToolBarHelper::trash('items.trash','JTOOLBAR_TRASH');
+		}		
 		if ($this->state->get('filter.published') == -2 && $canDo->get('core.delete')) {
 			JToolBarHelper::deleteList('', 'items.delete','JTOOLBAR_EMPTY_TRASH');
 		}
-		else if ($canDo->get('core.edit.state')) {
-			JToolBarHelper::trash('items.trash','JTOOLBAR_TRASH');
-		}
+
 		
 		if ($canDo->get('core.edit.state')) {
 			JToolBarHelper::makeDefault('items.setDefault', 'COM_MENUS_TOOLBAR_SET_HOME');

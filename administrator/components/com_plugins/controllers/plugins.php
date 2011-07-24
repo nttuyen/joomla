@@ -1,7 +1,7 @@
 <?php
 /**
- * @version		$Id: plugins.php 17858 2010-06-23 17:54:28Z eddieajau $
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @version		$Id: plugins.php 21032 2011-03-29 16:38:31Z dextercowley $
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -29,21 +29,4 @@ class PluginsControllerPlugins extends JControllerAdmin
 		return $model;
 	}
 
-	/**
-	 * Override the execute method to clear the plugin cache for non-display tasks.
-	 *
-	 * @param	string		The task to perform.
-	 * @return	mixed|false	The value returned by the called method, false in error case.
-	 * @since	1.6
-	 */
-	public function execute($task)
-	{
-		parent::execute($task);
-
-		// Clear the component's cache
-		if ($task != 'display') {
-			$cache = JFactory::getCache('com_plugins');
-			$cache->clean();
-		}
-	}
 }

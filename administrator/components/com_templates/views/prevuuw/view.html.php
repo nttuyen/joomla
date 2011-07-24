@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: view.html.php 16331 2010-04-22 05:23:13Z eddieajau $
+ * @version		$Id: view.html.php 21097 2011-04-07 15:38:03Z dextercowley $
  * @package		Joomla.Administrator
- * @subpackage	Templates
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @subpackage	com_templates
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -16,7 +16,7 @@ jimport('joomla.application.component.view');
  * HTML View class for the Templates component
  *
  * @package		Joomla.Administrator
- * @subpackage	Templates
+ * @subpackage	com_templates
  * @since		1.6
  */
 class TemplatesViewPrevuuw extends JView

@@ -1,7 +1,7 @@
 <?php
 /**
- * @version		$Id: view.html.php 19154 2010-10-18 16:20:10Z chdemko $
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @version		$Id: view.html.php 21097 2011-04-07 15:38:03Z dextercowley $
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -14,7 +14,7 @@ jimport('joomla.application.component.view');
  * View to edit a plugin.
  *
  * @package		Joomla.Administrator
- * @subpackage	Plugins
+ * @subpackage	com_plugins
  * @since		1.5
  */
 class PluginsViewPlugin extends JView
@@ -68,6 +68,14 @@ class PluginsViewPlugin extends JView
 		$lang = JFactory::getLanguage();
 
 		$help = $this->get('Help');
-		JToolBarHelper::help($help->key, false, $lang->hasKey($help->url) ? JText::_($help->url) : null);
+		if ($lang->hasKey($help->url)) {
+			$debug = $lang->setDebug(false);
+			$url = JText::_($help->url);
+			$lang->setDebug($debug);
+		}
+		else {
+			$url = null;
+		}
+		JToolBarHelper::help($help->key, false, $url);
 	}
 }

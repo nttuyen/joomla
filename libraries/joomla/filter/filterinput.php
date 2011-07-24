@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: filterinput.php 18326 2010-08-04 01:36:02Z eddieajau $
+ * @version		$Id: filterinput.php 21603 2011-06-21 18:31:49Z dextercowley $
  * @package		Joomla.Framework
  * @subpackage	Filter
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -75,7 +75,7 @@ class JFilterInput extends JObject
 	 * @param	int		$xssAuto	Only auto clean essentials = 0, Allow clean blacklisted tags/attr = 1
 	 * @since	1.5
 	 */
-	function __construct($tagsArray = array(), $attrArray = array(), $tagsMethod = 0, $attrMethod = 0, $xssAuto = 1)
+	public function __construct($tagsArray = array(), $attrArray = array(), $tagsMethod = 0, $attrMethod = 0, $xssAuto = 1)
 	{
 		// Make sure user defined arrays are in lowercase
 		$tagsArray = array_map('strtolower', (array) $tagsArray);
@@ -122,7 +122,7 @@ class JFilterInput extends JObject
 	 * specified bad code.
 	 *
 	 * @param	mixed	$source	Input string/array-of-string to be 'cleaned'
-	 * @param	string	$type	Return type for the variable (INT, FLOAT, BOOLEAN, WORD, ALNUM, CMD, BASE64, STRING, ARRAY, PATH, NONE)
+	 * @param	string	$type	Return type for the variable (INT, UINT, FLOAT, BOOLEAN, WORD, ALNUM, CMD, BASE64, STRING, ARRAY, PATH, NONE)
 	 * @return	mixed	'Cleaned' version of input parameter
 	 * @since	1.5
 	 * @static
@@ -137,6 +137,12 @@ class JFilterInput extends JObject
 				// Only use the first integer value
 				preg_match('/-?[0-9]+/', (string) $source, $matches);
 				$result = @ (int) $matches[0];
+				break;
+
+			case 'UINT' :
+				// Only use the first integer value
+				preg_match('/-?[0-9]+/', (string) $source, $matches);
+				$result = @ abs((int) $matches[0]);
 				break;
 
 			case 'FLOAT' :
@@ -170,6 +176,10 @@ class JFilterInput extends JObject
 
 			case 'STRING' :
 				$result = (string) $this->_remove($this->_decode((string) $source));
+				break;
+
+			case 'HTML' :
+				$result = (string) $this->_remove((string) $source);
 				break;
 
 			case 'ARRAY' :
@@ -258,6 +268,8 @@ class JFilterInput extends JObject
 	 */
 	protected function _cleanTags($source)
 	{
+		// First, pre-process this for illegal characters inside attribute values
+		$source = $this->_escapeAttributeValues($source);
 		// In the beginning we don't really have a tag, so everything is postTag
 		$preTag		= null;
 		$postTag	= $source;
@@ -273,6 +285,15 @@ class JFilterInput extends JObject
 			$postTag		= substr($postTag, $tagOpen_start);
 			$fromTagOpen	= substr($postTag, 1);
 			$tagOpen_end	= strpos($fromTagOpen, '>');
+			
+			// Check for mal-formed tag where we have a second '<' before the first '>'
+			$nextOpenTag = (strlen($postTag) > $tagOpen_start) ? strpos($postTag, '<', $tagOpen_start + 1) : false;
+			if (($nextOpenTag !== false) && ($nextOpenTag < $tagOpen_end)) {
+				// At this point we have a mal-formed tag -- remove the offending open
+				$postTag = substr($postTag, 0, $tagOpen_start) . substr($postTag, $tagOpen_start + 1);
+				$tagOpen_start	= strpos($postTag, '<');
+				continue;
+			}
 
 			// Let's catch any non-terminated tags and skip over them
 			if ($tagOpen_end === false) {
@@ -334,6 +355,21 @@ class JFilterInput extends JObject
 				$nextSpace		= strpos($fromSpace, ' ');
 				$openQuotes		= strpos($fromSpace, '"');
 				$closeQuotes	= strpos(substr($fromSpace, ($openQuotes +1)), '"') + $openQuotes +1;
+				
+				$startAtt = '';
+				$startAttPosition = 0;
+				
+				// Find position of equal and open quotes ignoring 
+				if (preg_match('#\s*=\s*\"#', $fromSpace, $matches, PREG_OFFSET_CAPTURE)) {
+					$startAtt = $matches[0][0];
+					$startAttPosition = $matches[0][1];
+					$closeQuotes = strpos(substr($fromSpace, ($startAttPosition + strlen($startAtt))), '"') + $startAttPosition + strlen($startAtt);
+					$nextEqual = $startAttPosition + strpos($startAtt, '=');
+					$openQuotes = $startAttPosition + strpos($startAtt, '"');
+					$nextSpace = strpos(substr($fromSpace, $closeQuotes), ' ') + $closeQuotes;
+				}
+
+				
 
 				// Do we have an attribute to process? [check for equal sign]
 				if ($fromSpace != '/' && (($nextEqual && $nextSpace && $nextSpace < $nextEqual ) || !$nextEqual))
@@ -344,11 +380,10 @@ class JFilterInput extends JObject
 					} else {
 						$attribEnd = $nextSpace - 1;
 					}
-					if((int) $fromSpace > 0)
+					// if there is an ending, use this, if not do not worry
+					if($attribEnd > 0)
 					{
 						$fromSpace = substr($fromSpace, $attribEnd + 1);
-					} else {
-						$fromSpace = substr($fromSpace, 0, $attribEnd).'="'.substr($fromSpace, 0, $attribEnd).'"'.substr($fromSpace, $attribEnd);
 					}
 				}
 				if (strpos($fromSpace, '=') !== false) {
@@ -395,7 +430,7 @@ class JFilterInput extends JObject
 					// Open or Single tag
 					$attrSet = $this->_cleanAttributes($attrSet);
 					$preTag .= '<'.$tagName;
-					for ($i = 0; $i < count($attrSet); $i ++) {
+					for ($i = 0, $count = count($attrSet); $i < $count; $i ++) {
 						$preTag .= ' '.$attrSet[$i];
 					}
 
@@ -445,7 +480,8 @@ class JFilterInput extends JObject
 
 			// Split into name/value pairs
 			$attrSubSet = explode('=', trim($attrSet[$i]), 2);
-			list ($attrSubSet[0]) = explode(' ', $attrSubSet[0]);
+			// Take the last attribute in case there is an attribute with no value
+			$attrSubSet[0] = array_pop(explode(' ', trim($attrSubSet[0])));
 
 			/*
 			 * Remove all "non-regular" attribute names
@@ -457,6 +493,8 @@ class JFilterInput extends JObject
 
 			// XSS attribute value filtering
 			if (isset($attrSubSet[1])) {
+				// trim leading and trailing spaces
+				$attrSubSet[1] = trim($attrSubSet[1]);
 				// strips unicode, hex, etc
 				$attrSubSet[1] = str_replace('&#', '', $attrSubSet[1]);
 				// strip normal newline within attr value
@@ -470,11 +508,11 @@ class JFilterInput extends JObject
 				// strip slashes
 				$attrSubSet[1] = stripslashes($attrSubSet[1]);
 			} else {
-				$attrSubSet[1] = NULL;
+				continue;
 			}
 
 			// Autostrip script tags
-			if (JFilterInput::checkAttribute($attrSubSet)) {
+			if (self::checkAttribute($attrSubSet)) {
 				continue;
 			}
 
@@ -493,7 +531,8 @@ class JFilterInput extends JObject
 					 */
 					$newSet[] = $attrSubSet[0].'="0"';
 				} else {
-					$newSet[] = $attrSubSet[0].'="'.$attrSubSet[0].'"';
+					// Leave empty attributes alone
+					$newSet[] = $attrSubSet[0].'=""';
 				}
 			}
 		}
@@ -526,4 +565,79 @@ class JFilterInput extends JObject
 		$source = preg_replace('/&#x([a-f0-9]+);/mei', "utf8_encode(chr(0x\\1))", $source); // hex notation
 		return $source;
 	}
+	
+	/**
+	 * Escape < > and " inside attribute values
+	 *
+	 * @param	string	$source The source string.
+	 * @return	string	Filtered string
+	 * @since	1.6
+	 */
+	protected function _escapeAttributeValues($source)
+	{
+		$alreadyFiltered = '';
+		$remainder = $source;
+		$badChars = array ('<', '"', '>');
+		$escapedChars = array ('&lt;', '&quot;', '&gt;');
+		// Process each portion based on presence of =" and "<space>, "/>, or ">
+		// See if there are any more attributes to process
+		while (preg_match('#\s*=\s*(\"|\')#', $remainder, $matches, PREG_OFFSET_CAPTURE))
+		{
+			// get the portion before the attribute value
+			$quotePosition = $matches[0][1];
+			$nextBefore = $quotePosition + strlen($matches[0][0]);
+			
+			// Figure out if we have a single or double quote and look for the matching closing quote
+			// Closing quote should be "/>, ">, "<space>, or " at the end of the string
+			$quote = substr($matches[0][0], -1);
+			$pregMatch = ($quote == '"') ? '#(\"\s*/\s*>|\"\s*>|\"\s+|\"$)#' : "#(\'\s*/\s*>|\'\s*>|\'\s+|\'$)#";
+			
+			// get the portion after attribute value
+			if (preg_match($pregMatch, substr($remainder, $nextBefore), $matches, PREG_OFFSET_CAPTURE)) {
+				// We have a closing quote
+				$nextAfter = $nextBefore + $matches[0][1];
+			} else {
+				// No closing quote
+				$nextAfter = strlen($remainder);
+			}
+			// Get the actual attribute value
+			$attributeValue = substr($remainder, $nextBefore, $nextAfter - $nextBefore);
+			// Escape bad chars
+			$attributeValue = str_replace($badChars, $escapedChars, $attributeValue);
+			$attributeValue = $this->_stripCSSExpressions($attributeValue);
+			$alreadyFiltered .= substr($remainder, 0, $nextBefore) . $attributeValue . $quote;
+			$remainder = substr($remainder, $nextAfter + 1);
+		}
+		
+		// At this point, we just have to return the $alreadyFiltered and the $remainder
+		return $alreadyFiltered . $remainder;
+	}
+	/**
+	 * Remove CSS Expressions in the form of <property>:expression(...)
+	 *
+	 * @param	string	$source The source string.
+	 * @return	string	Filtered string
+	 * @since	1.6
+	 */
+	protected function _stripCSSExpressions($source)
+	{
+		// Strip any comments out (in the form of /*...*/)
+		$test = preg_replace('#\/\*.*\*\/#U', '', $source);
+		// Test for :expression
+		if (!stripos($test, ':expression')) {
+			// Not found, so we are done
+			$return = $source;
+		} 
+		else {
+			// At this point, we have stripped out the comments and have found :expression
+			// Test stripped string for :expression followed by a '('
+			if (preg_match_all('#:expression\s*\(#', $test, $matches)) {
+				// If found, remove :expression
+				$test = str_ireplace(':expression', '', $test);
+				$return = $test;
+			}
+		}
+		return $return;
+	}
+	
 }

@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: edit.php 19073 2010-10-09 15:44:28Z chdemko $
+ * @version		$Id: edit.php 20509 2011-01-31 23:16:43Z dextercowley $
  * @package		Joomla.Administrator
  * @subpackage	com_newsfeeds
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -27,22 +27,22 @@ JHtml::_('behavior.keepalive');
 	}
 </script>
 
-<form action="<?php echo JRoute::_('index.php?option=com_newsfeeds'); ?>" method="post" name="adminForm" id="newsfeed-form" class="form-validate">
+<form action="<?php echo JRoute::_('index.php?option=com_newsfeeds&id='.(int) $this->item->id); ?>" method="post" name="adminForm" id="newsfeed-form" class="form-validate">
 	<div class="width-60 fltlft">
 		<fieldset class="adminform">
 			<legend><?php echo empty($this->item->id) ? JText::_('COM_NEWSFEEDS_NEW_NEWSFEED') : JText::sprintf('COM_NEWSFEEDS_EDIT_NEWSFEED', $this->item->id); ?></legend>
 			<ul class="adminformlist">
 			<li><?php echo $this->form->getLabel('name'); ?>
 			<?php echo $this->form->getInput('name'); ?></li>
+            
+   			<li><?php echo $this->form->getLabel('alias'); ?>
+			<?php echo $this->form->getInput('alias'); ?></li>
 
 			<li><?php echo $this->form->getLabel('link'); ?>
 			<?php echo $this->form->getInput('link'); ?></li>
 
 			<li><?php echo $this->form->getLabel('catid'); ?>
 			<?php echo $this->form->getInput('catid'); ?></li>
-
-			<li><?php echo $this->form->getLabel('alias'); ?>
-			<?php echo $this->form->getInput('alias'); ?></li>
 
 			<li><?php echo $this->form->getLabel('published'); ?>
 			<?php echo $this->form->getInput('published'); ?></li>
@@ -69,15 +69,7 @@ JHtml::_('behavior.keepalive');
 
 			<fieldset class="panelform">
 			<ul class="adminformlist">
-				<li><?php echo $this->form->getLabel('numarticles'); ?>
-				<?php echo $this->form->getInput('numarticles'); ?></li>
-
-				<li><?php echo $this->form->getLabel('cache_time'); ?>
-				<?php echo $this->form->getInput('cache_time'); ?></li>
-
-				<li><?php echo $this->form->getLabel('rtl'); ?>
-				<?php echo $this->form->getInput('rtl'); ?></li>
-
+				
 				<li><?php echo $this->form->getLabel('created_by'); ?>
 				<?php echo $this->form->getInput('created_by'); ?></li>
 
@@ -93,11 +85,22 @@ JHtml::_('behavior.keepalive');
 				<li><?php echo $this->form->getLabel('publish_down'); ?>
 				<?php echo $this->form->getInput('publish_down'); ?></li>
 
-				<li><?php echo $this->form->getLabel('modified'); ?>
-				<?php echo $this->form->getInput('modified'); ?></li>
+				<?php if ($this->item->modified_by) : ?>
+					<li><?php echo $this->form->getLabel('modified_by'); ?>
+					<?php echo $this->form->getInput('modified_by'); ?></li>
 
-				<li><?php echo $this->form->getLabel('version'); ?>
-				<?php echo $this->form->getInput('version'); ?></li>
+					<li><?php echo $this->form->getLabel('modified'); ?>
+					<?php echo $this->form->getInput('modified'); ?></li>
+				<?php endif; ?>
+
+				<li><?php echo $this->form->getLabel('numarticles'); ?>
+				<?php echo $this->form->getInput('numarticles'); ?></li>
+
+				<li><?php echo $this->form->getLabel('cache_time'); ?>
+				<?php echo $this->form->getInput('cache_time'); ?></li>
+
+				<li><?php echo $this->form->getLabel('rtl'); ?>
+				<?php echo $this->form->getInput('rtl'); ?></li>
 
 				<li><?php //echo $this->form->getLabel('xreference'); // Missing from schema! ?>
 				<?php //echo $this->form->getInput('xreference'); ?></li>

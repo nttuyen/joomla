@@ -1,11 +1,11 @@
 <?php
 /**
- * @version		$Id: category.php 19134 2010-10-14 16:48:16Z louis $
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @version		$Id: category.php 21148 2011-04-14 17:30:08Z ian $
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-// Check to ensure this file is included in Joomla!
+// No direct access.
 defined('_JEXEC') or die;
 
 jimport('joomla.application.component.modeladmin');
@@ -34,10 +34,16 @@ class CategoriesModelCategory extends JModelAdmin
 	 */
 	protected function canDelete($record)
 	{
-		$user = JFactory::getUser();
+		if (!empty($record->id)) {
+			if ($record->published != -2) {
+				return ;
+			}		
+			$user = JFactory::getUser();
 
-		return $user->authorise('core.delete', $record->extension.'.category.'.(int) $record->id);
-	}
+			return $user->authorise('core.delete', $record->extension.'.category.'.(int) $record->id);
+
+		}
+	}			
 
 	/**
 	 * Method to test whether a record can be deleted.
@@ -89,26 +95,21 @@ class CategoriesModelCategory extends JModelAdmin
 	{
 		$app = JFactory::getApplication('administrator');
 
-		if (!($parentId = $app->getUserState('com_categories.edit.'.$this->getName().'.parent_id'))) {
-			$parentId = JRequest::getInt('parent_id');
-		}
+		$parentId = JRequest::getInt('parent_id');
 		$this->setState('category.parent_id', $parentId);
 
-		if (!($extension = $app->getUserState('com_categories.edit.'.$this->getName().'.extension'))) {
-			$extension = JRequest::getCmd('extension', 'com_content');
-		}
 		// Load the User state.
-		if (!($pk = (int) $app->getUserState('com_categories.edit.'.$this->getName().'.id'))) {
-			$pk = (int) JRequest::getInt('item_id');
-		}
+		$pk = (int) JRequest::getInt('id');
 		$this->setState($this->getName().'.id', $pk);
 
-
+		$extension = JRequest::getCmd('extension', 'com_content');
 		$this->setState('category.extension', $extension);
 		$parts = explode('.',$extension);
-		// extract the component name
+
+		// Extract the component name
 		$this->setState('category.component', $parts[0]);
-		// extract the optional section name
+
+		// Extract the optional section name
 		$this->setState('category.section', (count($parts)>1)?$parts[1]:null);
 
 		// Load the parameters.
@@ -146,7 +147,8 @@ class CategoriesModelCategory extends JModelAdmin
 				$date = new JDate($result->created_time);
 				$date->setTimezone($tz);
 				$result->created_time = $date->toMySQL(true);
-			} else {
+			}
+			else {
 				$result->created_time = null;
 			}
 
@@ -154,7 +156,8 @@ class CategoriesModelCategory extends JModelAdmin
 				$date = new JDate($result->modified_time);
 				$date->setTimezone($tz);
 				$result->modified_time = $date->toMySQL(true);
-			} else {
+			}
+			else {
 				$result->modified_time = null;
 			}
 		}
@@ -175,6 +178,16 @@ class CategoriesModelCategory extends JModelAdmin
 		// Initialise variables.
 		$extension	= $this->getState('category.extension');
 
+		// A workaround to get the extension into the model for save requests.
+		if (empty($extension) && isset($data['extension'])) {
+			$extension	= $data['extension'];
+			$parts		= explode('.',$extension);
+
+			$this->setState('category.extension',	$extension);
+			$this->setState('category.component',	$parts[0]);
+			$this->setState('category.section',		@$parts[1]);
+		}
+
 		// Get the form.
 		$form = $this->loadForm('com_categories.category'.$extension, 'category', array('control' => 'jform', 'load_data' => $loadData));
 		if (empty($form)) {
@@ -185,6 +198,7 @@ class CategoriesModelCategory extends JModelAdmin
 		if (empty($data['extension'])) {
 			$data['extension'] = $extension;
 		}
+
 
 		if (!$this->canEditState((object) $data)) {
 			// Disable fields for display.
@@ -238,7 +252,7 @@ class CategoriesModelCategory extends JModelAdmin
 	 * @throws	Exception if there is an error loading the form.
 	 * @since	1.6
 	 */
-	protected function preprocessForm($form, $data)
+	protected function preprocessForm(JForm $form, $data, $groups = '')
 	{
 		jimport('joomla.filesystem.path');
 
@@ -286,8 +300,8 @@ class CategoriesModelCategory extends JModelAdmin
 		}
 
 		// Set the access control rules field component value.
-		$form->setFieldAttribute('rules', 'component', $component);
-		$form->setFieldAttribute('rules', 'section', $name);
+		$form->setFieldAttribute('rules', 'component',	$component);
+		$form->setFieldAttribute('rules', 'section',	$name);
 
 		// Trigger the default form events.
 		parent::preprocessForm($form, $data);
@@ -302,11 +316,14 @@ class CategoriesModelCategory extends JModelAdmin
 	 */
 	public function save($data)
 	{
-		$pk		= (!empty($data['id'])) ? $data['id'] : (int)$this->getState($this->getName().'.id');
-		$isNew	= true;
+		// Initialise variables;
+		$dispatcher = JDispatcher::getInstance();
+		$table		= $this->getTable();
+		$pk			= (!empty($data['id'])) ? $data['id'] : (int)$this->getState($this->getName().'.id');
+		$isNew		= true;
 
-		// Get a row instance.
-		$table = $this->getTable();
+		// Include the content plugins for the on save events.
+		JPluginHelper::importPlugin('content');
 
 		// Load the row if saving an existing category.
 		if ($pk > 0) {
@@ -320,13 +337,15 @@ class CategoriesModelCategory extends JModelAdmin
 		}
 
 		// Alter the title for save as copy
-		if (!$isNew && $data['id'] == 0 && $table->parent_id == $data['parent_id']) {
-			$m = null;
-			$data['alias'] = '';
-			if (preg_match('#\((\d+)\)$#', $table->title, $m)) {
-				$data['title'] = preg_replace('#\(\d+\)$#', '('.($m[1] + 1).')', $table->title);
-			} else {
-				$data['title'] .= ' (2)';
+		if (JRequest::getVar('task') == 'save2copy') {
+			$orig_data	= JRequest::getVar('jform', array(), 'post', 'array');
+			$orig_table = clone($this->getTable());
+			$orig_table->load( (int) $orig_data['id']);
+
+			if (((int) $data['parent_id'] === (int) $orig_table->parent_id) 
+			 && ($data['alias'] == $orig_table->alias)) {
+				$data['title'] .= ' '.JText::_('JGLOBAL_COPY');	
+				$data['alias'] .= '-copy';
 			}
 		}
 
@@ -348,20 +367,39 @@ class CategoriesModelCategory extends JModelAdmin
 			return false;
 		}
 
+		// Trigger the onContentBeforeSave event.
+		$result = $dispatcher->trigger($this->event_before_save, array($this->option.'.'.$this->name, &$table, $isNew));
+		if (in_array(false, $result, true)) {
+			$this->setError($table->getError());
+			return false;
+		}
+
 		// Store the data.
 		if (!$table->store()) {
 			$this->setError($table->getError());
 			return false;
 		}
 
-		// Rebuild the tree path.
+		// Trigger the onContentAfterSave event.
+		$dispatcher->trigger($this->event_after_save, array($this->option.'.'.$this->name, &$table, $isNew));
+
+		// Rebuild the path for the category:
 		if (!$table->rebuildPath($table->id)) {
+			$this->setError($table->getError());
+			return false;
+		}
+
+		// Rebuild the paths of the category's children:
+		if (!$table->rebuild($table->id, $table->lft, $table->level, $table->path)) {
 			$this->setError($table->getError());
 			return false;
 		}
 
 		$this->setState($this->getName().'.id', $table->id);
 
+		// Clear the cache
+		$this->cleanCache();
+		
 		return true;
 	}
 
@@ -381,6 +419,9 @@ class CategoriesModelCategory extends JModelAdmin
 			return false;
 		}
 
+		// Clear the cache
+		$this->cleanCache();
+		
 		return true;
 	}
 
@@ -402,6 +443,9 @@ class CategoriesModelCategory extends JModelAdmin
 			return false;
 		}
 
+		// Clear the cache
+		$this->cleanCache();
+		
 		return true;
 
 	}
@@ -455,6 +499,9 @@ class CategoriesModelCategory extends JModelAdmin
 			return false;
 		}
 
+		// Clear the cache
+		$this->cleanCache();
+		
 		return true;
 	}
 
@@ -468,6 +515,17 @@ class CategoriesModelCategory extends JModelAdmin
 	 */
 	protected function batchAccess($value, $pks)
 	{
+		// Check that user has edit permission for every category being changed
+		// Note that the entire batch operation fails if any category lacks edit permission
+		$user	= JFactory::getUser();
+		$extension = JRequest::getWord('extension');
+		foreach ($pks as $pk) {
+			if (!$user->authorise('core.edit', $extension.'.category.'.$pk)) {
+				// Error since user cannot edit this category
+				$this->setError(JText::_('JGLOBAL_BATCH_CATEGORY_CANNOT_EDIT'));
+				return false;
+			}
+		}
 		$table = $this->getTable();
 		foreach ($pks as $pk) {
 			$table->reset();
@@ -478,7 +536,7 @@ class CategoriesModelCategory extends JModelAdmin
 				return false;
 			}
 		}
-
+		
 		return true;
 	}
 
@@ -499,6 +557,8 @@ class CategoriesModelCategory extends JModelAdmin
 
 		$table	= $this->getTable();
 		$db		= $this->getDbo();
+		$user	= JFactory::getUser();
+		$extension = JRequest::getWord('extension');
 
 		// Check that the parent exists
 		if ($parentId) {
@@ -514,12 +574,25 @@ class CategoriesModelCategory extends JModelAdmin
 					$parentId = 0;
 				}
 			}
+			// Check that user has create permission for parent category
+			$canCreate = ($parentId == $table->getRootId()) ? $user->authorise('core.create', $extension) :
+				$user->authorise('core.create', $extension.'.category.'.$parentId);
+			if (!$canCreate) {
+				// Error since user cannot create in parent category
+				$this->setError(JText::_('JGLOBAL_BATCH_CATEGORY_CANNOT_CREATE'));
+				return false;
+			}
 		}
 
 		// If the parent is 0, set it to the ID of the root item in the tree
 		if (empty($parentId)) {
 			if (!$parentId = $table->getRootId()) {
 				$this->setError($db->getErrorMsg());
+				return false;
+			}
+			// Make sure we can create in root
+			elseif (!$user->authorise('core.create', $extension)) {
+				$this->setError(JText::_('JGLOBAL_BATCH_CATEGORY_CANNOT_CREATE'));
 				return false;
 			}
 		}
@@ -587,17 +660,17 @@ class CategoriesModelCategory extends JModelAdmin
 			// If we a copying children, the Old ID will turn up in the parents list
 			// otherwise it's a new top level item
 			$table->parent_id	= isset($parents[$oldParentId]) ? $parents[$oldParentId] : $parentId;
-			
+
 			// Set the new location in the tree for the node.
 			$table->setLocation($table->parent_id, 'last-child');
-			
+
 			// TODO: Deal with ordering?
 			//$table->ordering	= 1;
 			$table->level		= null;
 			$table->asset_id	= null;
 			$table->lft			= null;
 			$table->rgt			= null;
-			
+
 			// Store the row.
 			if (!$table->store()) {
 				$this->setError($table->getError());
@@ -621,10 +694,6 @@ class CategoriesModelCategory extends JModelAdmin
 			return false;
 		}
 
-		// Clear the component's cache
-		$cache = JFactory::getCache('com_categories');
-		$cache->clean();
-
 		return true;
 	}
 
@@ -639,12 +708,12 @@ class CategoriesModelCategory extends JModelAdmin
 	 */
 	protected function batchMove($value, $pks)
 	{
-		// $value comes as {parent_id}
-		$parts		= explode('.', $value);
-		$parentId	= (int) JArrayHelper::getValue($parts, 0, 1);
+		$parentId	= (int) $value;
 
 		$table	= $this->getTable();
 		$db		= $this->getDbo();
+		$user	= JFactory::getUser();
+		$extension = JRequest::getWord('extension');
 
 		// Check that the parent exists.
 		if ($parentId) {
@@ -661,7 +730,26 @@ class CategoriesModelCategory extends JModelAdmin
 					$parentId = 0;
 				}
 			}
+			// Check that user has create permission for parent category
+			$canCreate = ($parentId == $table->getRootId()) ? $user->authorise('core.create', $extension) :
+				$user->authorise('core.create', $extension.'.category.'.$parentId);
+			if (!$canCreate) {
+				// Error since user cannot create in parent category
+				$this->setError(JText::_('JGLOBAL_BATCH_CATEGORY_CANNOT_CREATE'));
+				return false;
+			}
+
+			// Check that user has edit permission for every category being moved
+			// Note that the entire batch operation fails if any category lacks edit permission
+			foreach ($pks as $pk) {
+				if (!$user->authorise('core.edit', $extension.'.category.'.$pk)) {
+					// Error since user cannot edit this category
+					$this->setError(JText::_('JGLOBAL_BATCH_CATEGORY_CANNOT_EDIT'));
+					return false;
+				}
+			}
 		}
+
 
 		// We are going to store all the children and just move the category
 		$children = array();
@@ -723,52 +811,31 @@ class CategoriesModelCategory extends JModelAdmin
 			}
 		}
 
-		// Clear the component's cache
-		$cache = JFactory::getCache('com_categories');
-		$cache->clean();
-
 		return true;
 	}
-	
+
 	/**
-	 * Method to toggle the featured setting of articles.
+	 * Custom clean the cache of com_content and content modules
 	 *
-	 * @param	array	The ids of the items to toggle.
-	 * @param	int		The value to toggle to.
-	 *
-	 * @return	boolean	True on success.
+	 * @since	1.6
 	 */
-	public function featured($pks, $value = 0)
+	protected function cleanCache()
 	{
-		// Sanitize the ids.
-		$pks = (array) $pks;
-		JArrayHelper::toInteger($pks);
-
-		if (empty($pks)) {
-			$this->setError(JText::_('COM_CONTENT_NO_ITEM_SELECTED'));
-			return false;
+		$extension = JRequest::getCmd('extension');
+		switch ($extension)
+		{
+			case 'com_content':
+				parent::cleanCache('com_content');
+				parent::cleanCache('mod_articles_archive');
+				parent::cleanCache('mod_articles_categories');
+				parent::cleanCache('mod_articles_category');
+				parent::cleanCache('mod_articles_latest');
+				parent::cleanCache('mod_articles_news');
+				parent::cleanCache('mod_articles_popular');
+				break;
+			default:
+				parent::cleanCache($extension);
+				break;
 		}
-
-		try {
-			$db = $this->getDbo();
-
-			$db->setQuery(
-				'UPDATE #__categories AS a' .
-				' SET a.featured = '.(int) $value.
-				' WHERE a.id IN ('.implode(',', $pks).')'
-			);
-			if (!$db->query()) {
-				throw new Exception($db->getErrorMsg());
-			}
-
-		} catch (Exception $e) {
-			$this->setError($e->getMessage());
-			return false;
-		}
-
-		$cache = JFactory::getCache('com_categories');
-		$cache->clean();
-
-		return true;
 	}
 }

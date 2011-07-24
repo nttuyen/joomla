@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: component.php 18896 2010-09-14 23:44:36Z eddieajau $
+ * @version		$Id: component.php 21097 2011-04-07 15:38:03Z dextercowley $
  * @package		Joomla.Administrator
- * @subpackage	templates.hathor
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @subpackage	Templates.hathor
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  * @since		1.6
  */
@@ -25,17 +25,21 @@ $lang->load('tpl_hathor', JPATH_ADMINISTRATOR)
 
 <link href="templates/system/css/system.css" type="text/css" rel="stylesheet" type="text/css" />
 <link href="templates/<?php echo  $this->template ?>/css/template.css" rel="stylesheet" type="text/css" />
-<link href="templates/<?php echo $this->template ?>/css/menu.css" rel="stylesheet" type="text/css" />
 
+<?php 
+	if (!$this->params->get('colourChoice')) : 
+		$colour = 'standard';
+	else :
+		$colour = htmlspecialchars($this->params->get('colourChoice'));
+	endif; 
+?>
+<link href="templates/<?php echo $this->template ?>/css/colour_<?php echo $colour; ?>.css" rel="stylesheet" type="text/css" />
+
+<!-- Load additional CSS styles for rtl sites -->
 <?php if ($this->direction == 'rtl') : ?>
 	<link href="templates/<?php echo  $this->template ?>/css/template_rtl.css" rel="stylesheet" type="text/css" />
+	<link href="templates/<?php echo $this->template ?>/css/colour_<?php echo $colour; ?>_rtl.css" rel="stylesheet" type="text/css" />
 <?php endif; ?>
-
-<!-- Load additional CSS styles for High Contrast colors -->
-<?php if ($this->params->get('highContrast')) : ?>
-	<link href="templates/<?php echo $this->template ?>/css/highcontrast.css" rel="stylesheet" type="text/css" />
-	<link href="templates/<?php echo $this->template ?>/css/menu_hc.css" rel="stylesheet" type="text/css" />
-<?php  endif; ?>
 
 <!-- Load additional CSS styles for bold Text -->
 <?php if ($this->params->get('boldText')) : ?>

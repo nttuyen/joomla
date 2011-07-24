@@ -1,7 +1,7 @@
 <?php
 /**
- * @version		$Id: newsfeed.php 18817 2010-09-08 10:47:15Z eddieajau $
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @version		$Id: newsfeed.php 21603 2011-06-21 18:31:49Z dextercowley $
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -34,18 +34,23 @@ class NewsfeedsModelNewsfeed extends JModelAdmin
 	 */
 	protected function canDelete($record)
 	{
-		$user = JFactory::getUser();
-
-		if (!empty($record->catid)) {
-			return $user->authorise('core.delete', 'com_newsfeed.category.'.(int) $record->catid);
-		}
-		else {
-			return parent::canDelete($record);
-		}
+		if (!empty($record->id)) {
+			if ($record->published != -2) {
+				return ;
+			}
+			$user = JFactory::getUser();
+	
+			if (!empty($record->catid)) {
+				return $user->authorise('core.delete', 'com_newsfeed.category.'.(int) $record->catid);
+			}
+			else {
+				return parent::canDelete($record);
+			}
+		}	
 	}
 
 	/**
-	 * Method to test whether a record can be deleted.
+	 * Method to test whether a record can have its state changed.
 	 *
 	 * @param	object	A record object.
 	 * @return	boolean	True if allowed to change the state of the record. Defaults to the permission set in the component.
@@ -56,7 +61,7 @@ class NewsfeedsModelNewsfeed extends JModelAdmin
 		$user = JFactory::getUser();
 
 		if (!empty($record->catid)) {
-			return $user->authorise('core.edit.state', 'com_newsfeed.category.'.(int) $record->catid);
+			return $user->authorise('core.edit.state', 'com_newsfeeds.category.'.(int) $record->catid);
 		}
 		else {
 			return parent::canEditState($record);
@@ -113,8 +118,8 @@ class NewsfeedsModelNewsfeed extends JModelAdmin
 			// The controller has already verified this is a record you can edit.
 			$form->setFieldAttribute('ordering', 'filter', 'unset');
 			$form->setFieldAttribute('published', 'filter', 'unset');
-			$form->setFieldAttribute('publish_up', 'filter', 'true');
-			$form->setFieldAttribute('publish_down', 'filter', 'true');
+			$form->setFieldAttribute('publish_up', 'filter', 'unset');
+			$form->setFieldAttribute('publish_down', 'filter', 'unset');
 		}
 
 		return $form;
@@ -133,6 +138,12 @@ class NewsfeedsModelNewsfeed extends JModelAdmin
 
 		if (empty($data)) {
 			$data = $this->getItem();
+
+			// Prime some default values.
+			if ($this->getState('newsfeed.id') == 0) {
+				$app = JFactory::getApplication();
+				$data->set('catid', JRequest::getInt('catid', $app->getUserState('com_newsfeeds.newsfeeds.filter.category_id')));
+			}
 		}
 
 		return $data;
@@ -195,13 +206,32 @@ class NewsfeedsModelNewsfeed extends JModelAdmin
 	}
 
 	/**
+	 * Method to change the published state of one or more records.
+	 *
+	 * @param	array	$pks	A list of the primary keys to change.
+	 * @param	int		$value	The value of the published state.
+	 *
+	 * @return	boolean	True on success.
+	 * @since	1.6
+	 */
+	function publish(&$pks, $value = 1)
+	{
+		$result = parent::publish($pks, $value);
+		
+		// Clean extra cache for newsfeeds
+		$this->cleanCache('feed_parser');
+
+		return $result;
+	}
+
+	/**
 	 * A protected method to get a set of ordering conditions.
 	 *
 	 * @param	object	A record object.
 	 * @return	array	An array of conditions to add to add to ordering queries.
 	 * @since	1.6
 	 */
-	protected function getReorderConditions($table = null)
+	protected function getReorderConditions($table)
 	{
 		$condition = array();
 		$condition[] = 'catid = '.(int) $table->catid;

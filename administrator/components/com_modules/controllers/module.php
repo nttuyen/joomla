@@ -1,7 +1,7 @@
 <?php
 /**
- * @version		$Id: module.php 18214 2010-07-22 06:32:52Z eddieajau $
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @version		$Id: module.php 21032 2011-03-29 16:38:31Z dextercowley $
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -20,24 +20,6 @@ jimport('joomla.application.component.controllerform');
 class ModulesControllerModule extends JControllerForm
 {
 	/**
-	 * Override the execute method to clear the modules cache for non-display tasks.
-	 *
-	 * @param	string		The task to perform.
-	 * @return	mixed|false	The value returned by the called method, false in error case.
-	 * @since	1.6
-	 */
-	public function execute($task)
-	{
-		parent::execute($task);
-
-		// Clear the component's cache
-		if ($task != 'edit' && $task != 'cancel' && $task != 'add') {
-			$cache = JFactory::getCache('com_modules');
-			$cache->clean();
-		}
-	}
-
-	/**
 	 * Override parent add method.
 	 */
 	public function add()
@@ -55,7 +37,7 @@ class ModulesControllerModule extends JControllerForm
 		$extensionId = JRequest::getInt('eid');
 		if (empty($extensionId)) {
 			$this->setRedirect(JRoute::_('index.php?option='.$this->option.'&view='.$this->view_item.'&layout=edit', false));
-			return JError::raiseWarning(500, 'COM_MODULES_ERROR_INVALID_EXTENSION');
+			return JError::raiseWarning(500, JText::_('COM_MODULES_ERROR_INVALID_EXTENSION'));
 		}
 
 		$app->setUserState('com_modules.add.module.extension_id', $extensionId);
@@ -64,7 +46,7 @@ class ModulesControllerModule extends JControllerForm
 	/**
 	 * Override parent cancel method to reset the add module state.
 	 */
-	public function cancel()
+	public function cancel($key = null)
 	{
 		// Initialise variables.
 		$app = JFactory::getApplication();
@@ -77,7 +59,7 @@ class ModulesControllerModule extends JControllerForm
 	/**
 	 * Override parent allowSave method.
 	 */
-	protected function allowSave(&$data, $key = 'id')
+	protected function allowSave($data, $key = 'id')
 	{
 		// use custom position if selected
 		if (empty($data['position'])) {
@@ -97,7 +79,7 @@ class ModulesControllerModule extends JControllerForm
 	 * @return	void
 	 * @since	1.6
 	 */
-	protected function postSaveHook(JModel &$model)
+	protected function postSaveHook(JModel &$model, $validData = array())
 	{
 		// Initialise variables.
 		$app = JFactory::getApplication();

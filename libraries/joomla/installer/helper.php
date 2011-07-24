@@ -1,7 +1,7 @@
 <?php
 /**
- * @version		$Id: helper.php 18650 2010-08-26 13:28:49Z ian $
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @version		$Id: helper.php 21693 2011-06-27 16:44:53Z dextercowley $
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -21,7 +21,7 @@ jimport('joomla.filesystem.path');
  * @subpackage	Installer
  * @since		1.5
  */
-class JInstallerHelper
+abstract class JInstallerHelper
 {
 	/**
 	 * Downloads a package
@@ -32,7 +32,7 @@ class JInstallerHelper
 	 * @return mixed Path to downloaded package or boolean false on failure
 	 * @since 1.5
 	 */
-	function downloadPackage($url, $target = false)
+	public static function downloadPackage($url, $target = false)
 	{
 		$config = JFactory::getConfig();
 
@@ -66,7 +66,7 @@ class JInstallerHelper
 
 		// Set the target path if not given
 		if (!$target) {
-			$target = $config->get('tmp_path').DS.JInstallerHelper::getFilenameFromURL($url);
+			$target = $config->get('tmp_path').DS.self::getFilenameFromURL($url);
 		}
 		else {
 			$target = $config->get('tmp_path').DS.basename($target);
@@ -78,7 +78,7 @@ class JInstallerHelper
 		while (!feof($inputHandle))
 		{
 			$contents .= fread($inputHandle, 4096);
-			if ($contents == false)
+			if ($contents === false)
 			{
 				JError::raiseWarning(44, JText::sprintf('JLIB_INSTALLER_ERROR_FAILED_READING_NETWORK_RESOURCES', $php_errormsg));
 				return false;
@@ -94,6 +94,9 @@ class JInstallerHelper
 		// restore error tracking to what it was before
 		ini_set('track_errors',$track_errors);
 
+		// bump the max execution time because not using built in php zip libs are slow
+		set_time_limit(ini_get('max_execution_time'));
+
 		// Return the name of the downloaded package
 		return basename($target);
 	}
@@ -107,7 +110,7 @@ class JInstallerHelper
 	 * @return Array Two elements - extractdir and packagefile
 	 * @since 1.5
 	 */
-	function unpack($p_filename)
+	public static function unpack($p_filename)
 	{
 		// Path to the archive
 		$archivename = $p_filename;
@@ -161,7 +164,7 @@ class JInstallerHelper
 		 * Get the extension type and return the directory/type array on success or
 		 * false on fail.
 		 */
-		if ($retval['type'] = JInstallerHelper::detectType($extractdir)) {
+		if ($retval['type'] = self::detectType($extractdir)) {
 			return $retval;
 		}
 		else {
@@ -177,7 +180,7 @@ class JInstallerHelper
 	 * @return mixed Extension type string or boolean false on fail
 	 * @since 1.5
 	 */
-	function detectType($p_dir)
+	public static function detectType($p_dir)
 	{
 		// Search the install dir for an xml file
 		$files = JFolder::files($p_dir, '\.xml$', 1, true);
@@ -221,7 +224,7 @@ class JInstallerHelper
 	 * @return mixed String filename or boolean false if failed
 	 * @since 1.5
 	 */
-	function getFilenameFromURL($url)
+	public static function getFilenameFromURL($url)
 	{
 		if (is_string($url))
 		{
@@ -240,7 +243,7 @@ class JInstallerHelper
 	 * @return boolean True on success
 	 * @since 1.5
 	 */
-	function cleanupInstall($package, $resultdir)
+	public static function cleanupInstall($package, $resultdir)
 	{
 		$config = JFactory::getConfig();
 
@@ -266,7 +269,7 @@ class JInstallerHelper
 	 * @param string
 	 * @return array
 	 */
-	function splitSql($sql)
+	public static function splitSql($sql)
 	{
 		$db = JFactory::getDbo();
 		return $db->splitSql($sql);

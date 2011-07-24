@@ -1,7 +1,9 @@
 <?php
 /**
- * @version		$Id: article.php 18839 2010-09-11 02:12:47Z ian $
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @version		$Id: article.php 21148 2011-04-14 17:30:08Z ian $
+ * @package		Joomla.Administrator
+ * @subpackage	com_content
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -10,11 +12,14 @@ defined('_JEXEC') or die;
 
 jimport('joomla.application.component.modeladmin');
 
+require_once JPATH_COMPONENT_ADMINISTRATOR.'/helpers/content.php';
+
 /**
- * Article model.
+ * Item Model for an Article.
  *
  * @package		Joomla.Administrator
  * @subpackage	com_content
+ * @since		1.6
  */
 class ContentModelArticle extends JModelAdmin
 {
@@ -27,22 +32,26 @@ class ContentModelArticle extends JModelAdmin
 	/**
 	 * Method to test whether a record can be deleted.
 	 *
-	 * @param	object	A record object.
+	 * @param	object	$record	A record object.
 	 *
 	 * @return	boolean	True if allowed to delete the record. Defaults to the permission set in the component.
 	 * @since	1.6
 	 */
 	protected function canDelete($record)
 	{
-		$user = JFactory::getUser();
-
-		return $user->authorise('core.delete', 'com_content.article.'.(int) $record->id);
+		if (!empty($record->id)) {
+			if ($record->state != -2) {
+				return ;
+			}
+			$user = JFactory::getUser();
+			return $user->authorise('core.delete', 'com_content.article.'.(int) $record->id);
+		}
 	}
 
 	/**
-	 * Method to test whether a record can be deleted.
+	 * Method to test whether a record can have its state edited.
 	 *
-	 * @param	object	A record object.
+	 * @param	object	$record	A record object.
 	 *
 	 * @return	boolean	True if allowed to change the state of the record. Defaults to the permission set in the component.
 	 * @since	1.6
@@ -73,7 +82,7 @@ class ContentModelArticle extends JModelAdmin
 	 * @return	void
 	 * @since	1.6
 	 */
-	protected function prepareTable($table)
+	protected function prepareTable(&$table)
 	{
 		// Set the publish date to now
 		if($table->state == 1 && intval($table->publish_up) == 0) {
@@ -82,7 +91,7 @@ class ContentModelArticle extends JModelAdmin
 
 		// Increment the content version number.
 		$table->version++;
-		
+
 		// Reorder the articles within the category so the new article is first
 		if (empty($table->id)) {
 			$table->reorder('catid = '.(int) $table->catid.' AND state >= 0');
@@ -123,7 +132,7 @@ class ContentModelArticle extends JModelAdmin
 			$registry->loadJSON($item->metadata);
 			$item->metadata = $registry->toArray();
 
-			$item->articletext = trim($item->fulltext) ? $item->introtext . "<hr id=\"system-readmore\" />" . $item->fulltext : $item->introtext;
+			$item->articletext = trim($item->fulltext) != '' ? $item->introtext . "<hr id=\"system-readmore\" />" . $item->fulltext : $item->introtext;
 		}
 
 		return $item;
@@ -150,6 +159,8 @@ class ContentModelArticle extends JModelAdmin
 		if ($id = (int) $this->getState('article.id')) {
 			// Existing record. Can only edit in selected categories.
 			$form->setFieldAttribute('catid', 'action', 'core.edit');
+			// Existing record. Can only edit own articles in selected categories.
+			$form->setFieldAttribute('catid', 'action', 'core.edit.own');
 		}
 		else {
 			// New record. Can only create in selected categories.
@@ -190,6 +201,12 @@ class ContentModelArticle extends JModelAdmin
 
 		if (empty($data)) {
 			$data = $this->getItem();
+
+			// Prime some default values.
+			if ($this->getState('article.id') == 0) {
+				$app = JFactory::getApplication();
+				$data->set('catid', JRequest::getInt('catid', $app->getUserState('com_content.articles.filter.category_id')));
+			}
 		}
 
 		return $data;
@@ -207,7 +224,7 @@ class ContentModelArticle extends JModelAdmin
 	{
 		if (parent::save($data)) {
 			if (isset($data['featured'])) {
-				$this->featured($this->getState('article.id'), $data['featured']);
+				$this->featured($this->getState($this->getName().'.id'), $data['featured']);
 			}
 			return true;
 		}
@@ -248,29 +265,46 @@ class ContentModelArticle extends JModelAdmin
 				throw new Exception($db->getErrorMsg());
 			}
 
-			// Adjust the mapping table.
-			// Clear the existing features settings.
-			$db->setQuery(
-				'DELETE FROM #__content_frontpage' .
-				' WHERE content_id IN ('.implode(',', $pks).')'
-			);
-			if (!$db->query()) {
-				throw new Exception($db->getErrorMsg());
-			}
-
-			if ($value == 1) {
-				// Featuring.
-				$tuples = array();
-				foreach ($pks as $i => $pk) {
-					$tuples[] = '('.$pk.', '.(int)($i + 1).')';
-				}
+			if ((int)$value == 0) {
+				// Adjust the mapping table.
+				// Clear the existing features settings.
 				$db->setQuery(
-					'INSERT INTO #__content_frontpage (`content_id`, `ordering`)' .
-					' VALUES '.implode(',', $tuples)
+					'DELETE FROM #__content_frontpage' .
+					' WHERE content_id IN ('.implode(',', $pks).')'
 				);
 				if (!$db->query()) {
-					$this->setError($db->getErrorMsg());
-					return false;
+					throw new Exception($db->getErrorMsg());
+				}
+			} else {
+				// first, we find out which of our new featured articles are already featured.
+				$query = $db->getQuery(true);
+				$query->select('f.content_id');
+				$query->from('#__content_frontpage AS f');
+				$query->where('content_id IN ('.implode(',', $pks).')');
+				//echo $query;
+				$db->setQuery($query);
+
+				if (!is_array($old_featured = $db->loadResultArray())) {
+					throw new Exception($db->getErrorMsg());
+				}
+				
+				// we diff the arrays to get a list of the articles that are newly featured
+				$new_featured = array_diff($pks, $old_featured);
+				
+				// Featuring.
+				$tuples = array();
+				foreach ($new_featured as $pk) {
+					$tuples[] = '('.$pk.', 0)';
+				}
+				if (count($tuples)) {
+					$db->setQuery(
+						'INSERT INTO #__content_frontpage (`content_id`, `ordering`)' .
+						' VALUES '.implode(',', $tuples)
+					);
+					if (!$db->query()) {
+						$this->setError($db->getErrorMsg());
+						return false;
+					}
 				}
 			}
 
@@ -281,8 +315,7 @@ class ContentModelArticle extends JModelAdmin
 
 		$table->reorder();
 
-		$cache = JFactory::getCache('com_content');
-		$cache->clean();
+		$this->cleanCache();
 
 		return true;
 	}
@@ -295,10 +328,26 @@ class ContentModelArticle extends JModelAdmin
 	 * @return	array	An array of conditions to add to add to ordering queries.
 	 * @since	1.6
 	 */
-	protected function getReorderConditions($table = null)
+	protected function getReorderConditions($table)
 	{
 		$condition = array();
 		$condition[] = 'catid = '.(int) $table->catid;
 		return $condition;
 	}
+
+	/**
+	 * Custom clean the cache of com_content and content modules
+	 *
+	 * @since	1.6
+	 */
+	protected function cleanCache()
+	{
+		parent::cleanCache('com_content');
+		parent::cleanCache('mod_articles_archive');
+		parent::cleanCache('mod_articles_categories');
+		parent::cleanCache('mod_articles_category');
+		parent::cleanCache('mod_articles_latest');
+		parent::cleanCache('mod_articles_news');
+		parent::cleanCache('mod_articles_popular');
+	}	
 }

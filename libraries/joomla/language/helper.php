@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: helper.php 17130 2010-05-17 05:52:36Z eddieajau $
+ * @version		$Id: helper.php 21003 2011-03-20 17:10:45Z infograf768 $
  * @package		Joomla.Framework
  * @subpackage	Language
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -26,23 +26,39 @@ class JLanguageHelper
 	 * @param	array	An array of arrays (text, value, selected)
 	 * @since	1.5
 	 */
-	public static function createLanguageList($actualLanguage, $basePath = JPATH_BASE, $caching = false)
+	public static function createLanguageList($actualLanguage, $basePath = JPATH_BASE, $caching = false, $installed = false)
 	{
 		$list = array ();
 
 		// cache activation
 		$langs = JLanguage::getKnownLanguages($basePath);
+		if ($installed)
+		{
+			$db = JFactory::getDBO();
+			$query = $db->getQuery(true);
+			$query->select('element');
+			$query->from('#__extensions');
+			$query->where('type='.$db->quote('language'));
+			$query->where('state=0');
+			$query->where('enabled=1');
+			$query->where('client_id='.($basePath==JPATH_ADMINISTRATOR?1:0));
+			$db->setQuery($query);
+			$installed_languages = $db->loadObjectList('element');
+		}
 
 		foreach ($langs as $lang => $metadata)
 		{
-			$option = array ();
+			if (!$installed || array_key_exists($lang, $installed_languages))
+			{
+				$option = array ();
 
-			$option['text'] = $metadata['name'];
-			$option['value'] = $lang;
-			if ($lang == $actualLanguage) {
-				$option['selected'] = 'selected="selected"';
+				$option['text'] = $metadata['name'];
+				$option['value'] = $lang;
+				if ($lang == $actualLanguage) {
+					$option['selected'] = 'selected="selected"';
+				}
+				$list[] = $option;
 			}
-			$list[] = $option;
 		}
 
 		return $list;
@@ -117,7 +133,8 @@ class JLanguageHelper
 				if (!$languages = $cache->get('languages')) {
 					$db 	= JFactory::getDBO();
 					$query	= $db->getQuery(true);
-					$query->select('*')->from('#__languages')->where('published=1');
+					// TODO Use an ordering field for 1.7 $query->select('*')->from('#__languages')->where('published=1')->order('ordering ASC');
+					$query->select('*')->from('#__languages')->where('published=1')->order('lang_id ASC');
 					$db->setQuery($query);
 
 					$languages['default'] 	= $db->loadObjectList();

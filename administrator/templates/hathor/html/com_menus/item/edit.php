@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: edit.php 19073 2010-10-09 15:44:28Z chdemko $
+ * @version		$Id: edit.php 21097 2011-04-07 15:38:03Z dextercowley $
  * @package		Joomla.Administrator
- * @subpackage	templates.hathor
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @subpackage	Templates.hathor
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  * @since		1.6
  */
@@ -11,30 +11,35 @@
 defined('_JEXEC') or die;
 
 // Include the component HTML helpers.
-JHtml::addIncludePath(JPATH_COMPONENT.DS.'helpers'.DS.'html');
+JHtml::addIncludePath(JPATH_COMPONENT.'/helpers/html');
 
 // Load the tooltip behavior.
 JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
-JHTML::_('behavior.modal');
+JHtml::_('behavior.modal');
 $canDo		= MenusHelper::getActions();
 ?>
 
 <script type="text/javascript">
 	Joomla.submitbutton = function(task, type)
 	{
-		if (task == 'item.setType') {
-			document.id('item-form').elements['jform[type]'].value = type;
-			Joomla.submitform(task, document.getElementById('item-form'));
+		if (task == 'item.setType' || task == 'item.setMenuType') {
+			if(task == 'item.setType') {
+				document.id('item-form').elements['jform[type]'].value = type;
+				document.id('fieldtype').value = 'type';
+			} else {
+				document.id('item-form').elements['jform[menutype]'].value = type;
+			}
+			Joomla.submitform('item.setType', document.id('item-form'));
 		} else if (task == 'item.cancel' || document.formvalidator.isValid(document.id('item-form'))) {
-			Joomla.submitform(task, document.getElementById('item-form'));
+			Joomla.submitform(task, document.id('item-form'));
 		} else {
 			// special case for modal popups validation response
 			$$('#item-form .modal-value.invalid').each(function(field){
 				var idReversed = field.id.split("").reverse().join("");
 				var separatorLocation = idReversed.indexOf('_');
 				var name = idReversed.substr(separatorLocation).split("").reverse().join("")+'name';
-				$(name).addClass('invalid');
+				document.id(name).addClass('invalid');
 			});
 		}
 	}
@@ -42,7 +47,7 @@ $canDo		= MenusHelper::getActions();
 
 <div class="menuitem-edit">
 
-<form action="<?php JRoute::_('index.php?option=com_menus'); ?>" method="post" name="adminForm" id="item-form" class="form-validate">
+<form action="<?php echo JRoute::_('index.php?option=com_menus&layout=edit&id='.(int) $this->item->id); ?>" method="post" name="adminForm" id="item-form" class="form-validate">
 
 <div class="col main-section">
 	<fieldset class="adminform">
@@ -87,10 +92,14 @@ $canDo		= MenusHelper::getActions();
 
 				<li><?php echo $this->form->getLabel('browserNav'); ?>
 				<?php echo $this->form->getInput('browserNav'); ?></li>
-				<?php if ($canDo->get('core.edit.state')) : ?>	
+				
+				<?php if ($canDo->get('core.edit.state')) : ?>
+					<?php if ($this->item->type == 'component') : ?>
 					<li><?php echo $this->form->getLabel('home'); ?>
 					<?php echo $this->form->getInput('home'); ?></li>
+					<?php endif ?>
 				<?php endif ?>
+				
 				<li><?php echo $this->form->getLabel('language'); ?>
 				<?php echo $this->form->getInput('language'); ?></li>
 
@@ -123,8 +132,8 @@ $canDo		= MenusHelper::getActions();
 	<input type="hidden" name="task" value="" />
 	<?php echo $this->form->getInput('component_id'); ?>
 	<?php echo JHtml::_('form.token'); ?>
+	<input type="hidden" id="fieldtype" name="fieldtype" value="" />
 </form>
 
 <div class="clr"></div>
 </div>
-

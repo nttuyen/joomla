@@ -1,7 +1,7 @@
 <?php
 /**
- * @version		$Id: newsfeeds.php 17858 2010-06-23 17:54:28Z eddieajau $
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @version		$Id: newsfeeds.php 21020 2011-03-27 06:52:01Z infograf768 $
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -34,10 +34,9 @@ class JFormFieldModal_Newsfeeds extends JFormField
 	 */
 	protected function getInput()
 	{
-		// Load the javascript and css
+		// Load the javascript
 		JHtml::_('behavior.framework');
-		JHTML::_('script','system/modal.js', false, true);
-		JHTML::_('stylesheet','system/modal.css', array(), true);
+		JHtml::_('behavior.modal', 'input.modal');
 
 		// Build the script.
 		$script = array();
@@ -55,8 +54,6 @@ class JFormFieldModal_Newsfeeds extends JFormField
 		$script[] = '	window.addEvent("domready", function() {';
 		$script[] = '		var div = new Element("div").setStyle("display", "none").injectBefore(document.id("menu-types"));';
 		$script[] = '		document.id("menu-types").injectInside(div);';
-		$script[] = '		SqueezeBox.initialize();';
-		$script[] = '		SqueezeBox.assign($$("input.modal"), {parse:"rel"});';
 		$script[] = '	});';
 
 		// Add the script to the document head.
@@ -82,7 +79,7 @@ class JFormFieldModal_Newsfeeds extends JFormField
 
 		$link = 'index.php?option=com_newsfeeds&amp;view=newsfeeds&amp;layout=modal&amp;tmpl=component&amp;function=jSelectChart_'.$this->id;
 
-		JHTML::_('behavior.modal', 'a.modal');
+		JHtml::_('behavior.modal', 'a.modal');
 		$html = "\n".'<div class="fltlft"><input type="text" id="'.$this->id.'_name" value="'.htmlspecialchars($title, ENT_QUOTES, 'UTF-8').'" disabled="disabled" /></div>';
 		$html .= '<div class="button2-left"><div class="blank"><a class="modal" title="'.JText::_('COM_NEWSFEEDS_CHANGE_FEED_BUTTON').'"  href="'.$link.'" rel="{handler: \'iframe\', size: {x: 800, y: 450}}">'.JText::_('COM_NEWSFEEDS_CHANGE_FEED_BUTTON').'</a></div></div>'."\n";
 		// The active newsfeed id field.

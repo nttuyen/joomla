@@ -1,9 +1,7 @@
 <?php
 /**
- * @version		$Id: ldap.php 17969 2010-06-30 04:52:00Z infograf768 $
- * @package		Joomla
- * @subpackage	JFramework
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @version		$Id: ldap.php 21097 2011-04-07 15:38:03Z dextercowley $
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -15,8 +13,8 @@ jimport('joomla.plugin.plugin');
 /**
  * LDAP Authentication Plugin
  *
- * @package		Joomla
- * @subpackage	JFramework
+ * @package		Joomla.Plugin
+ * @subpackage	Authentication.ldap
  * @since 1.5
  */
 
@@ -71,9 +69,14 @@ class plgAuthenticationLdap extends JPlugin
 			{
 				// Bind using Connect Username/password
 				// Force anon bind to mitigate misconfiguration like [#7119]
-				if (strlen($this->params->get('username'))) $bindtest = $ldap->bind();
-				else $bindtest = $ldap->anonymous_bind();
-
+				if (strlen($this->params->get('username'))) 
+				{
+					$bindtest = $ldap->bind();
+				}
+				else 
+				{
+					$bindtest = $ldap->anonymous_bind();
+				}
 
 				if ($bindtest)
 				{

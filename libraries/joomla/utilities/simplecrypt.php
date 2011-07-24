@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: simplecrypt.php 18766 2010-09-03 02:14:59Z ian $
+ * @version		$Id: simplecrypt.php 21039 2011-03-31 15:47:46Z dextercowley $
  * @package		Joomla.Framework
  * @subpackage	Utilities
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -57,7 +57,7 @@ class JSimpleCrypt extends JObject
 	{
 		$ai = $this->_xorCharString($s);
 		$s1 = "";
-		for ($i = 0; $i < count($ai); $i++)
+		for ($i = 0, $count = count($ai); $i < $count; $i++)
 			$s1 = $s1 . $this->_intToHex((int) $ai[$i]);
 		return $s1;
 	}

@@ -1,9 +1,9 @@
 <?php
 /**
- * @version	 $Id: edit.php 19073 2010-10-09 15:44:28Z chdemko $
+ * @version	 $Id: edit.php 21097 2011-04-07 15:38:03Z dextercowley $
  * @package		Joomla.Administrator
- * @subpackage	templates.hathor
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @subpackage	Templates.hathor
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  * @since		1.6
  */
@@ -34,7 +34,7 @@ JHtml::_('behavior.keepalive');
 
 <div class="category-edit">
 
-<form action="<?php JRoute::_('index.php?option=com_menus'); ?>" method="post" name="adminForm" id="item-form" class="form-validate">
+<form action="<?php echo JRoute::_('index.php?option=com_categories&extension='.JRequest::getCmd('extension', 'com_content').'&layout=edit&id='.(int) $this->item->id); ?>" method="post" name="adminForm" id="item-form" class="form-validate">
 	<div class="col main-section">
 		<fieldset class="adminform">
 			<legend><?php echo JText::_('COM_CATEGORIES_FIELDSET_DETAILS');?></legend>
@@ -56,6 +56,13 @@ JHtml::_('behavior.keepalive');
 
 					<li><?php echo $this->form->getLabel('access'); ?>
 					<?php echo $this->form->getInput('access'); ?></li>
+					
+					<?php if ($this->canDo->get('core.admin')): ?>
+					<li><span class="faux-label"><?php echo JText::_('JGLOBAL_ACTION_PERMISSIONS_LABEL'); ?></span>
+      					<button type="button" onclick="document.location.href='#access-rules';">
+      					<?php echo JText::_('JGLOBAL_PERMISSIONS_ANCHOR'); ?></button>
+    				</li>
+    				<?php endif; ?>	
 
 					<li><?php echo $this->form->getLabel('language'); ?>
 					<?php echo $this->form->getInput('language'); ?></li>
@@ -78,13 +85,6 @@ JHtml::_('behavior.keepalive');
 			<?php echo $this->loadTemplate('options'); ?>
 			<div class="clr"></div>
 
-			<?php echo JHtml::_('sliders.panel',JText::_('COM_CATEGORIES_FIELDSET_RULES'), 'meta-rules'); ?>
-			<fieldset>
-				<legend class="element-invisible"><?php echo JText::_('COM_CATEGORIES_FIELDSET_RULES'); ?></legend>
-					<?php //echo $this->form->getLabel('rules'); ?>
-					<?php echo $this->form->getInput('rules'); ?>
-			</fieldset>
-
 			<?php echo JHtml::_('sliders.panel',JText::_('JGLOBAL_FIELDSET_METADATA_OPTIONS'), 'meta-options'); ?>
 			<fieldset class="panelform">
 				<legend class="element-invisible"><?php echo JText::_('JGLOBAL_FIELDSET_METADATA_OPTIONS'); ?></legend>
@@ -92,10 +92,28 @@ JHtml::_('behavior.keepalive');
 			</fieldset>
 
 		<?php echo JHtml::_('sliders.end'); ?>
-	</div>
+		</div>
+		<div class="clr"></div>
+		
+		<?php if ($this->canDo->get('core.admin')): ?>
+		<div  class="col rules-section">
 
+			<?php echo JHtml::_('sliders.start','permissions-sliders-'.$this->item->id, array('useCookie'=>1)); ?>
+		
+			<?php echo JHtml::_('sliders.panel',JText::_('COM_CATEGORIES_FIELDSET_RULES'), 'access-rules'); ?>	
+			<fieldset class="panelform">
+			<legend class="element-invisible"><?php echo JText::_('COM_CATEGORIES_FIELDSET_RULES'); ?></legend>
+				<?php echo $this->form->getLabel('rules'); ?>
+				<?php echo $this->form->getInput('rules'); ?>
+			</fieldset>
+				
+			<?php echo JHtml::_('sliders.end'); ?>
+		</div>
+	<?php endif; ?>
+	<div>	
 	<input type="hidden" name="task" value="" />
 	<?php echo JHtml::_('form.token'); ?>
+	</div>
 </form>
 <div class="clr"></div>
 </div>

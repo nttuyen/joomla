@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: language.php 18658 2010-08-26 16:06:59Z infograf768 $
+ * @version		$Id: language.php 20196 2011-01-09 02:40:25Z ian $
  * @package		Joomla.Framework
  * @subpackage	Language
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -28,6 +28,7 @@ jimport('joomla.filesystem.stream');
  */
 class JLanguage extends JObject
 {
+	protected static $languages = array();
 	/**
 	 * Debug language, If true, highlights if string isn't found
 	 *
@@ -61,6 +62,14 @@ class JLanguage extends JObject
 	 * @since	1.5
 	 */
 	protected $metadata = null;
+
+	/**
+	 * Array|boolean holding the language locale
+	 *
+	 * @var		array|boolean
+	 * @since	1.5
+	 */
+	protected $locale = null;
 
 	/**
 	 * The language to load
@@ -248,7 +257,10 @@ class JLanguage extends JObject
 	 */
 	public static function getInstance($lang, $debug=false)
 	{
-		return new JLanguage($lang, $debug);
+		if (!isset(self::$languages[$lang.$debug])) {
+			self::$languages[$lang.$debug] = new JLanguage($lang, $debug);
+		}
+		return self::$languages[$lang.$debug];
 	}
 
 	/**
@@ -1031,6 +1043,40 @@ class JLanguage extends JObject
 		$this->metadata	= $this->getMetadata($this->lang);
 
 		return $previous;
+	}
+
+	/**
+	 * Get the language locale based on current language
+	 *
+	 * @return	array|false	The locale according to the language
+	 * @since	1.6
+	 */
+	public function getLocale()
+	{
+		if (!isset($this->locale))
+		{
+			$locale = str_replace(' ', '', isset($this->metadata['locale']) ? $this->metadata['locale'] : '');
+			if ($locale)
+			{
+				$this->locale = explode(',', $locale);
+			}
+			else
+			{
+				$this->locale = false;
+			}
+		}
+		return $this->locale;
+	}
+
+	/**
+	 * Get the first day of the week for this language
+	 *
+	 * @return	int	The first day of the week according to the language
+	 * @since	1.6
+	 */
+	public function getFirstDay()
+	{
+		return (int) (isset($this->metadata['firstDay']) ? $this->metadata['firstDay'] : 0);
 	}
 
 	/**

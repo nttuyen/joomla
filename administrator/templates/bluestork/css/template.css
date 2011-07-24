@@ -1,10 +1,10 @@
 @charset "UTF-8";
 
 /**
- * @version		$Id: template.css 19105 2010-10-13 16:04:55Z chdemko $
+ * @version		$Id: template.css 21093 2011-04-06 17:25:27Z infograf768 $
  * @package		Joomla.Administrator
  * @subpackage	templates.bluestork
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  *
  */
@@ -22,7 +22,9 @@ Dark grey color:			#666666 		RGB: 102/102/102
 Border grey color:			#CCCCCC 		RGB: 204/204/204
 
 ----------------------------------------------------------*/
-
+html {
+	overflow-y:scroll
+}
 
 body {
 	margin: 10px;
@@ -72,6 +74,10 @@ h3 {
 	font-size: 1.182em;
 }
 
+h4 {
+	font-size: 1.182em;
+}
+
 * :focus, a:active {
 	outline: none
 }
@@ -116,6 +122,10 @@ textarea {
 	border: 1px solid silver;
 }
 
+iframe {
+	border: 0;
+}
+
 .invalid {
 	color: red;
 	font-weight: bold;
@@ -149,6 +159,10 @@ textarea:focus {
 p.error {
 	color: red;
 	font-weight: bold;
+}
+
+.protected {
+	color: #999999;
 }
 
 p.warning {
@@ -388,6 +402,10 @@ textarea#message {
 	width: 90%;
 }
 
+.pre_message {
+	font-size: 1.3em;
+}
+
 /* -- OVERLIB STYLES ----------------------------- */
 .ol-foreground {
 	background-color: #ffe;
@@ -420,14 +438,17 @@ textarea#message {
 
 /* Page titles */
 div.pagetitle {
-	padding-left: 60px;
+	height: 48px;
+	padding-left: 70px;
 	background-repeat: no-repeat;
-	margin-left: 10px;
+	background-position: 10px 0px;
+	display: table-cell;
+	vertical-align: middle;
 }
 
 div.pagetitle h2 {
-	line-height: 48px;
-	font-size: 2em;
+	line-height: 24px;
+	font-size: 1.7em;
 	font-weight: bold;
 	color: #146295;
 	margin: 0;
@@ -496,7 +517,9 @@ div.toolbar-list a {
 	cursor: pointer;
 }
 
-div.toolbar-list a:hover {
+div.toolbar-list a:hover,
+div.toolbar-list a:focus, 
+div.toolbar-list a:active {
 	border-left: 1px solid #eee;
 	border-top: 1px solid #eee;
 	border-right: 1px solid #ccc;
@@ -558,26 +581,30 @@ textarea#mm_message {
 	border: 0 none;
 }
 
-.jpane-toggler span {
+.pane-toggler span {
 	background: transparent url(../images/j_arrow.png) 5px 50% no-repeat;
 	padding-left: 20px;
 }
 
-.jpane-toggler-down span {
+.pane-toggler-down span {
 	background: transparent url(../images/j_arrow_down.png) 5px 50% no-repeat;
 	padding-left: 20px;
 }
 
-.jpane-toggler-down {
+.pane-toggler-down {
 	border-bottom: 1px solid #ccc;
 }
 
-h3.jpane-toggler-down a:hover,
-h3.jpane-toggler a:hover {
+h3.pane-toggler-down a:hover,
+h3.pane-toggler a:hover {
 	text-decoration: none;
 }
 
-.jpane-slider ol li {
+.pane-slider.pane-hide {
+	display: none;
+}
+
+.pane-slider ol li {
 	list-style: none;
 	margin-left: -25px;
 	margin-top: 10px;
@@ -587,6 +614,19 @@ input#jformparams_link_titles1,
 input#jformparams_show_title1,
 input#jformparams_link_category1 {
 	margin-left: 13px;
+}
+
+div#position-icon.pane-sliders div.pane-down div.icon-wrapper {
+	margin: 5px 0 5px 0;
+}
+
+div#position-icon.pane-sliders div.pane-down .icon-wrapper .icon {
+	padding: 5px 0 5px 10px;
+	margin: 0;
+}
+
+div#position-icon.pane-sliders .icon {
+	background: #fff;
 }
 
 /* -- TAB STYLES ----------------------------- */
@@ -630,7 +670,8 @@ dl#content-pane.tabs {
 	margin: 1px 0 0 0;
 }
 
-div.current label {
+div.current label,
+div.current span.faux-label {
 	display: block;
 	min-width: 150px;
 	float: left;
@@ -640,6 +681,10 @@ div.current label {
 
 div.current fieldset {
 	border: none 0;
+}
+
+div.current fieldset.adminform {
+	border: 1px #ccc solid;
 }
 
 div.current fieldset.radio {
@@ -657,6 +702,24 @@ div.current fieldset.radio label {
 	clear: none;
 	min-width: 45px;
 	float: left;
+	margin: 3px 0 0 5px;
+}
+
+div.current fieldset.checkboxes {
+	float: left;
+	clear: right;
+}
+
+div.current fieldset.checkboxes input {
+	clear: left;
+	min-width: 15px;
+	float: left;
+	margin: 3px 0 0 2px;
+}
+
+div.current fieldset.checkboxes label {
+	clear: right;
+	min-width: 45px;
 	margin: 3px 0 0 5px;
 }
 
@@ -728,7 +791,9 @@ li.acl-resetbtn:hover {
 	text-decoration: none;
 }
 
-#cpanel div.icon a:hover {
+#cpanel div.icon a:hover,
+#cpanel div.icon a:focus,
+#cpanel div.icon a:active {
 	border-left: 1px solid #eee;
 	border-top: 1px solid #eee;
 	border-right: 1px solid #ccc;
@@ -813,7 +878,8 @@ ul.adminformlist li {
 	list-style: none;
 }
 
-fieldset label {
+fieldset label,
+fieldset span.faux-label {
 	float: left;
 	clear: left;
 	display:block;
@@ -824,7 +890,8 @@ fieldset ul {
 	padding: 0;
 }
 
-form label {
+form label,
+form span.faux-label {
 	font-size: 1.091em;
 }
 
@@ -887,7 +954,7 @@ span.readonly {
 }
 
 #jform-imp {
-	width: 70px;
+	min-width: 70px;
 }
 
 .mod-desc { margin-left: 135px !important; float: none !important;}
@@ -922,12 +989,6 @@ label#jform_grouptitle-lbl {
 	padding-top: 3px;
 }
 
-span.spacer label {
-	white-space: nowrap;
-	font-weight: bold;
-	color: #666;
-}
-
 div#content-pane fieldset {
 	border: 0;
 	padding: 10px 15px 0 15px;
@@ -942,18 +1003,9 @@ input.required {
 	background-color: #d5eeff;
 }
 
-label.required:after {
-	content: url(../images/required.png);
-	vertical-align: middle;
-	white-space: nowrap;
-}
-
-/* One-offs */
-
-/* Hide the extension name on create category page */
-label#jform_extension-lbl,
-input#jform_extension {
-	display: none;
+.star {
+	color:#EB8207;
+	font-size:1.2em;
 }
 
 /* -------- Batch Section ---------- */
@@ -1025,23 +1077,28 @@ button.jform-rightbtn {
 }
 
 /* Field label widths - long label */
-fieldset.adminform.long label {
+fieldset.adminform.long label, 
+fieldset.adminform.long span.faux-label {
 	min-width: 180px;
 }
 fieldset.adminform.long input { }
 
 /* Field label widths - short label */
-fieldset.adminform label {
-	width: 135px;
+fieldset.adminform label, 
+fieldset.adminform span.faux-label {
+	min-width: 135px;
+	padding: 0 5px 0 0;
 }
 
 fieldset.panelform {
 	overflow: hidden;
 }
 fieldset.panelform label,
-fieldset.panelform div.paramrow label {
+fieldset.panelform div.paramrow label,
+fieldset.panelform span.faux-label {
 	min-width: 145px;
-	max-width: 145px;
+	max-width: 250px;
+	padding: 0 5px 0 0;
 }
 
 /* One-offs */
@@ -1131,18 +1188,66 @@ fieldset.adminform-legacy fieldset.radio {
 	border: 0;
 	float: left;
 	padding: 0;
-	margin: 0 0 5px 5px;
+	margin: 0 0 5px 0;
 	/* clear: right; */
 }
 
 fieldset.adminform fieldset.radio label,
 fieldset.panelform fieldset.radio label {
 	min-width: 60px;
+	padding-left: 0;
+	padding-right: 10px;
 	float: left;
 	clear: none;
-	width: 40px;
+	/*width: 40px;*/
 	display:inline;
 }
+
+/* checkboxes */
+fieldset.adminform fieldset.checkboxes,
+fieldset.panelform fieldset.checkboxes,
+fieldset.adminform-legacy fieldset.checkboxes  {
+	border: 0;
+	float:left;
+	padding: 0;
+	margin: 0 0 5px 0;
+	clear:right;
+}
+
+
+fieldset.adminform fieldset.checkboxes input[type="checkbox"],
+fieldset.panelform fieldset.checkboxes input[type="checkbox"] {
+	float: left;
+	clear: left;
+}
+fieldset.adminform fieldset.checkboxes label,
+fieldset.panelform fieldset.checkboxes label,
+fieldset.adminform fieldset.checkboxes span.faux-label,
+fieldset.panelform fieldset.checkboxes span.faux-label {
+	clear: right;
+}
+
+/* end checkboxes */
+
+/* spacer */
+div.current span.spacer > span.before,
+fieldset.adminform span.spacer > span.before,
+fieldset.panelform span.spacer > span.before {
+	clear: both;
+	overflow: hidden;
+	height: 0;
+	display: block;
+}
+
+div.current span.spacer > span.text label ,
+fieldset.adminform span.spacer > span.text label ,
+fieldset.panelform span.spacer > span.text label {
+	white-space: nowrap;
+	font-weight: bold;
+	color: #666;
+}
+
+/* end spacer */
 
 fieldset.panelform-legacy label,
 fieldset.adminform-legacy label {
@@ -1151,12 +1256,12 @@ fieldset.adminform-legacy label {
 }
 
 /* JParameter classes on radio button labels  */
-fieldset.panelform-legacy label.radiobtn_jno,
-fieldset.panelform-legacy label.radiobtn_jyes,
-fieldset.panelform-legacy label.radiobtn_show,
-fieldset.panelform-legacy label.radiobtn_hide,
-fieldset.panelform-legacy label.radiobtn_off,
-fieldset.panelform-legacy label.radiobtn_on	{
+fieldset.panelform-legacy label.radiobtn-jno,
+fieldset.panelform-legacy label.radiobtn-jyes,
+fieldset.panelform-legacy label.radiobtn-show,
+fieldset.panelform-legacy label.radiobtn-hide,
+fieldset.panelform-legacy label.radiobtn-off,
+fieldset.panelform-legacy label.radiobtn-on	{
 	min-width: 40px !important;
 	clear: none !important;
 }
@@ -1453,8 +1558,13 @@ table.adminlist tr td.btns a {
 div#element-box div.m form table.adminlist tr td a {
 	font-size: 1.1em;
 }
+
+div#element-box div.m form table.adminlist tr td div.button2-left.smallsub a {
+	font-size: 1em;
+}
+
 div#element-box div.m form table.adminlist tr td p.smallsub a,
-div#element-box div.m div.jpane-slider form table.adminlist a {
+div#element-box div.m div.pane-slider form table.adminlist a {
 	font-size: 1em;
 }
 
@@ -1604,8 +1714,9 @@ a.saveorder.inactive {
 }
 
 .button2-left a,
-.button2-left button,
 .button2-right a,
+.button2-left button,
+.button2-right button,
 .button2-left span,
 .button2-right span {
 	display: block;
@@ -1630,6 +1741,7 @@ a.saveorder.inactive {
 .button2-right .blank a,
 .button2-left .blank span,
 .button2-right .blank span,
+.button2-left .blank button,
 .button2-right .blank button {
 	padding: 0 6px;
 }
@@ -1641,18 +1753,21 @@ a.saveorder.inactive {
 
 .button2-left a:hover,
 .button2-right a:hover,
+.button2-left button:hover,
 .button2-left button:hover	{
 	text-decoration: none;
 	color: #0B55C4;
 }
 
 .button2-left a,
-.button2-left span {
+.button2-left span,
+.button2-left button {
 	padding: 0 24px 0 6px;
 }
 
 .button2-right a,
-.button2-right span {
+.button2-right span,
+.button2-right button {
 	padding: 0 6px 0 24px;
 }
 
@@ -1701,6 +1816,16 @@ button:hover {
 	border: 1px solid #aaa;
 }
 
+div.button2-left button {
+	background: transparent;
+	margin-top: 0;
+	border: 0 solid #ccc;
+}
+
+div.button2-left button {
+	background: transparent;
+	border: 0 solid #aaa;
+}
 
 /* -- TOOLTIP STYLES ----------------------------- */
 .tip {
@@ -1760,7 +1885,7 @@ a img.calendar {
 
 .login {
 	margin: 50px auto 100px;
-	width: 500px;
+	width: 575px;
 }
 
 form#form-login {
@@ -1780,7 +1905,7 @@ p {
 
 #section-box {
 	float: right;
-	width: 300px;
+	width: 340px;
 	margin-left: 10px;
 	margin-right: 10px;
 	background-color: #fff;
@@ -1863,6 +1988,9 @@ a.jgrid:hover {	text-decoration: none;}
 .jgrid span.downarrow_disabled		{ background-image: url(../images/admin/downarrow0.png); background-position: 0 -12px; }
 .jgrid span.uparrow					{ background-image: url(../images/admin/uparrow.png); }
 .jgrid span.uparrow_disabled		{ background-image: url(../images/admin/uparrow0.png); background-position: 0 -12px; }
+.jgrid span.published				{ background-image: url(../images/admin/publish_g.png); }
+.jgrid span.expired					{ background-image: url(../images/admin/publish_r.png); }
+.jgrid span.pending					{ background-image: url(../images/admin/publish_y.png); }
 
 /* -- ICON STYLES ----------------------------- */
 .icon-16-archive					{	background-image: url(../images/menu/icon-16-archive.png);	}
@@ -1914,6 +2042,7 @@ a.jgrid:hover {	text-decoration: none;}
 .icon-16-newlevel					{	background-image: url(../images/menu/icon-16-newlevel.png);	}
 .icon-16-newuser					{	background-image: url(../images/menu/icon-16-newuser.png);	}
 .icon-16-plugin						{	background-image: url(../images/menu/icon-16-plugin.png);	}
+.icon-16-profile					{	background-image: url(../images/menu/icon-16-user.png);	}
 .icon-16-purge						{	background-image: url(../images/menu/icon-16-purge.png);	}
 .icon-16-readmess					{	background-image: url(../images/menu/icon-16-readmess.png);	}
 .icon-16-redirect					{	background-image: url(../images/menu/icon-16-redirect.png);	}
@@ -1969,9 +2098,13 @@ a.jgrid:hover {	text-decoration: none;}
 .icon-32-delete-style				{	background-image: url(../images/toolbar/icon-32-delete-style.png);	}
 .icon-32-purge						{	background-image: url(../images/toolbar/icon-32-purge.png);	}
 .icon-32-remove						{	background-image: url(../images/toolbar/icon-32-remove.png);	}
+.icon-32-featured			{	background-image: url(../images/toolbar/icon-32-featured.png);	}
 .toolbar-inactive					{	background-position: 0px 32px;  }
 
 /* -- HEADER ICON STYLES ----------------------------- */
+.icon-48-categories					{	background-image: url(../images/header/icon-48-category.png);	}
+.icon-48-category-edit				{	background-image: url(../images/header/icon-48-category.png);	}
+.icon-48-category-add				{	background-image: url(../images/header/icon-48-category-add.png);	}
 .icon-48-generic					{	background-image: url(../images/header/icon-48-generic.png);	}
 .icon-48-banners					{	background-image: url(../images/header/icon-48-banner.png);	}
 .icon-48-banners-categories			{	background-image: url(../images/header/icon-48-banner-categories.png);	}
@@ -2002,6 +2135,8 @@ a.jgrid:hover {	text-decoration: none;}
 .icon-48-trash						{	background-image: url(../images/header/icon-48-trash.png);	}
 .icon-48-user						{	background-image: url(../images/header/icon-48-user.png);	}
 .icon-48-user-add					{	background-image: url(../images/header/icon-48-user-add.png);	}
+.icon-48-user-edit					{	background-image: url(../images/header/icon-48-user-edit.png);	}
+.icon-48-user-profile					{	background-image: url(../images/header/icon-48-user-profile.png);	}
 .icon-48-inbox						{	background-image: url(../images/header/icon-48-inbox.png);	}
 .icon-48-new-privatemessage			{	background-image: url(../images/header/icon-48-new-privatemessage.png);	}
 .icon-48-msgconfig					{	background-image: url(../images/header/icon-48-message_config.png);	}
@@ -2022,8 +2157,6 @@ a.jgrid:hover {	text-decoration: none;}
 .icon-48-content-categories			{	background-image: url(../images/header/icon-48-category.png);	}
 .icon-48-content-category-edit		{	background-image: url(../images/header/icon-48-category.png);	}
 .icon-48-content-category-add		{	background-image: url(../images/header/icon-48-category-add.png);	}
-.icon-48-categories					{	background-image: url(../images/header/icon-48-category.png);	}
-.icon-48-category-add				{	background-image: url(../images/header/icon-48-category-add.png);	}
 .icon-48-install					{	background-image: url(../images/header/icon-48-extension.png);	}
 .icon-48-dbbackup					{	background-image: url(../images/header/icon-48-backup.png);	}
 .icon-48-dbrestore					{	background-image: url(../images/header/icon-48-dbrestore.png);	}
@@ -2334,6 +2467,26 @@ dl.menu_type dd ul {
 	margin-left: -40px;
 }
 
+ul#new-modules-list {
+	padding: 5px 0 0 15px;
+	width:95%;
+	margin: 0;
+	list-style: none;
+	border-top: 1px solid #666;
+}
+ul#new-modules-list li {
+	list-style: none;
+	display: block;
+	float:left;
+	margin: 0 20px 0 0;
+	width: 47%;
+}
+ul#new-modules-list li a {
+	font-size: 1.091em;
+	line-height: 1.8em;
+}
+
+
 /* -- ACL STYLES ----------- */
 
 /* Relocated from com_users/media/default.css  */
@@ -2575,13 +2728,14 @@ table.aclmodify-table select {
 
 /* Summary Tab */
 table.aclsummary-table th.col1 {
-	width: 40%;
+	width: 25%;
 }
 
 table.aclsummary-table th.col2,
 table.aclsummary-table th.col3,
 table.aclsummary-table th.col4,
-table.aclsummary-table th.col5	{
+table.aclsummary-table th.col5,
+table.aclsummary-table th.col6	{
 	width: 15%;
 	vertical-align: bottom;
 	text-align: center;
@@ -2595,12 +2749,37 @@ table.aclsummary-table td.col4,
 table.aclsummary-table th.col4,
 table.aclsummary-table td.col5,
 table.aclsummary-table th.col5,
+table.aclsummary-table td.col6,
+table.aclsummary-table th.col6,
 table.aclmodify-table td.col2,
 table.aclmodify-table th.col2	{
 	border-left: 1px solid #cbcbcb;
 }
 
 /* Icons */
+span.icon-16-unset,
+span.icon-16-allowed,
+span.icon-16-denied,
+span.icon-16-locked {
+	padding-left: 18px;
+}
+
+span.icon-16-unset {
+	background: url(../images/admin/icon-16-denyinactive.png) no-repeat;
+}
+
+span.icon-16-allowed {
+	background: url(../images/admin/icon-16-allow.png) no-repeat;
+}
+
+span.icon-16-denied {
+	background: url(../images/admin/icon-16-deny.png) no-repeat;
+}
+
+span.icon-16-locked {
+	background: url(../images/admin/checked_out.png) 0 0 no-repeat;
+}
+
 label.icon-16-allow,
 label.icon-16-deny,
 a.icon-16-allow,
@@ -2742,6 +2921,13 @@ label#jform_rules-lbl {
 	white-space: nowrap;
 	display: none;
 }
+
+label#jform_filters-lbl {
+	float: none;
+	white-space: nowrap;
+	display: none;
+}
+
 /**
 * Mod_rewrite Warning
 */
@@ -2764,8 +2950,9 @@ ul.config-option-list fieldset {
 	padding-right: 0;
 }
 
-
-/* CSS Rules Permission Angie */
+/**
+* Permission Rules
+*/
 
 #permissions-sliders ul#rules,
 #permissions-sliders ul#rules ul
@@ -2775,19 +2962,12 @@ ul.config-option-list fieldset {
     border:solid 0px #ccc; 
     background:#fff; 
     list-style-type:none;
-  
 }
 
 #permissions-sliders ul#rules li
 {
 	margin:0px 0 0 0%;
-	/*padding:0 0 0 1%;*/
-	padding:0
-}
-
-#permissions-sliders ul#rules .mypanel
-{
-	width:99%
+	padding:0;
 }
 
 ul#rules li .pane-sliders .panel h3.title
@@ -2795,61 +2975,53 @@ ul#rules li .pane-sliders .panel h3.title
 	border:solid 0px #ccc;
 }
 
-#permissions-sliders ul#rules .jpane-slider
+#permissions-sliders ul#rules .pane-slider
 {
-    padding:0px;
-    position:absolute; 
-    top:0px;
-    right:0 ;
-    background:none;
-    width:60%; 
+		border:solid 1px #ccc;
+}
+
+#permissions-sliders ul#rules .pane-slider.pane-hide
+{
+	display:none;
 }
 
 #permissions-sliders ul#rules li h3
 {
-	background:#f5f5f5;
+	background:#fafafa;
 	 font-size:1.10em;
-	 font-weight:normal
 }
 
-#permissions-sliders ul#rules li h3.jpane-toggler-down a
+#permissions-sliders ul#rules li h3
+{
+	border: solid 1px #ccc;
+}
+
+#permissions-sliders ul#rules li h3.pane-toggler-down a
 {	
 	border:solid 0px;
 }
 
-#permissions-sliders ul#rules li h3.jpane-toggler-down
-{ 
+#permissions-sliders ul#rules li h3.pane-toggler-down
+{
 	color:#000; 
-	background:#146295;
+	/*background:#146295;*/
 }
     
-#permissions-sliders ul#rules li h3.jpane-toggler-down span
+#permissions-sliders ul#rules li h3.pane-toggler-down span
 { 
-	color:#fff; 
+	/*color:#fff; */
 }
         
         
 #permissions-sliders ul#rules .group-kind
 {
-	color:#025A8D
+	color:#025A8D;
 }
             
 #permissions-sliders ul#rules table.group-rules
 {
     border-collapse:collapse;
      width:100%
-}
-
-#permissions-sliders ul#rules table.group-rules caption
-{
-	padding:10px; 
-	font-weight:bold;
-	text-align:left
-}
-
-#permissions-sliders ul#rules table.group-rules caption span
-{
-	font-weight:normal
 }
 
 #permissions-sliders ul#rules table.group-rules td
@@ -2875,7 +3047,18 @@ ul#rules li .pane-sliders .panel h3.title
     margin-bottom: 3px;
     margin-left:0;
     border:0;
-    margin-right:60.5%; 
+}
+
+#permissions-sliders p.rule-desc
+{
+	font-size: 1.091em;
+	margin-left: 0;
+}
+
+#permissions-sliders div.rule-notes
+	
+{
+	font-size: 1.091em;
 }
 
 ul#rules table.aclmodify-table
@@ -2889,6 +3072,11 @@ ul#rules table.group-rules td label
 	margin:0 !important
 }
 
+ul#rules table.group-rules td span
+{
+	padding-bottom: 4px;
+}
+
 table.group-rules td select
 {
 	margin:0 !important
@@ -2896,20 +3084,21 @@ table.group-rules td select
 	
 #permissions-sliders ul#rules .mypanel
 {
-	border:solid 0px #ddd; 
-	background:#f5f5f5; 
+	background:#ffffff; 
 	padding:0px; 
-	width:100% 
 }
+
+#permissions-sliders .mypanel table.group-rules
+{
+	margin: 5px;
+} 
 
 #permissions-sliders .mypanel table.group-rules caption
 {
-	border:solid 1px #ccc;
 }  
 
 #permissions-sliders ul#rules 
 {	
-	min-height:25em ;
 	padding:5px
 }
 
@@ -2919,34 +3108,80 @@ table.group-rules td select
     padding:4px
 }
 
-#permissions-sliders span.level
+#permissions-sliders .pane-toggler span
+{
+	padding-left:20px;
+}
+
+#permissions-sliders .pane-toggler-down span
+{
+}
+
+#permissions-sliders .pane-toggler-down span
+{
+	padding-left:20px;
+}
+	
+#permissions-sliders .pane-toggler-down span.level,
+#permissions-sliders .pane-toggler span.level
 {
 	color:#aaa;
-	background-image:none
-}
-
-#permissions-sliders .jpane-toggler span
-{
-	padding-left:5px;background-image:none
-}
-
-#permissions-sliders .jpane-toggler-down span
-	{
 	background-image:none;
+	padding: 0;
 }
-
-#permissions-sliders .jpane-toggler-down span
-	{padding-left:5px}
 
 #permissions-sliders ul#rules .panel h3
-	{
-	background:#f5f5f5 url(../images/j_arrow_right.png) top right no-repeat
+{
 }
 	
 /* global_config permissions */
 
-#page-permissions  fieldset ul#rules  .jpane-slider
-	{width:60%;}
+#page-permissions  fieldset ul#rules  .pane-slider
+{
+}
 
 #permissions-sliders
-	{ min-height:29em; width:100%; }
+{
+}
+	
+/* Debug acl styling */	
+.check-0,
+table.adminlist tbody td.check-0 {
+	background-color: #FFFFCF;
+}
+
+.check-a,
+table.adminlist tbody td.check-a {
+	background-color: #CFFFDA;
+}
+
+.check-d,
+table.adminlist tbody td.check-d {
+	background-color: #FFCFCF;
+}
+
+.swatch {
+	text-align: center;
+	padding: 0 15px 0 15px;
+}
+
+/* Tab changes for accessibility */
+dl.tabs dt h3 {
+	margin:0;
+	padding: 0;
+	font-size: 1em;
+	font-weight: normal;
+}
+
+dl.tabs dt h3 a:link {
+	color:#333333;
+	outline:medium none;
+	text-decoration:none;
+}
+
+/* -- CUSTOM LANG STRINGS STYLES  ----------- */
+
+.red {
+	font-weight: bold;
+	color: #c00;
+}

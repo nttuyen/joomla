@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: checkin.php 18792 2010-09-07 02:15:14Z ian $
+ * @version		$Id: checkin.php 21097 2011-04-07 15:38:03Z dextercowley $
  * @package		Joomla.Administrator
- * @subpackage	Checkin
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @subpackage	com_checkin
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 

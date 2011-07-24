@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: model.php 18650 2010-08-26 13:28:49Z ian $
+ * @version		$Id: model.php 21032 2011-03-29 16:38:31Z dextercowley $
  * @package		Joomla.Framework
  * @subpackage	Application
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -62,24 +62,46 @@ abstract class JModel extends JObject
 	protected $state;
 
 	/**
+	 * @var		string	The event to trigger when cleaning cache.
+	 * @since	1.6.2
+	 */
+	protected $event_clean_cache = null;
+
+	/**
 	 * Add a directory where JModel should search for models. You may
 	 * either pass a string or an array of directories.
 	 *
 	 * @param	string	A path to search.
-	 * @return	array	An array with directory elements
+	 * @param	string	A prefix for models
+	 * @return	array	An array with directory elements. If prefix is equal to '', all directories are returned
 	 */
-	public static function addIncludePath($path='')
+	public static function addIncludePath($path='', $prefix='')
 	{
 		static $paths;
 
 		if (!isset($paths)) {
 			$paths = array();
 		}
-		if (!empty($path) && !in_array($path, $paths)) {
-			jimport('joomla.filesystem.path');
-			array_unshift($paths, JPath::clean($path));
+
+		if (!isset($paths[$prefix])) {
+			$paths[$prefix] = array();
 		}
-		return $paths;
+
+		if (!isset($paths[''])) {
+			$paths[''] = array();
+		}
+
+		if (!empty($path))
+		{
+			jimport('joomla.filesystem.path');
+			if(!in_array($path, $paths[$prefix])) {
+				array_unshift($paths[$prefix], JPath::clean($path));
+			}
+			if(!in_array($path, $paths[''])) {
+				array_unshift($paths[''], JPath::clean($path));
+			}
+		}
+		return $paths[$prefix];
 	}
 
 	/**
@@ -131,9 +153,15 @@ abstract class JModel extends JObject
 		if (!class_exists($modelClass)) {
 			jimport('joomla.filesystem.path');
 			$path = JPath::find(
-				JModel::addIncludePath(),
+				JModel::addIncludePath(null, $prefix),
 				JModel::_createFileName('model', array('name' => $type))
 			);
+			if(!$path) {
+				$path = JPath::find(
+					JModel::addIncludePath(null, ''),
+					JModel::_createFileName('model', array('name' => $type))
+				);
+			}
 			if ($path) {
 				require_once $path;
 
@@ -198,6 +226,14 @@ abstract class JModel extends JObject
 		if (!empty($config['ignore_request'])) {
 			$this->__state_set = true;
 		}
+
+		// Set the clean cache event
+		if (isset($config['event_clean_cache'])) {
+			$this->event_clean_cache = $config['event_clean_cache'];
+		} else  if (empty($this->event_clean_cache)) {
+			$this->event_clean_cache = 'onContentCleanCache';
+		}
+
 	}
 
 	/**
@@ -278,7 +314,7 @@ abstract class JModel extends JObject
 		if (empty($name)) {
 			$r = null;
 			if (!preg_match('/Model(.*)/i', get_class($this), $r)) {
-				JError::raiseError (500, 'JLIB_APPLICATION_ERROR_MODEL_GET_NAME');
+				JError::raiseError (500, JText::_('JLIB_APPLICATION_ERROR_MODEL_GET_NAME'));
 			}
 			$name = strtolower($r[1]);
 		}
@@ -366,5 +402,32 @@ abstract class JModel extends JObject
 	public function setState($property, $value=null)
 	{
 		return $this->state->set($property, $value);
+	}
+
+	/**
+	 * Clean the cache
+	 *
+	 * @param	string	$group		The cache group
+	 * @param	string	$client_id	The ID of the client
+	 *
+	 * @since	1.6
+	 */
+	protected function cleanCache($group = null, $client_id = 0)
+	{
+		// Initialise variables;
+		$conf = JFactory::getConfig();
+		$dispatcher = JDispatcher::getInstance();
+		
+		$options = array(
+			'defaultgroup' 	=> ($group) 	? $group : (isset($this->option) ? $this->option : JRequest::getCmd('option')),
+			'cachebase'		=> ($client_id) ? JPATH_ADMINISTRATOR.DS.'cache' : $conf->get('cache_path', JPATH_SITE.DS.'cache')
+		);
+		
+		jimport('joomla.cache.cache');
+		$cache = JCache::getInstance('callback', $options);
+		$cache->clean();
+
+		// Trigger the onContentCleanCache event.
+		$dispatcher->trigger($this->event_clean_cache, $options);
 	}
 }

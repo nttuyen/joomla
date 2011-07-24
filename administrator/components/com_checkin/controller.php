@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: controller.php 19039 2010-10-04 21:24:17Z chdemko $
+ * @version		$Id: controller.php 21097 2011-04-07 15:38:03Z dextercowley $
  * @package		Joomla.Administrator
- * @subpackage	Checkin
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @subpackage	com_checkin
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -16,13 +16,13 @@ jimport('joomla.application.component.controller');
  * Checkin Controller
  *
  * @package		Joomla.Administrator
- * @subpackage	Checkin
+ * @subpackage	com_checkin
  * @since 1.6
  */
 class CheckinController extends JController
 {
 	public function display($cachable = false, $urlparams = false)
-	{	
+	{
 		// Load the submenu.
 		$this->addSubmenu(JRequest::getWord('option', 'com_checkin'));
 
@@ -41,7 +41,8 @@ class CheckinController extends JController
 
 		if (empty($ids)) {
 			JError::raiseWarning(500, JText::_('JLIB_HTML_PLEASE_MAKE_A_SELECTION_FROM_THE_LIST'));
-		} else {
+		}
+		else {
 			// Get the model.
 			$model = $this->getModel();
 
@@ -51,7 +52,7 @@ class CheckinController extends JController
 
 		$this->setRedirect('index.php?option=com_checkin');
 	}
-	
+
 	/**
 	 * Configure the Linkbar.
 	 *
@@ -67,7 +68,7 @@ class CheckinController extends JController
 			'index.php?option=com_checkin',
 			$vName == 'com_checkin'
 		);
-			
+
 		JSubMenuHelper::addEntry(
 			JText::_('JGLOBAL_SUBMENU_CLEAR_CACHE'),
 			'index.php?option=com_cache',

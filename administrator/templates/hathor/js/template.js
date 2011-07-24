@@ -1,5 +1,5 @@
 /**
- * @version		$Id: template.js 19060 2010-10-08 08:29:51Z chdemko $
+ * @version		$Id: template.js 20822 2011-02-21 23:02:52Z dextercowley $
  * @package		Hathor
  * @copyright	Copyright (C) 2005 - 2009 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
@@ -13,9 +13,9 @@
  * Set focus to username on the login screen
  */
 function setFocus() {
-	if (document.getElementById("login-page")) {
-		document.getElementById("form-login").username.select();
-		document.getElementById("form-login").username.focus();
+	if (document.id("login-page")) {
+		document.id("form-login").username.select();
+		document.id("form-login").username.focus();
 	}
 }
 
@@ -24,15 +24,13 @@ function setFocus() {
  * Opera
  */
 function setSkip() {
-	var is_webkit = navigator.userAgent.toLowerCase().indexOf('webkit') > -1;
-	var is_opera = navigator.userAgent.toLowerCase().indexOf('opera') > -1;
-	if (is_webkit || is_opera) {
-		var target = document.getElementById('skiptarget');
+	if (Browser.Engine.webkit || Browser.opera) {
+		var target = document.id('skiptarget');
 		target.href = "#skiptarget";
 		target.innerText = "Start of main content";
 		target.setAttribute("tabindex", "0");
-		document.getElementById('skiplink').setAttribute("onclick",
-				"document.getElementById('skiptarget').focus();");
+		document.id('skiplink').setAttribute("onclick",
+				"document.id('skiptarget').focus();");
 	}
 }
 
@@ -44,8 +42,8 @@ function setSkip() {
  * @return
  */
 function setRoleAttribute(id, rolevalue) {
-	if (document.getElementById(id)) {
-		document.getElementById(id).setAttribute("role", rolevalue);
+	if (document.id(id)) {
+		document.id(id).setAttribute("role", rolevalue);
 	}
 }
 
@@ -98,14 +96,41 @@ function setAriaProperties() {
  * Process file
  */
 
+/** from accessible suckerfish menu by Matt Carroll,
+ * mootooled by Bill Tomczak
+ */
+
+window.addEvent('domready', function(){
+	  var menu = document.id('menu');
+	  if (menu && !menu.hasClass('disabled')) {
+	    menu.getElements('li').each(function(cel){
+	      cel.addEvent('mouseenter', function(){
+	        this.addClass('sfhover');
+	      });
+	      cel.addEvent('mouseleave', function() {
+					this.removeClass('sfhover');
+				});
+	    });
+
+	  	menu.getElements('a').each(function(ael) {
+				ael.addEvent('focus', function() {
+					this.addClass('sffocus');
+					this.getParents('li').addClass('sfhover');
+				});
+				ael.addEvent('blur', function() {
+					this.removeClass('sffocus');
+					this.getParents('li').removeClass('sfhover');
+				});
+			});
+		}
+	});
+
 window.addEvent('domready', function() {
 	setFocus();
 	setSkip();
 	setAriaRoleElementsById();
 	setAriaProperties();
 });
-
-
 
 /**
  * For IE6 - Background flicker fix

@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: module.php 19157 2010-10-18 16:37:27Z chdemko $
+ * @version		$Id: module.php 21148 2011-04-14 17:30:08Z ian $
  * @package		Joomla.Administrator
- * @subpackage	Modules
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @subpackage	com_modules
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -52,12 +52,9 @@ class ModulesModelModule extends JModelAdmin
 		$app = JFactory::getApplication('administrator');
 
 		// Load the User state.
-		if (!($pk = (int) $app->getUserState('com_modules.edit.module.id'))) {
+		if (!($pk = (int) JRequest::getInt('id'))) {
 			if ($extensionId = (int) $app->getUserState('com_modules.add.module.extension_id')) {
 				$this->setState('extension.id', $extensionId);
-			}
-			else {
-				$pk = (int) JRequest::getInt('id');
 			}
 		}
 		$this->setState('module.id', $pk);
@@ -88,8 +85,11 @@ class ModulesModelModule extends JModelAdmin
 			if ($table->load($pk)) {
 
 				// Access checks.
-				if (!$user->authorise('core.delete', 'com_modules')) {
-					throw new Exception(JText::_('JERROR_CORE_DELETE_NOT_PERMITTED'));
+				if (!$user->authorise('core.delete', 'com_modules') || 
+							$table->published != -2) {
+					JError::raiseWarning(403, JText::_('JERROR_CORE_DELETE_NOT_PERMITTED'));	
+					//	throw new Exception(JText::_('JERROR_CORE_DELETE_NOT_PERMITTED'));
+					return;
 				}
 
 				if (!$table->delete($pk)) {
@@ -107,17 +107,15 @@ class ModulesModelModule extends JModelAdmin
 				}
 
 				// Clear module cache
-				$cache = JFactory::getCache($table->module);
-				$cache->clean();
+				parent::cleanCache($table->module, $table->client_id);
 			}
 			else {
 				throw new Exception($table->getError());
 			}
 		}
 
-		// Clear module cache
-		$cache = JFactory::getCache('com_modules');
-		$cache->clean();
+		// Clear modules cache
+		$this->cleanCache();
 
 		return true;
 	}
@@ -158,7 +156,9 @@ class ModulesModelModule extends JModelAdmin
 				else {
 					$table->title .= ' (2)';
 				}
-
+				// Unpublish duplicate module
+				$table->published = 0;
+				
 				if (!$table->check() || !$table->store()) {
 					throw new Exception($table->getError());
 				}
@@ -180,10 +180,6 @@ class ModulesModelModule extends JModelAdmin
 				{
 					$tuples[] = '('.(int) $table->id.','.(int) $menuid.')';
 				}
-
-				// Clear module cache
-				$cache = JFactory::getCache($table->module);
-				$cache->clean();
 			}
 			else {
 				throw new Exception($table->getError());
@@ -200,9 +196,8 @@ class ModulesModelModule extends JModelAdmin
 			}
 		}
 
-		// Clear module cache
-		$cache = JFactory::getCache('com_modules');
-		$cache->clean();
+		// Clear modules cache
+		$this->cleanCache();
 
 		return true;
 	}
@@ -351,7 +346,8 @@ class ModulesModelModule extends JModelAdmin
 			}
 
 			// Convert to the JObject before adding other data.
-			$this->_cache[$pk] = JArrayHelper::toObject($table->getProperties(1), 'JObject');
+			$properties = $table->getProperties(1);
+			$this->_cache[$pk] = JArrayHelper::toObject($properties, 'JObject');
 
 			// Convert the params field to an array.
 			$registry = new JRegistry;
@@ -463,7 +459,7 @@ class ModulesModelModule extends JModelAdmin
 	 * @throws	Exception if there is an error loading the form.
 	 * @since	1.6
 	 */
-	protected function preprocessForm($form, $data)
+	protected function preprocessForm(JForm $form, $data, $group = '')
 	{
 		jimport('joomla.filesystem.file');
 		jimport('joomla.filesystem.folder');
@@ -506,7 +502,22 @@ class ModulesModelModule extends JModelAdmin
 		}
 
 		// Trigger the default form events.
-		parent::preprocessForm($form, $data);
+		parent::preprocessForm($form, $data, $group);
+	}
+
+	/**
+	 * Loads ContentHelper for filters before validating data.
+	 *
+	 * @param	object		$form		The form to validate against.
+	 * @param	array		$data		The data to validate.
+	 * @return	mixed		Array of filtered data if valid, false otherwise.
+	 * @since	1.1
+	 */
+	function validate($form, $data)
+	{
+		require_once(JPATH_ADMINISTRATOR.'/components/com_content/helpers/content.php');
+
+		return parent::validate($form, $data);
 	}
 
 	/**
@@ -533,6 +544,18 @@ class ModulesModelModule extends JModelAdmin
 			$table->load($pk);
 			$isNew = false;
 		}
+		
+		// Alter the title and published state for Save as Copy
+		if (JRequest::getVar('task') == 'save2copy') {
+			$orig_data	= JRequest::getVar('jform', array(), 'post', 'array');
+			$orig_table = clone($this->getTable());
+			$orig_table->load( (int) $orig_data['id']);
+
+			if ($data['title'] == $orig_table->title) {
+				$data['title'] .= ' '.JText::_('JGLOBAL_COPY');
+				$data['published'] = 0;
+			}
+		}
 
 		// Bind the data.
 		if (!$table->bind($data)) {
@@ -548,7 +571,8 @@ class ModulesModelModule extends JModelAdmin
 			$this->setError($table->getError());
 			return false;
 		}
-
+		
+		
 		// Trigger the onExtensionBeforeSave event.
 		$result = $dispatcher->trigger('onExtensionBeforeSave', array('com_modules.module', &$table, $isNew));
 		if (in_array(false, $result, true)) {
@@ -578,7 +602,7 @@ class ModulesModelModule extends JModelAdmin
 		$query	= $db->getQuery(true);
 		$query->delete();
 		$query->from('#__modules_menu');
-		$query->where('moduleid='.(int)$table->id);
+		$query->where('moduleid = '.(int)$table->id);
 		$db->setQuery((string)$query);
 		$db->query();
 
@@ -591,6 +615,11 @@ class ModulesModelModule extends JModelAdmin
 		if (is_numeric($assignment)) {
 			// Variable is numeric, but could be a string.
 			$assignment = (int) $assignment;
+
+			// Logic check: if no module excluded then convert to display on all.
+			if ($assignment == -1 && empty($data['assigned'])){
+				$assignment = 0;
+			}
 
 			// Check needed to stop a module being assigned to `All`
 			// and other menu items resulting in a module being displayed twice.
@@ -654,11 +683,12 @@ class ModulesModelModule extends JModelAdmin
 		$this->setState('module.extension_id',	$extensionId);
 		$this->setState('module.id',			$table->id);
 
-		// Clear module cache
-		$cache = JFactory::getCache();
-		$cache->clean($table->module);
-		$cache->clean('com_modules');
-
+		// Clear modules cache
+		$this->cleanCache();
+		
+		// Clean module cache
+		parent::cleanCache($table->module, $table->client_id);
+		
 		return true;
 	}
 
@@ -670,7 +700,7 @@ class ModulesModelModule extends JModelAdmin
 	 * @return	array	An array of conditions to add to add to ordering queries.
 	 * @since	1.6
 	 */
-	protected function getReorderConditions($table = null)
+	protected function getReorderConditions($table)
 	{
 		$condition = array();
 		$condition[] = 'client_id = '.(int) $table->client_id;
@@ -678,4 +708,13 @@ class ModulesModelModule extends JModelAdmin
 
 		return $condition;
 	}
+	
+	/**
+	 * Custom clean cache method for different clients
+	 *
+	 * @since	1.6
+	 */
+	function cleanCache() {
+		parent::cleanCache('com_modules', $this->getClient());
+	}	
 }

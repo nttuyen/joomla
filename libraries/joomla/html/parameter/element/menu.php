@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: menu.php 18650 2010-08-26 13:28:49Z ian $
+ * @version		$Id: menu.php 20972 2011-03-16 13:57:36Z chdemko $
  * @package		Joomla.Framework
  * @subpackage	Parameter
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -14,7 +14,8 @@ defined('JPATH_BASE') or die;
  * Renders a menu element
  *
  * @package		Joomla.Framework
- * @subpackage		Parameter
+ * @subpackage	Parameter
+ * @deprecated	JParameter is deprecated and will be removed in a future version. Use JForm instead.
  * @since		1.5
  */
 

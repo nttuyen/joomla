@@ -1,29 +1,34 @@
 <?php
 /**
- * @version		$Id: edit.php 19073 2010-10-09 15:44:28Z chdemko $
+ * @version		$Id: edit.php 21020 2011-03-27 06:52:01Z infograf768 $
  * @package		Joomla.Administrator
  * @subpackage	com_menus
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
 defined('_JEXEC') or die;
 
 // Include the component HTML helpers.
-JHtml::addIncludePath(JPATH_COMPONENT.DS.'helpers'.DS.'html');
+JHtml::addIncludePath(JPATH_COMPONENT.'/helpers/html');
 
 // Load the tooltip behavior.
 JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
-JHTML::_('behavior.modal');
+JHtml::_('behavior.modal');
 ?>
 
 <script type="text/javascript">
 	Joomla.submitbutton = function(task, type)
 	{
-		if (task == 'item.setType') {
-			document.id('item-form').elements['jform[type]'].value = type;
-			Joomla.submitform(task, document.getElementById('item-form'));
+		if (task == 'item.setType' || task == 'item.setMenuType') {
+			if(task == 'item.setType') {
+				document.id('item-form').elements['jform[type]'].value = type;
+				document.getElementById('fieldtype').value = 'type';
+			} else {
+				document.id('item-form').elements['jform[menutype]'].value = type;
+			}
+			Joomla.submitform('item.setType', document.getElementById('item-form'));
 		} else if (task == 'item.cancel' || document.formvalidator.isValid(document.id('item-form'))) {
 			Joomla.submitform(task, document.getElementById('item-form'));
 		} else {
@@ -32,13 +37,13 @@ JHTML::_('behavior.modal');
 				var idReversed = field.id.split("").reverse().join("");
 				var separatorLocation = idReversed.indexOf('_');
 				var name = idReversed.substr(separatorLocation).split("").reverse().join("")+'name';
-				$(name).addClass('invalid');
+				document.id(name).addClass('invalid');
 			});
 		}
 	}
 </script>
 
-<form action="<?php echo JRoute::_('index.php?option=com_menus'); ?>" method="post" name="adminForm" id="item-form" class="form-validate">
+<form action="<?php echo JRoute::_('index.php?option=com_menus&layout=edit&id='.(int) $this->item->id); ?>" method="post" name="adminForm" id="item-form" class="form-validate">
 
 <div class="width-60 fltlft">
 	<fieldset class="adminform">
@@ -56,10 +61,16 @@ JHTML::_('behavior.modal');
 					<?php $this->form->setFieldAttribute('link','readonly','false');?>
 					<li><?php echo $this->form->getLabel('link'); ?>
 					<?php echo $this->form->getInput('link'); ?></li>
-				<?php endif ?>
+				<?php endif; ?>
 
-				<li><?php echo $this->form->getLabel('alias'); ?>
-				<?php echo $this->form->getInput('alias'); ?></li>
+				<?php if ($this->item->type == 'alias'): ?>
+					<li> <?php echo $this->form->getLabel('aliastip'); ?></li>
+				<?php endif; ?>
+
+				<?php if ($this->item->type !='url'): ?>
+					<li><?php echo $this->form->getLabel('alias'); ?>
+					<?php echo $this->form->getInput('alias'); ?></li>
+				<?php endif; ?>
 
 				<li><?php echo $this->form->getLabel('note'); ?>
 				<?php echo $this->form->getInput('note'); ?></li>
@@ -121,6 +132,7 @@ JHTML::_('behavior.modal');
 	<?php echo $this->form->getInput('component_id'); ?>
 	<?php echo JHtml::_('form.token'); ?>
 </div>
+<input type="hidden" id="fieldtype" name="fieldtype" value="" />
 </form>
 
 

@@ -1,8 +1,7 @@
 <?php
 /**
- * @version		$Id: redirect.php 19158 2010-10-18 17:20:22Z chdemko $
- * @package		Joomla
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @version		$Id: redirect.php 21097 2011-04-07 15:38:03Z dextercowley $
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -13,8 +12,8 @@ jimport('joomla.plugin.plugin');
 /**
  * Plugin class for redirect handling.
  *
- * @package		Joomla
- * @subpackage	plgSystemRedirect
+ * @package		Joomla.Plugin
+ * @subpackage	System.redirect
  */
 class plgSystemRedirect extends JPlugin
 {

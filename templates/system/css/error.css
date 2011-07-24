@@ -1,6 +1,6 @@
 /**
- * @version		$Id: error.css 14276 2010-01-18 14:20:28Z louis $
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @version		$Id: error.css 20475 2011-01-28 15:47:14Z chdemko $
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -28,27 +28,32 @@ body {
 	margin-top: 0px;
 }
 
+.error {
+	margin-left: auto;
+	margin-right: auto;
+}
+
 table, td, th, div, pre, blockquote, ul, ol, dl, address,.componentheading,.contentheading,.contentpagetitle,.sectiontableheader,.newsfeedheading {
 	font-family: helvetica, arial, sans-serif;
 	font-weight: normal;
 }
 
 #outline {
-	width: 814px;
-	margin: 0px;
+	width: 900px;
+	margin: 0 auto;
 	padding: 0px;
 	padding-top: 60px;
 	padding-bottom: 60px;
 	background: #FFFFFF;
 }
 #errorboxoutline {
-	width: 600px;
+	width: 900px;
 	margin: 0px;
 	padding: 0px;
 	border: 1px solid #000000;
 }
 #errorboxheader {
-	width: 600px;
+	width: 900px;
 	margin: 0px;
 	padding: 0px;
 	background: #E44249;

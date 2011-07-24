@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: page.php 18023 2010-07-05 10:02:43Z ian $
+ * @version		$Id: page.php 21089 2011-04-05 22:10:12Z dextercowley $
  * @package		Joomla.Framework
  * @subpackage	Cache
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -89,7 +89,7 @@ class JCacheControllerPage extends JCacheController
 		if ($data !== false) {
 			$data = unserialize(trim($data));
 			if ($wrkarounds === true) {
-				echo JCache::getWorkarounds($data);
+				$data = JCache::getWorkarounds($data);
 			}
 
 			$this->_setEtag($id);

@@ -2,7 +2,7 @@
 /**
  * @version		$Id: default.php 17187 2010-05-19 11:18:22Z infograf768 $
  * @package		Joomla.Site
- * @subpackage	com_content
+ * @subpackage	Templates.beez5
  * @copyright	Copyright (C) 2005 - 2009 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
@@ -21,8 +21,7 @@ JHtml::addIncludePath(JPATH_COMPONENT.DS.'helpers');
 
 $pageClass = $this->params->get('pageclass_sfx');
 ?>
-
-<section class="category-list <?php echo $pageClass;?>">
+<section class="category-list<?php echo $this->pageclass_sfx;?>">
 <?php if ($this->params->get('show_page_heading', 1)) : ?>
 <?php if ($this->params->get('show_page_heading', 1) AND ($this->params->get('show_category_title') OR $this->params->get('page_subheading'))) : ?>
 <hgroup>

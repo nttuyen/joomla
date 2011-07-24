@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: edit.php 19073 2010-10-09 15:44:28Z chdemko $
+ * @version		$Id: edit.php 21097 2011-04-07 15:38:03Z dextercowley $
  * @package		Joomla.Administrator
- * @subpackage	templates.hathor
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @subpackage	Templates.hathor
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  * @since		1.6
  */
@@ -11,10 +11,9 @@
 // no direct access
 defined('_JEXEC') or die;
 
-JHtml::addIncludePath(JPATH_COMPONENT.DS.'helpers'.DS.'html');
+JHtml::addIncludePath(JPATH_COMPONENT.'/helpers/html');
 JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
-$canDo = WeblinksHelper::getActions();
 ?>
 <script type="text/javascript">
 	Joomla.submitbutton = function(task)
@@ -30,7 +29,7 @@ $canDo = WeblinksHelper::getActions();
 </script>
 <div class="weblink-edit">
 
-<form action="<?php JRoute::_('index.php?option=com_weblinks'); ?>" method="post" name="adminForm" id="weblink-form" class="form-validate">
+<form action="<?php echo JRoute::_('index.php?option=com_weblinks&layout=edit&id='.(int) $this->item->id); ?>" method="post" name="adminForm" id="weblink-form" class="form-validate">
 <div class="col main-section">
 	<fieldset class="adminform">
 		<legend><?php echo empty($this->item->id) ? JText::_('COM_WEBLINKS_NEW_WEBLINK') : JText::sprintf('COM_WEBLINKS_EDIT_WEBLINK', $this->item->id); ?></legend>
@@ -44,14 +43,12 @@ $canDo = WeblinksHelper::getActions();
 			<li><?php echo $this->form->getLabel('url'); ?>
 			<?php echo $this->form->getInput('url'); ?></li>
 
-			<?php if ($canDo->get('core.edit.state')) { ?>
-				<li><?php echo $this->form->getLabel('state'); ?>
-				<?php echo $this->form->getInput('state'); ?></li>
-			<?php }?>
-			<?php if ($canDo->get('core.create')) { ?>
-				<li><?php echo $this->form->getLabel('catid'); ?>
-				<?php echo $this->form->getInput('catid'); ?></li>
-			<?php }?>
+			<li><?php echo $this->form->getLabel('state'); ?>
+			<?php echo $this->form->getInput('state'); ?></li>
+			
+			<li><?php echo $this->form->getLabel('catid'); ?>
+			<?php echo $this->form->getInput('catid'); ?></li>
+			
 			<li><?php echo $this->form->getLabel('ordering'); ?>
 			<?php echo $this->form->getInput('ordering'); ?></li>
 
@@ -95,11 +92,19 @@ $canDo = WeblinksHelper::getActions();
 			<li><?php echo $this->form->getLabel('publish_down'); ?>
 			<?php echo $this->form->getInput('publish_down'); ?></li>
 
-			<li><?php echo $this->form->getLabel('modified'); ?>
-			<?php echo $this->form->getInput('modified'); ?></li>
+			<?php if ($this->item->modified_by) : ?>
+				<li><?php echo $this->form->getLabel('modified_by'); ?>
+				<?php echo $this->form->getInput('modified_by'); ?></li>
 
-			<li><?php echo $this->form->getLabel('version'); ?>
-			<?php echo $this->form->getInput('version'); ?></li>
+				<li><?php echo $this->form->getLabel('modified'); ?>
+				<?php echo $this->form->getInput('modified'); ?></li>
+			<?php endif; ?>
+
+			<?php if ($this->item->hits) : ?>
+				<li><?php echo $this->form->getLabel('hits'); ?>
+				<?php echo $this->form->getInput('hits'); ?></li>
+			<?php endif; ?>
+
 		</ul>
 
 		</fieldset>
@@ -107,7 +112,8 @@ $canDo = WeblinksHelper::getActions();
 		<?php echo $this->loadTemplate('params'); ?>
 
 		<?php echo $this->loadTemplate('metadata'); ?>
-
+		
+	<?php echo JHtml::_('sliders.end'); ?>
 	</div>
 	<div class="clr"></div>
 

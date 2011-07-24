@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-	<!-- $Id: item_component.xml 18322 2010-08-03 19:54:54Z infograf768 $ -->
+	<!-- $Id: item_component.xml 20523 2011-02-03 01:26:20Z dextercowley $ -->
 <form>
 	<fields name="params" label="COM_MENUS_LINKTYPE_OPTIONS_LABEL"
 	>
@@ -18,6 +18,15 @@
 			<field name="menu_image" type="media"
 				label="COM_MENUS_ITEM_FIELD_MENU_IMAGE_LABEL"
 				description="COM_MENUS_ITEM_FIELD_MENU_IMAGE_DESC" />
+				
+			<field name="menu_text" type="radio"
+				label="COM_MENUS_ITEM_FIELD_MENU_TEXT_LABEL"
+				description="COM_MENUS_ITEM_FIELD_MENU_TEXT_DESC"
+				default="1" filter="integer"
+			>
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
 
 		</fieldset>
 		
@@ -52,15 +61,12 @@
 		
 		<fieldset name="metadata" label="JGLOBAL_FIELDSET_METADATA_OPTIONS"
 		>
-
-			
-
 			<field name="menu-meta_description" type="textarea"
-				label="JFIELD_META_DESCRIPTION_LABEL" description="COM_MENUS_ITEM_FIELD_META_DESCRIPTION_DESC"
+				label="JFIELD_META_DESCRIPTION_LABEL" description="JFIELD_META_DESCRIPTION_DESC"
 				rows="3" cols="40" />
 
 			<field name="menu-meta_keywords" type="textarea"
-				label="JFIELD_META_KEYWORDS_LABEL" description="COM_MENUS_ITEM_FIELD_META_KEYWORDS_DESC"
+				label="JFIELD_META_KEYWORDS_LABEL" description="JFIELD_META_KEYWORDS_DESC"
 				rows="3" cols="40" />
 
 			<field name="robots"
@@ -75,7 +81,7 @@
 			<option value="noindex, nofollow">JGLOBAL_NOINDEX_NOFOLLOW</option>
 		</field>
 
-			<field name="secure" type="radio"
+			<field name="secure" type="list"
 				label="COM_MENUS_ITEM_FIELD_SECURE_LABEL" description="COM_MENUS_ITEM_FIELD_SECURE_DESC"
 				default="0" filter="integer"
 			>

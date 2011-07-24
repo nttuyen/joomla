@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: default.php 18611 2010-08-24 02:17:02Z ian $
+ * @version		$Id: default.php 21020 2011-03-27 06:52:01Z infograf768 $
  * @package		Joomla.Administrator
  * @subpackage	com_installer
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  * @since		1.6
  */
@@ -30,6 +30,6 @@ if (!count($this->messages)) {
 <div class="clr"> </div>
 <div>
 	<input type="hidden" name="boxchecked" value="0" />
-	<?php echo JHTML::_('form.token'); ?>
+	<?php echo JHtml::_('form.token'); ?>
 </div>
 </form>

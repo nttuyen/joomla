@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: contact.php 18817 2010-09-08 10:47:15Z eddieajau $
+ * @version		$Id: contact.php 21148 2011-04-14 17:30:08Z ian $
  * @package		Joomla.Administrator
  * @subpackage	com_contact
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -13,7 +13,7 @@ defined('_JEXEC') or die;
 jimport('joomla.application.component.modeladmin');
 
 /**
- * Item Model for Contacts.
+ * Item Model for a Contact.
  *
  * @package		Joomla.Administrator
  * @subpackage	com_contact
@@ -30,19 +30,18 @@ class ContactModelContact extends JModelAdmin
 	 * @since	1.6
 	 */
 	protected function canDelete($record)
-	{
-		$user = JFactory::getUser();
-
-		if ($record->catid) {
+	{ 
+		if (!empty($record->id)) {
+			if ($record->published != -2) {
+				return ;
+			}		
+			$user = JFactory::getUser();
 			return $user->authorise('core.delete', 'com_contact.category.'.(int) $record->catid);
-		}
-		else {
-			return parent::canDelete($record);
-		}
+		}	
 	}
 
 	/**
-	 * Method to test whether a record can be deleted.
+	 * Method to test whether a record can have its state edited.
 	 *
 	 * @param	object	$record	A record object.
 	 *
@@ -148,6 +147,12 @@ class ContactModelContact extends JModelAdmin
 
 		if (empty($data)) {
 			$data = $this->getItem();
+
+			// Prime some default values.
+			if ($this->getState('contact.id') == 0) {
+				$app = JFactory::getApplication();
+				$data->set('catid', JRequest::getInt('catid', $app->getUserState('com_contact.contacts.filter.category_id')));
+			}
 		}
 
 		return $data;
@@ -283,7 +288,7 @@ class ContactModelContact extends JModelAdmin
 	 * @return	array	An array of conditions to add to add to ordering queries.
 	 * @since	1.6
 	 */
-	protected function getReorderConditions($table = null)
+	protected function getReorderConditions($table)
 	{
 		$condition = array();
 		$condition[] = 'catid = '.(int) $table->catid;
@@ -335,8 +340,8 @@ class ContactModelContact extends JModelAdmin
 
 		$table->reorder();
 
-		$cache = JFactory::getCache('com_contact');
-		$cache->clean();
+		// Clean component's cache
+		$this->cleanCache();
 
 		return true;
 	}

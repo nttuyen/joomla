@@ -1,46 +1,48 @@
 <?php
 /**
- * @version		$Id: languagefilter.php 19103 2010-10-13 14:54:21Z infograf768 $
- * @package		Joomla
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @version		$Id: languagefilter.php 21097 2011-04-07 15:38:03Z dextercowley $
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
 // no direct access
 defined('_JEXEC') or die;
 
+jimport('joomla.language.helper');
 jimport('joomla.plugin.plugin');
 
 /**
-* Joomla! Language Filter Plugin
-*
- * @package		Joomla
- * @subpackage	System
+ * Joomla! Language Filter Plugin
+ *
+ * @package		Joomla.Plugin
+ * @subpackage	System.languagefilter
  * @since		1.6
  */
 class plgSystemLanguageFilter extends JPlugin
 {
-	public static $mode_sef;
-	public static $tag;
-	public static $sefs;
-	public static $lang_codes;
+	protected static $mode_sef;
+	protected static $tag;
+	protected static $sefs;
+	protected static $lang_codes;
 
-	public static $default_lang;
-	public static $default_sef;
+	protected static $default_lang;
+	protected static $default_sef;
+
+	private static $_user_lang_code;
 
 	public function __construct(&$subject, $config)
 	{
 		$app = JFactory::getApplication();
+		$router = $app->getRouter();
 		if ($app->isSite()) {
-			$app->setLanguageFilter(true);
-			$router = $app->getRouter();
-
 			// setup language data
 			self::$mode_sef 	= ($router->getMode() == JROUTER_MODE_SEF) ? true : false;
 			self::$sefs 		= JLanguageHelper::getLanguages('sef');
 			self::$lang_codes 	= JLanguageHelper::getLanguages('lang_code');
 			self::$default_lang = JComponentHelper::getParams('com_languages')->get('site', 'en-GB');
 			self::$default_sef 	= self::$lang_codes[self::$default_lang]->sef;
+
+			$app->setLanguageFilter(true);
 			$uri = JFactory::getURI();
 			if (self::$mode_sef) {
 				// Get the route path from the request.
@@ -54,8 +56,9 @@ class plgSystemLanguageFilter extends JPlugin
 				$parts = explode('/', $path);
 
 				// The language segment is always at the beginning of the route path if it exists.
-				$sef = '';
-				if (!empty($parts)) {
+				$sef = $uri->getVar('lang');
+				
+				if (!empty($parts) && empty($sef)) {
 					$sef = reset($parts);
 				}
 			}
@@ -113,7 +116,7 @@ class plgSystemLanguageFilter extends JPlugin
 				if ($item->home && $uri->getVar('option')!='com_search')
 				{
 					$link = $item->link;
-					$parts = parse_url($link);
+					$parts = JString::parse_url($link);
 					if (isset ($parts['query']) && strpos($parts['query'], '&amp;')) {
 						$parts['query'] = str_replace('&amp;', '&', $parts['query']);
 					}
@@ -156,6 +159,10 @@ class plgSystemLanguageFilter extends JPlugin
 	public function parseRule(&$router, &$uri)
 	{
 		$array = array();
+		$lang_code = JRequest::getString(JUtility::getHash('language'), null ,'cookie');
+		if (!$lang_code) {
+			$lang_code = JLanguageHelper::detectLanguage();
+		}
 		if (self::$mode_sef) {
 			$path = $uri->getPath();
 			$parts = explode('/', $path);
@@ -163,7 +170,20 @@ class plgSystemLanguageFilter extends JPlugin
 			$sef = $parts[0];
 
 			if (!isset(self::$sefs[$sef])) {
-				$sef = self::$default_sef;
+				$sef = isset(self::$lang_codes[$lang_code]) ? self::$lang_codes[$lang_code]->sef : self::$default_sef;
+				$uri->setPath($sef . '/' . $path);
+				
+				$post = JRequest::get('POST');
+				if (JRequest::getMethod() != "POST" || count($post) == 0)
+				{
+					$app = JFactory::getApplication();
+					if ($app->getCfg('sef_rewrite')) {
+						$app->redirect($uri->base().$uri->toString(array('path', 'query', 'fragment')));
+					}
+					else {
+						$app->redirect($uri->base().'index.php/'.$uri->toString(array('path', 'query', 'fragment')));
+					}
+				}
 			}
 			$lang_code = self::$sefs[$sef]->lang_code;
 			if ($lang_code && JLanguage::exists($lang_code)) {
@@ -173,9 +193,118 @@ class plgSystemLanguageFilter extends JPlugin
 		}
 		else {
 			$sef = $uri->getVar('lang');
+			if (!isset(self::$sefs[$sef])) {
+				$sef = isset(self::$lang_codes[$lang_code]) ? self::$lang_codes[$lang_code]->sef : self::$default_sef;
+				$uri->setVar('lang', $sef);
+				$post = JRequest::get('POST');
+				if (JRequest::getMethod() != "POST" || count($post) == 0)
+				{
+					$app = JFactory::getApplication();
+					$app->redirect(JURI::base(true).'/index.php?'.$uri->getQuery());
+				}
+			}
 		}
 
 		$array = array('lang' => $sef);
 		return $array;
+	}
+	/**
+	 * before store user method
+	 *
+	 * Method is called before user data is stored in the database
+	 *
+	 * @param	array		$user	Holds the old user data.
+	 * @param	boolean		$isnew	True if a new user is stored.
+	 * @param	array		$new	Holds the new user data.
+	 *
+	 * @return	void
+	 * @since	1.6
+	 */
+	public function onUserBeforeSave($user, $isnew, $new)
+	{
+		if ($this->params->get('automatic_change', '1')=='1' && key_exists('params', $user))
+		{
+			$registry = new JRegistry();
+			$registry->loadJSON($user['params']);
+			self::$_user_lang_code = $registry->get('language');
+			if (empty(self::$_user_lang_code)) {
+				self::$_user_lang_code = self::$default_lang;
+			}
+		}
+	}
+
+
+	/**
+	 * after store user method
+	 *
+	 * Method is called after user data is stored in the database
+	 *
+	 * @param	array		$user		Holds the new user data.
+	 * @param	boolean		$isnew		True if a new user is stored.
+	 * @param	boolean		$success	True if user was succesfully stored in the database.
+	 * @param	string		$msg		Message.
+	 *
+	 * @return	void
+	 * @since	1.6
+	 */
+	public function onUserAfterSave($user, $isnew, $success, $msg)
+	{
+		if ($this->params->get('automatic_change', '1')=='1' && key_exists('params', $user) && $success)
+		{
+			$registry = new JRegistry();
+			$registry->loadJSON($user['params']);
+			$lang_code = $registry->get('language');
+			if (empty($lang_code)) {
+				$lang_code = self::$default_lang;
+			}
+			$app = JFactory::getApplication();
+			if ($lang_code == self::$_user_lang_code || !isset(self::$lang_codes[$lang_code]))
+			{
+				if ($app->isSite())
+				{
+					$app->setUserState('com_users.edit.profile.redirect',null);
+				}
+			}
+			else
+			{
+				if ($app->isSite())
+				{
+					$app->setUserState('com_users.edit.profile.redirect','index.php?Itemid='.$app->getMenu()->getDefault($lang_code)->id.'&lang='.$lang_codes[$lang_code]->sef);
+					self::$tag = $lang_code;
+					// Create a cookie
+					$conf = JFactory::getConfig();
+					$cookie_domain 	= $conf->get('config.cookie_domain', '');
+					$cookie_path 	= $conf->get('config.cookie_path', '/');
+					setcookie(JUtility::getHash('language'), $lang_code, time() + 365 * 86400, $cookie_path, $cookie_domain);
+				}
+			}
+		}
+	}
+
+	/**
+	 * This method should handle any login logic and report back to the subject
+	 *
+	 * @param	array	$user		Holds the user data
+	 * @param	array	$options	Array holding options (remember, autoregister, group)
+	 *
+	 * @return	boolean	True on success
+	 * @since	1.5
+	 */
+	public function onUserLogin($user, $options = array())
+	{
+		$app = JFactory::getApplication();
+		if ($app->isSite())
+		{
+			$lang_code = $user['language'];
+			if (empty($lang_code)) {
+				$lang_code = self::$default_lang;
+			}
+			self::$tag = $lang_code;
+			// Create a cookie
+			$conf = JFactory::getConfig();
+			$cookie_domain 	= $conf->get('config.cookie_domain', '');
+			$cookie_path 	= $conf->get('config.cookie_path', '/');
+			setcookie(JUtility::getHash('language'), $lang_code, time() + 365 * 86400, $cookie_path, $cookie_domain);
+		}
 	}
 }

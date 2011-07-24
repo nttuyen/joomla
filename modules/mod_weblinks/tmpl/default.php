@@ -1,6 +1,6 @@
 <?php
 /**
- * @version		$Id: default.php 17024 2010-05-13 12:47:15Z hackwar $
+ * @version		$Id: default.php 20974 2011-03-16 14:14:03Z chdemko $
  * @package		Joomla.Site
  * @subpackage	mod_weblinks
  * @copyright	Copyright (C) 2005 - 2009 Open Source Matters, Inc. All rights reserved.
@@ -9,7 +9,7 @@
 
 defined('_JEXEC') or die;
 ?>
-<ul class="weblinks<?php echo $params->get('moduleclass_sfx'); ?>">
+<ul class="weblinks<?php echo $moduleclass_sfx; ?>">
 <?php foreach ($list as $item) :	?>
 <li>
 	<?php
@@ -24,7 +24,7 @@ defined('_JEXEC') or die;
 
 		case 2:
 			// open in a popup window
-			echo "<a href=\"#\" onclick=\"javascript: window.open('". $link ."', '', 'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=780,height=550'); return false\">".
+			echo "<a href=\"#\" onclick=\"window.open('". $link ."', '', 'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=780,height=550'); return false\">".
 				htmlspecialchars($item->title, ENT_COMPAT, 'UTF-8') .'</a>';
 			break;
 

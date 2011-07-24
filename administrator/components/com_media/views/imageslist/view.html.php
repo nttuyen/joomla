@@ -1,7 +1,7 @@
 <?php
 /**
- * @version		$Id: view.html.php 17858 2010-06-23 17:54:28Z eddieajau $
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @version		$Id: view.html.php 21020 2011-03-27 06:52:01Z infograf768 $
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -26,16 +26,24 @@ class MediaViewImagesList extends JView
 
 		$app = JFactory::getApplication();
 
-		JHtml::_('behavior.framework', true);
-		JHTML::_('stylesheet','media/popup-imagelist.css', array(), true);
+		$lang	= JFactory::getLanguage();
+
+		JHtml::_('stylesheet','media/popup-imagelist.css', array(), true);
+		if ($lang->isRTL()) :
+			JHtml::_('stylesheet','media/popup-imagelist_rtl.css', array(), true);
+		endif;
 
 		$document = JFactory::getDocument();
 		$document->addScriptDeclaration("var ImageManager = window.parent.ImageManager;");
 
+		$images = $this->get('images');
+		$folders = $this->get('folders');
+		$state = $this->get('state');
+
 		$this->assign('baseURL', COM_MEDIA_BASEURL);
-		$this->assignRef('images', $this->get('images'));
-		$this->assignRef('folders', $this->get('folders'));
-		$this->assignRef('state', $this->get('state'));
+		$this->assignRef('images', $images);
+		$this->assignRef('folders', $folders);
+		$this->assignRef('state', $state);
 
 		parent::display($tpl);
 	}

@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: framework.php 18650 2010-08-26 13:28:49Z ian $
+ * @version		$Id: framework.php 21171 2011-04-18 21:50:18Z dextercowley $
  * @package		Joomla.Site
  * @subpackage	Application
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -14,16 +14,16 @@ defined('_JEXEC') or die;
 // Joomla system checks.
 //
 
-@set_magic_quotes_runtime(0);
+@ini_set('magic_quotes_runtime', 0);
 @ini_set('zend.ze1_compatibility_mode', '0');
 
 //
 // Installation check, and check on removal of the install directory.
 //
 
-if (!file_exists(JPATH_CONFIGURATION.DS.'configuration.php') || (filesize(JPATH_CONFIGURATION.DS.'configuration.php') < 10) /*|| file_exists(JPATH_INSTALLATION.DS.'index.php')*/) {
-
-	if (file_exists(JPATH_INSTALLATION.DS.'index.php')) {
+if (!file_exists(JPATH_CONFIGURATION.'/configuration.php') || (filesize(JPATH_CONFIGURATION.'/configuration.php') < 10) || file_exists(JPATH_INSTALLATION.'/index.php')) {
+	
+	if (file_exists(JPATH_INSTALLATION.'/index.php')) {
 		header('Location: '.substr($_SERVER['REQUEST_URI'],0,strpos($_SERVER['REQUEST_URI'],'index.php')).'installation/index.php');
 		exit();
 	} else {
@@ -38,8 +38,6 @@ if (!file_exists(JPATH_CONFIGURATION.DS.'configuration.php') || (filesize(JPATH_
 
 // System includes.
 require_once JPATH_LIBRARIES.'/joomla/import.php';
-
-
 
 // Pre-Load configuration.
 require_once JPATH_CONFIGURATION.'/configuration.php';

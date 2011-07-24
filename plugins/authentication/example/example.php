@@ -1,9 +1,7 @@
 <?php
 /**
- * @version		$Id: example.php 16736 2010-05-04 06:08:34Z eddieajau $
- * @package		Joomla
- * @subpackage	JFramework
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @version		$Id: example.php 21097 2011-04-07 15:38:03Z dextercowley $
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -15,8 +13,8 @@ jimport('joomla.plugin.plugin');
 /**
  * Example Authentication Plugin
  *
- * @package		Joomla
- * @subpackage	JFramework
+ * @package		Joomla.Plugin
+ * @subpackage	Authentication.example
  * @since 1.5
  */
 class plgAuthenticationExample extends JPlugin

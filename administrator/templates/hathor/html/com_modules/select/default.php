@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: default.php 16708 2010-05-03 20:00:47Z eddieajau $
+ * @version		$Id: default.php 21097 2011-04-07 15:38:03Z dextercowley $
  * @package		Joomla.Administrator
- * @subpackage	templates.hathor
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @subpackage	Templates.hathor
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  * @since		1.6
  */
@@ -16,6 +16,8 @@ JHtml::addIncludePath(JPATH_COMPONENT.'/helpers/html');
 JHtml::_('behavior.tooltip');
 ?>
 
+<h2 class="modal-title"><?php echo JText::_('COM_MODULES_TYPE_CHOOSE')?></h2>
+
 <ul id="new-modules-list">
 <?php foreach ($this->items as &$item) : ?>
 	<li>
@@ -23,14 +25,8 @@ JHtml::_('behavior.tooltip');
 		// Prepare variables for the link.
 
 		$link	= 'index.php?option=com_modules&task=module.add&eid='. $item->extension_id;
-		$name	= $this->escape(JText::_($item->name));
-		$desc	= $this->escape(JText::_('COM_MODULES_NODESCRIPTION'));
-
-		if (isset($item->xml)) :
-			if ($text = trim($item->xml->description)) :
-				$desc = $this->escape(JText::_($text));
-			endif;
-		endif;
+		$name	= $this->escape($item->name);
+		$desc	= $this->escape($item->desc);
 		?>
 		<span class="editlinktip hasTip" title="<?php echo $name.' :: '.$desc; ?>">
 			<a href="<?php echo JRoute::_($link);?>" target="_top">
@@ -38,3 +34,4 @@ JHtml::_('behavior.tooltip');
 	</li>
 <?php endforeach; ?>
 </ul>
+<div class="clr"></div>

@@ -1,7 +1,7 @@
 <?php
 /**
- * @version		$Id: head.php 18212 2010-07-22 06:02:54Z eddieajau $
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @version		$Id: head.php 20874 2011-03-03 17:05:10Z dextercowley $
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -41,6 +41,9 @@ class JDocumentRendererHead extends JDocumentRenderer
 	 */
 	public function fetchHead(&$document)
 	{
+		// Trigger the onBeforeCompileHead event (skip for installation, since it causes an error)
+		$app = JFactory::getApplication();
+		$app->triggerEvent('onBeforeCompileHead');
 		// get line endings
 		$lnEnd	= $document->_getLineEnd();
 		$tab	= $document->_getTab();
@@ -60,10 +63,10 @@ class JDocumentRendererHead extends JDocumentRenderer
 			{
 				if ($type == 'http-equiv') {
 					$content.= '; charset=' . $document->getCharset();
-					$buffer .= $tab.'<meta http-equiv="'.$name.'" content="'.$content.'"'.$tagEnd.$lnEnd;
+					$buffer .= $tab.'<meta http-equiv="'.$name.'" content="'.htmlspecialchars($content).'"'.$tagEnd.$lnEnd;
 				}
 				else if ($type == 'standard') {
-					$buffer .= $tab.'<meta name="'.$name.'" content="'.$content.'"'.$tagEnd.$lnEnd;
+					$buffer .= $tab.'<meta name="'.$name.'" content="'.htmlspecialchars($content).'"'.$tagEnd.$lnEnd;
 				}
 			}
 		}
@@ -71,10 +74,10 @@ class JDocumentRendererHead extends JDocumentRenderer
 		// dont add empty descriptions
 		$documentDescription = $document->getDescription();
 		if ($documentDescription) {
-			$buffer .= $tab.'<meta name="description" content="'.$documentDescription.'" />'.$lnEnd;
+			$buffer .= $tab.'<meta name="description" content="'.htmlspecialchars($documentDescription).'" />'.$lnEnd;
 		}
 
-		$buffer .= $tab.'<meta name="generator" content="'.$document->getGenerator().'" />'.$lnEnd;
+		$buffer .= $tab.'<meta name="generator" content="'.htmlspecialchars($document->getGenerator()).'" />'.$lnEnd;
 		$buffer .= $tab.'<title>'.htmlspecialchars($document->getTitle(), ENT_COMPAT, 'UTF-8').'</title>'.$lnEnd;
 
 		// Generate link declarations
@@ -115,8 +118,18 @@ class JDocumentRendererHead extends JDocumentRenderer
 		}
 
 		// Generate script file links
-		foreach ($document->_scripts as $strSrc => $strType) {
-			$buffer .= $tab.'<script type="'.$strType.'" src="'.$strSrc.'"></script>'.$lnEnd;
+		foreach ($document->_scripts as $strSrc => $strAttr) {
+			$buffer .= $tab.'<script src="'.$strSrc.'"';
+			if (!is_null($strAttr['mime'])) {
+				$buffer .= ' type="'.$strAttr['mime'].'"';
+			}
+			if ($strAttr['defer']) {
+				$buffer .= ' defer="defer"';
+			}
+			if ($strAttr['async']) {
+				$buffer .= ' async="async"';
+			}
+			$buffer .= '></script>'.$lnEnd;
 		}
 
 		// Generate script declarations

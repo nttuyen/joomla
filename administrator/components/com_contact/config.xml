@@ -5,6 +5,16 @@
 		label="COM_CONTACT_FIELD_CONFIG_INDIVIDUAL_CONTACT_DISPLAY"
 		description="COM_CONTACT_FIELD_CONFIG_INDIVIDUAL_CONTACT_DESC"
 	>
+
+		<field
+			name="contact_layout" type="componentlayout"
+			label="JGLOBAL_FIELD_LAYOUT_LABEL"
+			description="JGLOBAL_FIELD_LAYOUT_DESC"
+			menuitems="true"
+			extension="com_contact"
+			view="contact"
+		/>
+
 		<field name="show_contact_category"
 			type="list"
 			default="hide"
@@ -202,7 +212,7 @@
 		<field name="show_profile"
 			type="radio"
 			default="1"
-			label="COM_CONTACT_FIELD_PROFILE_SHOW_LABEL" description="COM_CONTACT_FIELD_PROFILE_SHOW_LABEL"
+			label="COM_CONTACT_FIELD_PROFILE_SHOW_LABEL" description="COM_CONTACT_FIELD_PROFILE_SHOW_DESC"
 		>
 			<option value="0">JHIDE</option>
 			<option value="1">JSHOW</option>
@@ -312,6 +322,15 @@
 			description="COM_CONTACT_FIELD_CONFIG_CATEGORY_DESC"
 	>
 			
+		<field 
+			name="category_layout" type="componentlayout"
+			label="JGLOBAL_FIELD_LAYOUT_LABEL"
+			description="JGLOBAL_FIELD_LAYOUT_DESC"
+			menuitems="true"
+			extension="com_contact"
+			view="category"
+		/>
+
 			<field name="show_category_title" type="radio"
 				default="1"
 				label="JGLOBAL_SHOW_CATEGORY_TITLE"
@@ -537,7 +556,7 @@
 		<field name="show_state_headings"
 			type="radio"
 			default="0"
-			label="JGLOBAL_STATE"
+			label="COM_CONTACT_FIELD_CONFIG_STATE_LABEL"
 			description="COM_CONTACT_FIELD_CONFIG_STATE_DESC"
 		>
 			
@@ -695,6 +714,7 @@
 		<field name="rules"
 			type="rules"
 			label="JCONFIG_PERMISSIONS_LABEL"
+			validate="rules"
 			filter="rules"
 			component="com_contact"
 			section="component" />

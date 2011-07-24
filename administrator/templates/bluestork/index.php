@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: index.php 18458 2010-08-16 01:37:04Z eddieajau $
+ * @version		$Id: index.php 21097 2011-04-07 15:38:03Z dextercowley $
  * @package		Joomla.Administrator
- * @subpackage	templates.bluestork
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @subpackage	Templates.bluestork
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -68,7 +68,7 @@ $app = JFactory::getApplication();
 				if ($task == 'edit' || $task == 'editA' || JRequest::getInt('hidemainmenu')) {
 					$logoutLink = '';
 				} else {
-					$logoutLink = JRoute::_('index.php?option=com_login&task=logout');
+					$logoutLink = JRoute::_('index.php?option=com_login&task=logout&'. JUtility::getToken() .'=1');
 				}
 				$hideLinks	= JRequest::getBool('hidemainmenu');
 				$output = array();
@@ -139,7 +139,7 @@ $app = JFactory::getApplication();
 		<jdoc:include type="modules" name="footer" style="none"  />
 	<div id="footer">
 		<p class="copyright">
-			<?php $joomla= '<a href="http://www.joomla.org">Joomla!</a>';
+			<?php $joomla= '<a href="http://www.joomla.org">Joomla!&#174;</a>';
 				echo JText::sprintf('JGLOBAL_ISFREESOFTWARE', $joomla) ?>
 			<span class="version"><?php echo  JText::_('JVERSION') ?> <?php echo  JVERSION; ?></span>
 		</p>

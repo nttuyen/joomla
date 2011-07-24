@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: helper.php 17852 2010-06-23 17:40:30Z eddieajau $
+ * @version		$Id: helper.php 21084 2011-04-05 00:49:22Z dextercowley $
  * @package		Joomla.Site
  * @subpackage	mod_whosonline
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -13,9 +13,8 @@ defined('_JEXEC') or die;
 class modWhosonlineHelper
 {
 	// show online count
-	function getOnlineCount() {
+	static function getOnlineCount() {
 		$db		= JFactory::getDbo();
-		$sessions = null;
 		// calculate number of guests and users
 		$result	= array();
 		$user_array  = 0;
@@ -25,11 +24,7 @@ class modWhosonlineHelper
 		$query->from('#__session');
 		$query->where('client_id = 0');
 		$db->setQuery($query);
-		$sessions = $db->loadObjectList();
-
-		if ($db->getErrorNum()) {
-			JError::raiseWarning(500, $db->stderr());
-		}
+		$sessions = (array) $db->loadObjectList();
 
 		if (count($sessions)) {
 			foreach ($sessions as $session) {
@@ -51,20 +46,15 @@ class modWhosonlineHelper
 	}
 
 	// show online member names
-	function getOnlineUserNames() {
+	static function getOnlineUserNames() {
 		$db		= JFactory::getDbo();
-		$result	= null;
 		$query	= $db->getQuery(true);
 		$query->select('a.username, a.time, a.userid, a.usertype, a.client_id');
 		$query->from('#__session AS a');
 		$query->where('a.userid != 0');
+		$query->where('a.client_id = 0');
 		$query->group('a.userid');
 		$db->setQuery($query);
-		$result = $db->loadObjectList();
-		if ($db->getErrorNum()) {
-			JError::raiseWarning(500, $db->stderr());
-		}
-
-		return $result;
+		return (array) $db->loadObjectList();
 	}
 }

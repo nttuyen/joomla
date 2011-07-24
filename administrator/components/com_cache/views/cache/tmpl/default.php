@@ -1,17 +1,17 @@
 <?php
 /**
- * @version		$Id: default.php 19039 2010-10-04 21:24:17Z chdemko $
+ * @version		$Id: default.php 21032 2011-03-29 16:38:31Z dextercowley $
  * @package		Joomla.Administrator
  * @subpackage	com_cache
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
 // no direct access
 defined('_JEXEC') or die;
 
-$listOrder	= $this->state->get('list.ordering');
-$listDirn	= $this->state->get('list.direction');
+$listOrder	= $this->escape($this->state->get('list.ordering'));
+$listDirn	= $this->escape($this->state->get('list.direction'));
 ?>
 
 <form action="<?php echo JRoute::_('index.php?option=com_cache'); ?>" method="post" name="adminForm" id="adminForm">
@@ -68,7 +68,7 @@ $listDirn	= $this->state->get('list.direction');
 				<?php echo $item->count; ?>
 			</td>
 			<td class="center">
-				<?php echo $item->size ?>
+				<?php echo JHtml::_('number.bytes', $item->size*1024); ?>
 			</td>
 		</tr>
 		<?php $i++; endforeach; ?>

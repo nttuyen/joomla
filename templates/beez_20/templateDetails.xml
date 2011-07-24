@@ -6,7 +6,7 @@
 	<author>Angie Radtke</author>
 	<authorEmail>a.radtke@derauftritt.de</authorEmail>
 	<authorUrl>http://www.der-auftritt.de</authorUrl>
-	<copyright>Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.</copyright>
+	<copyright>Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.</copyright>
 	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
 	<version>1.6.0</version>
 	<description>TPL_BEEZ2_XML_DESCRIPTION</description>
@@ -21,6 +21,7 @@
 		<filename>index.html</filename>
 		<filename>index.php</filename>
 		<filename>templateDetails.xml</filename>
+		<filename>template_preview.png</filename>
 		<filename>template_thumbnail.png</filename>
 		<filename>favicon.ico</filename>
 		<filename>component.php</filename>
@@ -28,6 +29,7 @@
 	</files>
 
 	<positions>
+		<position>debug</position>
 		<position>position-0</position>
 		<position>position-1</position>
 		<position>position-2</position>
@@ -55,29 +57,33 @@
 	<config>
 		<fields name="params">
 			<fieldset name="advanced">
-				<field name="wrapperSmall" type="text" default="53"
+				<field name="wrapperSmall"  class="validate-numeric" type="text" default="53"
 					label="TPL_BEEZ2_FIELD_WRAPPERSMALL_LABEL"
-					description="TPL_BEEZ2_FIELD_WRAPPERSMALL_DESC" />
+					description="TPL_BEEZ2_FIELD_WRAPPERSMALL_DESC"
+					filter="integer" />
 
-				<field name="wrapperLarge" type="text" default="72"
+				<field name="wrapperLarge"  class="validate-numeric" type="text" default="72"
 					label="TPL_BEEZ2_FIELD_WRAPPERLARGE_LABEL"
-					description="TPL_BEEZ2_FIELD_WRAPPERLARGE_DESC" />
+					description="TPL_BEEZ2_FIELD_WRAPPERLARGE_DESC"
+					filter="integer" />
 
 				<field name="logo" type="media"
-					hide_default="1"
 					label="TPL_BEEZ2_FIELD_LOGO_LABEL" description="TPL_BEEZ2_FIELD_LOGO_DESC" />
 
 				<field name="sitetitle"  type="text" default=""
 					label="TPL_BEEZ2_FIELD_SITETITLE_LABEL"
-					description="TPL_BEEZ2_FIELD_SITETITLE_DESC" />
+					description="TPL_BEEZ2_FIELD_SITETITLE_DESC"
+					filter="string" />
 
 				<field name="sitedescription"  type="text" default=""
 					label="TPL_BEEZ2_FIELD_DESCRIPTION_LABEL"
-					description="TPL_BEEZ2_FIELD_DESCRIPTION_DESC" />
+					description="TPL_BEEZ2_FIELD_DESCRIPTION_DESC"
+					filter="string" />
 
 				<field name="navposition" type="list" default="center"
 					label="TPL_BEEZ2_FIELD_NAVPOSITION_LABEL"
 					description="TPL_BEEZ2_FIELD_NAVPOSITION_DESC"
+					filter="word"
 				>
 					<option value="center">TPL_BEEZ2_OPTION_AFTER_CONTENT</option>
 					<option value="left">TPL_BEEZ2_OPTION_BEFORE_CONTENT</option>
@@ -86,11 +92,12 @@
 				<field name="templatecolor" type="list" default="nature"
 					label="TPL_BEEZ2_FIELD_TEMPLATECOLOR_LABEL"
 					description="TPL_BEEZ2_FIELD_TEMPLATECOLOR_DESC"
+					filter="word"
 				>
 
 					<option value="nature">TPL_BEEZ2_OPTION_NATURE</option>
 					<option value="personal">TPL_BEEZ2_OPTION_PERSONAL</option>
-					<option value="black">TPL_BEEZ2_OPTION_BLACK</option>
+				
 				</field>
 
 

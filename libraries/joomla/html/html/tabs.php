@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: tabs.php 16235 2010-04-20 04:13:25Z pasamio $
+ * @version		$Id: tabs.php 21020 2011-03-27 06:52:01Z infograf768 $
  * @package		Joomla.Framework
  * @subpackage	HTML
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -17,8 +17,6 @@
  */
 abstract class JHtmlTabs
 {
-	protected static $opened = array();
-
 	/**
 	 * Creates a panes and creates the JavaScript object for it.
 	 *
@@ -30,9 +28,8 @@ abstract class JHtmlTabs
 	public static function start($group='tabs', $params=array())
 	{
 		JHtmlTabs::_loadBehavior($group,$params);
-		array_push(JHtmlTabs::$opened,false);
 
-		return '<dl class="tabs" id="'.$group.'">';
+		return '<dl class="tabs" id="'.$group.'"><dt style="display:none;"></dt><dd style="display:none;">';
 	}
 
 	/**
@@ -43,16 +40,7 @@ abstract class JHtmlTabs
 	 */
 	public static function end()
 	{
-		if (array_pop(JHtmlTabs::$opened))
-		{
-			$close = '</dd>';
-		}
-		else
-		{
-			$close = '';
-		}
-
-		return $close.'</dl>';
+		return '</dd></dl>';
 	}
 
 	/**
@@ -65,17 +53,7 @@ abstract class JHtmlTabs
 	 */
 	public static function panel($text, $id)
 	{
-		if (JHtmlTabs::$opened[count(JHtmlTabs::$opened)-1])
-		{
-			$close = '</dd>';
-		}
-		else
-		{
-			JHtmlTabs::$opened[count(JHtmlTabs::$opened)-1] = true;
-			$close = '';
-		}
-
-		return $close.'<dt class="'.$id.'"><span>'.$text.'</span></dt><dd>';
+		return '</dd><dt class="tabs '.$id.'"><span><h3><a href="javascript:void(0);">'.$text.'</a></h3></span></dt><dd class="tabs">';
 	}
 
 	/**
@@ -97,9 +75,11 @@ abstract class JHtmlTabs
 
 			$display = (isset($params['startOffset'])) ? (int)$params['startOffset'] : null ;
 			$options = '{';
-			$opt['onActive']		= (isset($params['onActive'])) ? $params['onActive'] : null ;
-			$opt['onBackground']	= (isset($params['onBackground'])) ? $params['onBackground'] : null ;
-			$opt['display']			= (isset($params['useCookie']) && $params['useCookie']) ? JRequest::getInt('jpanetabs_' . $group, $display, 'cookie') : $display ;
+			$opt['onActive']			= (isset($params['onActive'])) ? $params['onActive'] : null ;
+			$opt['onBackground']		= (isset($params['onBackground'])) ? $params['onBackground'] : null ;
+			$opt['display']				= (isset($params['useCookie']) && $params['useCookie']) ? JRequest::getInt('jpanetabs_' . $group, $display, 'cookie') : $display ;
+			$opt['titleSelector']		= "'dt.tabs'";
+			$opt['descriptionSelector']	= "'dd.tabs'";
 			foreach ($opt as $k => $v)
 			{
 				if ($v) {
@@ -115,7 +95,7 @@ abstract class JHtmlTabs
 
 			$document = JFactory::getDocument();
 			$document->addScriptDeclaration($js);
-			JHTML::_('script','system/tabs.js', false, true);
+			JHtml::_('script','system/tabs.js', false, true);
 
 			$loaded[$group] = true;
 		}

@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: templatestyle.php 16113 2010-04-15 18:56:21Z eddieajau $
+ * @version		$Id: templatestyle.php 21097 2011-04-07 15:38:03Z dextercowley $
  * @package		Joomla.Framework
  * @subpackage	Parameter
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License, see LICENSE.php
  */
 
@@ -11,8 +11,9 @@
 defined( '_JEXEC' ) or die( 'Access denied' );
 
 /**
- * @package		Joomla.Administrator
+ * @package		Joomla.Framework
  * @subpackage	Parameter
+ * @deprecated	JParameter is deprecated and will be removed in a future version. Use JForm instead.
  * @since		1.6
 **/
 class JElementTemplateStyle extends JElement {
@@ -39,7 +40,7 @@ class JElementTemplateStyle extends JElement {
 		array_unshift( $data, $default );
 
 		$selected = $this->_getSelected();
-		$html = JHTML::_( 'select.genericlist', $data, $control_name.'['.$name.']', 'class="inputbox" size="6"', 'id', 'description', $selected );
+		$html = JHtml::_( 'select.genericlist', $data, $control_name.'['.$name.']', 'class="inputbox" size="6"', 'id', 'description', $selected );
 		return $html;
 	}
 
