@@ -10,9 +10,9 @@ class JConfig {
 	public $debug_lang = '0';
 	public $dbtype = 'mysql';
 	public $host = 'localhost';
-	public $user = 'root';
-	public $password = '';
-	public $db = 'thongti3_hanhphuc';
+	public $user = 'nttuyen_hanhphuc';
+	public $password = 'adminpass';
+	public $db = 'nttuyen_hanhphuc';
 	public $dbprefix = 'jos_';
 	public $live_site = '';
 	public $secret = 'NTX8eWNNwOVqtJEy';
@@ -51,7 +51,7 @@ class JConfig {
 	public $unicodeslugs = '0';
 	public $feed_limit = '10';
 	public $log_path = '/var/www/hanhphuc/logs';
-	public $tmp_path = 'D:\\temp\\hanhphuc';
+	public $tmp_path = '/var/www/temp';
 	public $lifetime = '9999';
 	public $session_handler = 'database';
 	public $MetaRights = 'hanhphuc';
