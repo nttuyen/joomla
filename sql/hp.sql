@@ -1,6 +1,26 @@
 
 ALTER TABLE `jos_users` ADD COLUMN `user_type` INT(3) NOT NULL DEFAULT 0  AFTER `params` ;
 
+CREATE  TABLE `jos_hp_business_profile` (
+  `user_id` INT NULL ,
+  `business_director` VARCHAR(255) NULL ,
+  `business_name` VARCHAR(255) NULL ,
+  `business_address` VARCHAR(255) NULL ,
+  `business_city` VARCHAR(255) NULL ,
+  `business_district` VARCHAR(255) NULL ,
+  `business_village` VARCHAR(255) NULL ,
+  `business_phone` VARCHAR(255) NULL ,
+  `business_fax` VARCHAR(255) NULL ,
+  `business_website` VARCHAR(255) NULL ,
+  `business_logo` VARCHAR(255) NULL ,
+  `business_sitename` VARCHAR(255) NULL ,
+  `business_slogan` VARCHAR(255) NULL ,
+  `business_banner` VARCHAR(255) NULL ,
+  `meta` VARCHAR(500) NULL ,
+  PRIMARY KEY (`user_id`) )
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_general_ci;
+
 
 CREATE TABLE `jos_hp_business_info` (
   `id` int(11) NOT NULL AUTO_INCREMENT,

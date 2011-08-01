@@ -75,7 +75,7 @@
 		/>
 	</fieldset>
 
-	<fieldset name="default_more"
+	<!--<fieldset name="default_more"
 		label="Thông tin thêm"
 	>
 
@@ -102,5 +102,5 @@
 		/>
 
 		
-	</fieldset>
+	</fieldset>-->
 </form>

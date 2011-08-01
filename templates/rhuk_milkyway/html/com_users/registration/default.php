@@ -19,7 +19,23 @@ require_once('recaptchalib.php');
 // Get a key from https://www.google.com/recaptcha/admin/create
 			$publickey = "6Lenb74SAAAAALZUshMNkxVOcCxHDbzc1-ridwa5";
 			$privatekey = "6Lenb74SAAAAAGhSC0k0QfzkQqqcCPP6C208L5Ve";
+			
+//var_dump($this->form);
 ?>
+
+<script src="<?php echo JURI::root() ?>templates/rhuk_milkyway/js/jquery-1.6.1.js" type="text/javascript"></script>
+<script src="<?php echo JURI::root() ?>templates/rhuk_milkyway/js/jquery.vnlocation.js" type="text/javascript"></script>
+<script type="text/javascript">
+    jQuery.noConflict();
+    jQuery(document).ready(function($){
+        $(document).vnlocation({
+            province: '#jform_business_city',
+            district: '#jform_business_district'
+        });
+    });
+</script>
+
+
 <div class="registration<?php echo $this->params->get('pageclass_sfx')?>">
 <?php if ($this->params->get('show_page_heading')) : ?>
 <h1>
@@ -28,15 +44,43 @@ require_once('recaptchalib.php');
 <?php endif; ?>
 
 <form id="member-registration" action="<?php echo JRoute::_('index.php?option=com_users&task=registration.register'); ?>" method="post" class="form-validate">
+	<?php
+	//User type first
+	foreach($this->form->getFieldsets() as $fieldset) {
+		if($fieldset->name != 'hp_user_type') continue;
+		$userTypeFieldset = $fieldset;
+	} 
+	?>
+	<fieldset>
+		<legend><?php echo JText::_($userTypeFieldset->label); ?></legend>
+		<table cellpadding="2" cellspacing="0" border="0" width="100%">
+			<?php foreach($this->form->getFieldset($userTypeFieldset->name) as $field): ?>
+			<tr>
+				<td width="30%">
+                	<?php echo $field->label; ?>
+                    <?php if (!$field->required): ?>
+                    <span class="optional"><?php echo JText::_('COM_USERS_OPTIONAL'); ?></span>
+                    <?php endif; ?>
+                </td>
+                <td>
+                	<?php echo $field->input; ?>
+                </td>
+            </tr>
+			<?php endforeach;?>
+		</table>
+	</fieldset>
+	
+	
     <?php
     // Iterate through the form fieldsets and display each one.
     foreach ($this->form->getFieldsets() as $fieldset):
+    	if($fieldset->name == 'hp_user_type') continue;
     ?>
-    <fieldset>
         <?php
         // If the fieldset has a label set, display it as the legend.
-        if (isset($fieldset->label)):
+        if (!empty($fieldset->label)):
         ?>
+        <fieldset>
         <legend><?php echo JText::_($fieldset->label); ?></legend>
 
     <table cellpadding="2" cellspacing="0" border="0" width="100%">
@@ -65,8 +109,10 @@ require_once('recaptchalib.php');
             endif;
         endforeach;
         ?>
+        <?php if (!empty($fieldset->label)):?>
         </table>
     </fieldset>
+    <?php endif;?>
     <?php
     endforeach;
     ?>

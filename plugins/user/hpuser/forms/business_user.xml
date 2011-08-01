@@ -1,11 +1,137 @@
 <?xml version="1.0" encoding="utf-8"?>
 	<!-- $Id: profile.xml 17890 2010-06-27 00:47:12Z infograf768 $ -->
 <form>
-	<fields name="business_profile">
-		<fieldset name="business_profile"
-			label="Thông tin doanh nghiệp"
-		>
-			
-		</fieldset>
-	</fields>
+	<fieldset name="business_profile"
+		label="Thông tin doanh nghiệp">
+		<field
+			name="business_director"
+			type="text"
+			id="business_director"
+			description="Tên giám đốc/Người đại diện"
+			filter="string"
+			label="Tên giám đốc/Người đại diện"
+			message="Tên giám đốc/Người đại diện"
+			size="30"
+		/>
+        <field
+			name="business_name"
+			type="text"
+			id="business_name"
+			description="Tên doanh nghiệp"
+			filter="string"
+			label="Tên doanh nghiệp"
+			message="Tên doanh nghiệp"
+			size="30"
+		/>
+        <field
+			name="business_address"
+			type="text"
+			id="business_address"
+			description="Dịa chỉ doanh nghiệp"
+			filter="string"
+			label="Địa chỉ doanh nghiệp"
+			message="Địa chỉ doanh nghiệp"
+			size="30"
+		/>
+        <field
+			name="business_city"
+			type="list"
+			id="business_city"
+			description="Tỉnh/Thành Phố"
+			filter="string"
+			label="Tỉnh/Thành Phố"
+			message="Tỉnh/Thành Phố"
+			size="1"
+		/>
+        <field
+			name="business_district"
+			type="list"
+			id="business_district"
+			description="Quận/Huyện"
+			filter="string"
+			label="Quận/Huyện"
+			message="Quận/Huyện"
+			size="1"
+		/>
+        <field
+			name="business_village"
+			type="text"
+			id="business_village"
+			description="Xã/Phường"
+			filter="string"
+			label="Xã/Phường"
+			message="Xã/Phường"
+			size="30"
+		/>
+        <field
+			name="business_phone"
+			type="text"
+			id="business_phone"
+			description="Điện thoại"
+			filter="string"
+			label="Điện thoại"
+			message="Điện thoại"
+			size="30"
+		/>
+        <field
+			name="business_fax"
+			type="text"
+			id="business_fax"
+			description="Fax"
+			filter="string"
+			label="Fax"
+			message="Fax"
+			size="30"
+		/>
+        <field
+			name="business_website"
+			type="url"
+			id="business_website"
+			description="Website"
+			filter="string"
+			label="Website"
+			message="Website"
+			size="30"
+		/>
+        <field
+			name="business_logo"
+			type="file"
+			id="business_logo"
+			description="Logo"
+			filter="string"
+			label="Logo"
+			message="Logo"
+			size="30"
+		/>
+        <field
+			name="business_sitename"
+			type="text"
+			id="business_sitename"
+			description="Tên website"
+			filter="string"
+			label="Tên website"
+			message="Tên website"
+			size="30"
+		/>
+        <field
+			name="business_slogan"
+			type="text"
+			id="business_slogan"
+			description="Slogan"
+			filter="string"
+			label="Slogan"
+			message="Slogan"
+			size="30"
+		/>
+        <field
+			name="business_banner"
+			type="file"
+			id="business_banner"
+			description="Banner"
+			filter="string"
+			label="Banner"
+			message="Banner"
+			size="30"
+		/>
+	</fieldset>
 </form>

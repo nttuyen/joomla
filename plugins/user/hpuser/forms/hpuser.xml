@@ -1,0 +1,16 @@
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+	<!-- $Id: profile.xml 17890 2010-06-27 00:47:12Z infograf768 $ -->
+<form>
+	<fieldset name="hp_user_type" label="Loại tài khoản">
+		<field name="user_type" type="list"
+			readonly = "readonly"
+			class = "readonly"
+			default="0"
+			description="Loại tài khoản"
+			label="Loại tài khoản"
+		>
+			<option value="0">Tài khoản thường</option>
+			<option value="1">Tài khoản doanh nghiệp</option>
+		</field>
+	</fieldset>
+</form>

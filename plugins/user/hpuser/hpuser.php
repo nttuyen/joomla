@@ -10,6 +10,8 @@ defined('_JEXEC') or die;
 
 jimport('joomla.plugin.plugin');
 
+define('JPATH_PLUGIN_HPUSER', dirname(__FILE__));
+
 /**
  * Example User Plugin
  *
@@ -27,8 +29,24 @@ class plgUserHpuser extends JPlugin {
 	 * @return	boolean
 	 * @since	1.6
 	 */
-	function onContentPrepareData($context, $data) {
+	public function onContentPrepareData($context, $data) {
 		//TODO #nttuyen prepair user's data for form
+		//Check we are manipulating a valid form.
+		if (!in_array($context, array('com_users.profile','com_users.user', 'com_users.registration', 'com_admin.profile'))) {
+			return true;
+		}
+		
+		$userType = JRequest::getInt('type', 0);
+		if (is_object($data)) {
+			if(!isset($data->user_type)) {
+				$data->user_type = $userType;
+			}
+		} else {
+			if(!isset($data['user_type'])){
+				$data['user_type'] = $userType;
+			}
+		}
+		
 		return true;
 	}
 	
@@ -39,13 +57,53 @@ class plgUserHpuser extends JPlugin {
 	 * @return	boolean
 	 * @since	1.6
 	 */
-	function onContentPrepareForm($form, $data) {
+	public function onContentPrepareForm($form, $data) {
 		//TODO: #nttuyen Prepair form
+		
+		$userType = JRequest::getInt('type', 0);
+		
+		if(is_object($data) && isset($data->user_type)) {
+			$userType = $data->user_type;
+		}
+		
+		if (!($form instanceof JForm)) {
+			$this->_subject->setError('JERROR_NOT_A_FORM');
+			return false;
+		}
+		JForm::addFormPath(JPATH_PLUGIN_HPUSER.DS.'forms');
+		
+		$form->loadFile('hpuser', false);
+		$form->setValue('user_type', '', $userType);
+		
+		if($userType == 1) {
+			//TODO: #nttuyen business user
+			$form->loadFile('business_user', false);
+		} else {
+			//Normal user
+			$form->loadFile('normal_user', false);
+		}
+		
 		return true;
 	}
 	
-	function onUserAfterSave($data, $isNew, $result, $error) {
+	public function onUserAfterSave($data, $isNew, $result, $error) {
 		//TODO #nttuyen save user's info after save
+		
+		$info = array();
+		$info['user_id'] = $data['id'];
+		foreach ($data as $key => $value) {
+			if(substr($key, 0, strlen('business_')) == 'business_') {
+				$businessInfo[$key] = $value;
+			}
+		}
+		
+		$db = JFactory::getDbo();
+		if($isNew) {
+			$db->insertObject('#__hp_business_profile', $info);
+		} else {
+			$db->insertObject('#__hp_business_profile', $info);
+		}
+		
 		return true;
 	}
 	
