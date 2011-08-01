@@ -173,8 +173,10 @@ $doc->addScript($this->baseurl.'/templates/beez_20/javascript/md_stylechanger.js
 
                                                         <jdoc:include type="message" />
                                                         <jdoc:include type="component" />
+                                                        <div><jdoc:include type="modules" name="nttuyen-je-youtube"   />
 
-                                                </div><!-- end main -->
+                                                </div>
+                                                <!-- end main -->
 
                                         </div><!-- end wrapper -->
 
