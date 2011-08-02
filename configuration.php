@@ -10,7 +10,7 @@ class JConfig {
 	public $debug_lang = '0';
 	public $dbtype = 'mysql';
 	public $host = 'localhost';
-	public $user = 'nttuyen_hanhphuc';
+	public $user = 'root';
 	public $password = 'adminpass';
 	public $db = 'nttuyen_hanhphuc';
 	public $dbprefix = 'jos_';
