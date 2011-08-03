@@ -53,10 +53,12 @@ require_once('recaptchalib.php');
 <form id="member-registration" action="<?php echo JRoute::_('index.php?option=com_users&task=registration.register'); ?>" method="post" class="form-validate">
 	<?php
 	//User type first
+	$userTypeFieldset = null;
 	foreach($this->form->getFieldsets() as $fieldset) {
 		if($fieldset->name != 'hp_user_type') continue;
 		$userTypeFieldset = $fieldset;
-	} 
+	}
+	if($userTypeFieldset && $this->form->getField('user_type')->type != 'Hidden'): 
 	?>
 	<fieldset>
 		<legend><?php echo JText::_($userTypeFieldset->label); ?></legend>
@@ -76,7 +78,7 @@ require_once('recaptchalib.php');
 			<?php endforeach;?>
 		</table>
 	</fieldset>
-	
+	<?php endif;?>
 	
     <?php
     // Iterate through the form fieldsets and display each one.
