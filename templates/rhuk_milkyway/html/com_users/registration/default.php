@@ -32,6 +32,13 @@ require_once('recaptchalib.php');
             province: '#jform_business_city',
             district: '#jform_business_district'
         });
+
+        $("#jform_user_type").change(function(){
+            var registerURL = "<?php echo JRoute::_('index.php?option=com_users&view=registration&type=_USERTYPE')?>";
+            var seletedValue = $(this).val();
+            registerURL = registerURL.replace("_USERTYPE", seletedValue);
+            window.location.replace(registerURL);
+        });
     });
 </script>
 
@@ -46,10 +53,12 @@ require_once('recaptchalib.php');
 <form id="member-registration" action="<?php echo JRoute::_('index.php?option=com_users&task=registration.register'); ?>" method="post" class="form-validate">
 	<?php
 	//User type first
+	$userTypeFieldset = null;
 	foreach($this->form->getFieldsets() as $fieldset) {
 		if($fieldset->name != 'hp_user_type') continue;
 		$userTypeFieldset = $fieldset;
-	} 
+	}
+	if($userTypeFieldset && $this->form->getField('user_type')->type != 'Hidden'): 
 	?>
 	<fieldset>
 		<legend><?php echo JText::_($userTypeFieldset->label); ?></legend>
@@ -69,7 +78,7 @@ require_once('recaptchalib.php');
 			<?php endforeach;?>
 		</table>
 	</fieldset>
-	
+	<?php endif;?>
 	
     <?php
     // Iterate through the form fieldsets and display each one.

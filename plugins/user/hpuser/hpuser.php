@@ -31,7 +31,6 @@ class plgUserHpuser extends JPlugin {
 	 */
 	public function onContentPrepareData($context, $data) {
 		//TODO #nttuyen prepair user's data for form
-		//Check we are manipulating a valid form.
 		if (!in_array($context, array('com_users.profile','com_users.user', 'com_users.registration', 'com_admin.profile'))) {
 			return true;
 		}
@@ -41,10 +40,19 @@ class plgUserHpuser extends JPlugin {
 			if(!isset($data->user_type)) {
 				$data->user_type = $userType;
 			}
+			$userType = $data->user_type;
 		} else {
 			if(!isset($data['user_type'])){
 				$data['user_type'] = $userType;
 			}
+			$userType = $data['user_type'];
+		}
+		
+		if($userType == 0) {
+			//Load data from normal user
+		} else if($userType == 1) {
+			//Load data from business profile
+			
 		}
 		
 		return true;
@@ -59,28 +67,31 @@ class plgUserHpuser extends JPlugin {
 	 */
 	public function onContentPrepareForm($form, $data) {
 		//TODO: #nttuyen Prepair form
-		
-		$userType = JRequest::getInt('type', 0);
-		
-		if(is_object($data) && isset($data->user_type)) {
-			$userType = $data->user_type;
-		}
-		
 		if (!($form instanceof JForm)) {
 			$this->_subject->setError('JERROR_NOT_A_FORM');
 			return false;
 		}
 		JForm::addFormPath(JPATH_PLUGIN_HPUSER.DS.'forms');
-		
 		$form->loadFile('hpuser', false);
+		
+		$formName = $form->getName();
+		$userType = JRequest::getInt('type', 0);
+		if(is_object($data) && isset($data->user_type)) {
+			$userType = $data->user_type;
+		}
 		$form->setValue('user_type', '', $userType);
 		
 		if($userType == 1) {
-			//TODO: #nttuyen business user
+			//Business user
 			$form->loadFile('business_user', false);
 		} else {
 			//Normal user
 			$form->loadFile('normal_user', false);
+		}
+		
+		//If not at new user, don't editable user_type field
+		if($formName != 'com_users.registration') {
+			$form->setFieldAttribute('user_type', 'type', 'hidden');
 		}
 		
 		return true;
