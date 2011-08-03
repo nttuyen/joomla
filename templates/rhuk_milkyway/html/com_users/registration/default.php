@@ -32,6 +32,13 @@ require_once('recaptchalib.php');
             province: '#jform_business_city',
             district: '#jform_business_district'
         });
+
+        $("#jform_user_type").change(function(){
+            var registerURL = "<?php echo JRoute::_('index.php?option=com_users&view=registration&type=_USERTYPE')?>";
+            var seletedValue = $(this).val();
+            registerURL = registerURL.replace("_USERTYPE", seletedValue);
+            window.location.replace(registerURL);
+        });
     });
 </script>
 
