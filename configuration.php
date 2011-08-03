@@ -6,13 +6,13 @@ class JConfig {
 	public $editor = 'tinymce';
 	public $list_limit = '20';
 	public $access = '1';
-	public $debug = '0';
+	public $debug = '1';
 	public $debug_lang = '0';
 	public $dbtype = 'mysql';
 	public $host = 'localhost';
-	public $user = 'nttuyen_hanhphuc';
-	public $password = 'adminpass';
-	public $db = 'nttuyen_hanhphuc';
+	public $user = 'root';
+	public $password = '';
+	public $db = 'thongti3_hanhphuc';
 	public $dbprefix = 'jos_';
 	public $live_site = '';
 	public $secret = 'NTX8eWNNwOVqtJEy';
