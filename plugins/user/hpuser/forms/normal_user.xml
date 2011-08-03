@@ -1,29 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 	<!-- $Id: profile.xml 17890 2010-06-27 00:47:12Z infograf768 $ -->
 <form>
-	<fieldset name="user_profile"
-		label="Thông tin thêm"
-	>
-		<field name="name_of_yours" type="text"
-			autocomplete="off"
-			default="Hanhphuc.vn"
-			description="Tên hai bạn, tên này sẽ được sử dụng trên blog"
-			label="Tên hai bạn"
-			size="30"
-		/>
-		
-		<field name="website_slogan" type="text" default="Trăm năm hạnh phúc"
-			description="Slogan"
-			label="Slogan"
-			size="30"
-		/>
-
-		<field name="date_organization" type="calendar" readonly="1"
-			class="validate-username"
-			description="Ngày tổ chức đám cưới của hai bạn"
-			label="Ngày tổ chức"
-			size="30"
-			validate="username"
-		/>
-	</fieldset>
+	<fields name="user_profile">
+		<fieldset name="user_profile"
+			label="Thông tin thêm">
+			<field name="name_of_yours" type="text"
+				autocomplete="off"
+				default="Hanhphuc.vn"
+				description="Tên hai bạn, tên này sẽ được sử dụng trên blog"
+				label="Tên hai bạn"
+				size="30"
+			/>
+			
+			<field name="website_slogan" type="text" default="Trăm năm hạnh phúc"
+				description="Slogan"
+				label="Slogan"
+				size="30"
+			/>
+	
+			<field name="date_organization" type="calendar" readonly="1"
+				class="validate-username"
+				description="Ngày tổ chức đám cưới của hai bạn"
+				label="Ngày tổ chức"
+				size="30"
+				validate="username"
+			/>
+		</fieldset>
+	</fields>
 </form>

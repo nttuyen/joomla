@@ -74,6 +74,8 @@ class plgUserHpuser extends JPlugin {
 		JForm::addFormPath(JPATH_PLUGIN_HPUSER.DS.'forms');
 		$form->loadFile('hpuser', false);
 		
+		$user = JFactory::getUser();
+		
 		$formName = $form->getName();
 		$userType = JRequest::getInt('type', 0);
 		if(is_object($data) && isset($data->user_type)) {
@@ -81,17 +83,25 @@ class plgUserHpuser extends JPlugin {
 		}
 		$form->setValue('user_type', '', $userType);
 		
-		if($userType == 1) {
-			//Business user
-			$form->loadFile('business_user', false);
-		} else {
-			//Normal user
-			$form->loadFile('normal_user', false);
+		//Neu la tao moi trong admin thi khong can fai load them form
+		//De lai luc sua se load them
+		if(!$user->get('isRoot') || @$data->id > 0) {
+			if($userType == 1) {
+				//Business user
+				$form->loadFile('business_user', false);
+			} else {
+				//Normal user
+				$form->loadFile('normal_user', false);
+			}
 		}
 		
 		//If not at new user, don't editable user_type field
-		if($formName != 'com_users.registration') {
-			$form->setFieldAttribute('user_type', 'type', 'hidden');
+		if($formName != 'com_users.registration' && @$data->id != 0) {
+			if($user->get('isRoot')) {
+				$form->setFieldAttribute('user_type', 'readonly', 'true');
+			} else {
+				$form->setFieldAttribute('user_type', 'type', 'hidden');
+			}
 		}
 		
 		return true;
@@ -99,21 +109,17 @@ class plgUserHpuser extends JPlugin {
 	
 	public function onUserAfterSave($data, $isNew, $result, $error) {
 		//TODO #nttuyen save user's info after save
+		$info = new stdClass();
+		if(isset($data['id']) && $data['id']) $info->user_id = $data['id'];
 		
-		$info = array();
-		$info['user_id'] = $data['id'];
-		foreach ($data as $key => $value) {
-			if(substr($key, 0, strlen('business_')) == 'business_') {
-				$businessInfo[$key] = $value;
-			}
-		}
-		
-		$db = JFactory::getDbo();
-		if($isNew) {
-			$db->insertObject('#__hp_business_profile', $info);
-		} else {
-			$db->insertObject('#__hp_business_profile', $info);
-		}
+//		$db = JFactory::getDbo();
+//		if(!empty($info)) {
+//			if($isNew) {
+//				$db->insertObject('#__hp_business_profile', $info);
+//			} else {
+//				$db->insertObject('#__hp_business_profile', $info);
+//			}
+//		}
 		
 		return true;
 	}
