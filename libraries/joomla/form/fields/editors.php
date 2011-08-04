@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: editors.php 18650 2010-08-26 13:28:49Z ian $
+ * @version		$Id: editors.php 20196 2011-01-09 02:40:25Z ian $
  * @package		Joomla.Framework
  * @subpackage	Form
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -58,7 +58,7 @@ class JFormFieldEditors extends JFormFieldList
 				$lang->load('plg_editors_'.$option->value, JPATH_ADMINISTRATOR, null, false, false)
 			||	$lang->load('plg_editors_'.$option->value, JPATH_PLUGINS .'/editors/'.$option->value, null, false, false)
 			||	$lang->load('plg_editors_'.$option->value, JPATH_ADMINISTRATOR, $lang->getDefault(), false, false)
-			||	$lang->load('plg_editors_'.$option->value, JPATH_PLUGINS .DS.$this->_type.DS.$this->_name, $lang->getDefault(), false, false);
+			||	$lang->load('plg_editors_'.$option->value, JPATH_PLUGINS .'/editors/'.$option->value, $lang->getDefault(), false, false);
 			$options[$i]->text = JText::_($option->text);
 		}
 

@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: equals.php 16178 2010-04-18 05:17:17Z infograf768 $
+ * @version		$Id: equals.php 20196 2011-01-09 02:40:25Z ian $
  * @package		Joomla.Framework
  * @subpackage	Form
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -51,7 +51,7 @@ class JFormRuleEquals extends JFormRule
 		}
 
 		// Check that a valid JForm object is given for retrieving the validation field value.
-		if (!$form instanceof JForm) {
+		if (!($form instanceof JForm)) {
 			return new JException(JText::sprintf('JLIB_FORM_INVALID_FORM_OBJECT', get_class($this)));
 		}
 

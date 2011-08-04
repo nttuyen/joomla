@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: menu.php 18917 2010-09-15 06:12:17Z eddieajau $
+ * @version		$Id: menu.php 20196 2011-01-09 02:40:25Z ian $
  * @package		Joomla.Framework
  * @subpackage	Application
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -288,7 +288,7 @@ class JMenu extends JObject
 		$user	= JFactory::getUser();
 
 		if ($menu) {
-			return in_array((int) $menu->access, $user->authorisedLevels());
+			return in_array((int) $menu->access, $user->getAuthorisedViewLevels());
 		}
 		else {
 			return true;

@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: groupedlist.php 19151 2010-10-18 09:42:55Z chdemko $
+ * @version		$Id: groupedlist.php 20196 2011-01-09 02:40:25Z ian $
  * @package		Joomla.Framework
  * @subpackage	Form
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -56,7 +56,7 @@ class JFormFieldGroupedList extends JFormField
 					// Create a new option object based on the <option /> element.
 					$tmp = JHtml::_('select.option',
 						($element['value']) ? (string) $element['value'] : trim((string) $element),
-						JText::_(trim((string) $element)), 'value', 'text',
+						JText::alt(trim((string) $element), preg_replace('/[^a-zA-Z0-9_\-]/', '_', $this->fieldname)), 'value', 'text',
 						((string) $element['disabled']=='true'));
 
 					// Set some option attributes.

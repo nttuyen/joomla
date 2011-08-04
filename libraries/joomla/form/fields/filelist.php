@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: filelist.php 16825 2010-05-05 12:10:37Z louis $
+ * @version		$Id: filelist.php 20196 2011-01-09 02:40:25Z ian $
  * @package		Joomla.Framework
  * @subpackage	Form
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -59,10 +59,10 @@ class JFormFieldFileList extends JFormFieldList
 
 		// Prepend some default options based on field attributes.
 		if (!$hideNone) {
-			$options[] = JHtml::_('select.option', '-1', JText::_('JOPTION_DO_NOT_USE'));
+			$options[] = JHtml::_('select.option', '-1', JText::alt('JOPTION_DO_NOT_USE', preg_replace('/[^a-zA-Z0-9_\-]/', '_', $this->fieldname)));
 		}
 		if (!$hideDefault) {
-			$options[] = JHtml::_('select.option', '', JText::_('JOPTION_USE_DEFAULT'));
+			$options[] = JHtml::_('select.option', '', JText::alt('JOPTION_USE_DEFAULT', preg_replace('/[^a-zA-Z0-9_\-]/', '_', $this->fieldname)));
 		}
 
 		// Get a list of files in the search path with the given filter.

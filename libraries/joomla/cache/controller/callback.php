@@ -1,6 +1,6 @@
 <?php
 /**
- * @version		$Id: callback.php 18835 2010-09-11 01:56:48Z ian $
+ * @version		$Id: callback.php 19705 2010-11-30 18:29:50Z chdemko $
  * @package		Joomla.Framework
  * @subpackage	Cache
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
@@ -54,7 +54,7 @@ class JCacheControllerCallback extends JCacheController
 	 * @return	mixed	Result of the callback
 	 * @since	1.6
 	 */
-	public function get($callback, $args, $id=false, $wrkarounds=false, $woptions=array())
+	public function get($callback, $args=array(), $id=false, $wrkarounds=false, $woptions=array())
 	{
 
 		// Normalize callback

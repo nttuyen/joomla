@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: view.php 18650 2010-08-26 13:28:49Z ian $
+ * @version		$Id: view.php 20196 2011-01-09 02:40:25Z ian $
  * @package		Joomla.Framework
  * @subpackage	Application
- * @copyright Copyright Copyright (C) 2005 - 2010 Open Source Matters. All rights reserved.
+ * @copyright Copyright Copyright (C) 2005 - 2011 Open Source Matters. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -69,6 +69,14 @@ class JView extends JObject
 	 * @access	protected
 	 */
 	var $_layoutExt = 'php';
+
+	/**
+	 * Layout template
+	 *
+	 * @var		string
+	 * @access	protected
+	 */
+	var $_layoutTemplate = '_';
 
 	/**
 	* The set of search directories for resources (templates)
@@ -391,6 +399,17 @@ class JView extends JObject
 	{
 		return $this->_layout;
 	}
+	
+	/**
+	* Get the layout template.
+	*
+	* @access public
+	* @return string The layout template name
+	*/
+	function getLayoutTemplate()
+	{
+		return $this->_layoutTemplate;
+	}
 
 	/**
 	 * Method to get the view name
@@ -449,15 +468,26 @@ class JView extends JObject
 	* Sets the layout name to use
 	*
 	* @access	public
-	* @param	string The layout name.
-	* @return	string Previous value
+	* @param	string	The layout name or a string in format <template>:<layout file>
+	* @return	string 	Previous value
 	* @since	1.5
 	*/
 
 	function setLayout($layout)
 	{
-		$previous		= $this->_layout;
-		$this->_layout = $layout;
+		$previous = $this->_layout;
+		if (strpos($layout, ':') === false )
+		{
+			$this->_layout = $layout;
+		}
+		else
+		{
+			// Convert parameter to array based on :
+			$temp = explode(':', $layout);
+			$this->_layout = $temp[1];
+			// Set layout template
+			$this->_layoutTemplate = $temp[0];
+		}
 		return $previous;
 	}
 
@@ -523,26 +553,40 @@ class JView extends JObject
 		// clear prior output
 		$this->_output = null;
 
+		$template = JFactory::getApplication()->getTemplate();
+		$layout = $this->getLayout();
+		$layoutTemplate = $this->getLayoutTemplate();
+
 		//create the template file name based on the layout
-		$file = isset($tpl) ? $this->_layout.'_'.$tpl : $this->_layout;
+		$file = isset($tpl) ? $layout.'_'.$tpl : $layout;
 		// clean the file name
 		$file = preg_replace('/[^A-Z0-9_\.-]/i', '', $file);
-		$tpl  = preg_replace('/[^A-Z0-9_\.-]/i', '', $tpl);
+		$tpl  = isset($tpl)? preg_replace('/[^A-Z0-9_\.-]/i', '', $tpl) : $tpl;
 
 		// Load the language file for the template
 		$lang	= JFactory::getLanguage();
-		$app	= JFactory::getApplication();
-		$template = $app->getTemplate();
 			$lang->load('tpl_'.$template, JPATH_BASE, null, false, false)
 		||	$lang->load('tpl_'.$template, JPATH_THEMES."/$template", null, false, false)
 		||	$lang->load('tpl_'.$template, JPATH_BASE, $lang->getDefault(), false, false)
 		||	$lang->load('tpl_'.$template, JPATH_THEMES."/$template", $lang->getDefault(), false, false);
-
+		
+		// change the template folder if alternative layout is in different template
+		if (isset($layoutTemplate) && $layoutTemplate != '_' && $layoutTemplate != $template)
+		{
+			$this->_path['template'] = str_replace($template, $layoutTemplate, $this->_path['template']);
+		}
 
 		// load the template script
 		jimport('joomla.filesystem.path');
 		$filetofind	= $this->_createFileName('template', array('name' => $file));
 		$this->_template = JPath::find($this->_path['template'], $filetofind);
+		
+		// If alternate layout can't be found, fall back to default layout
+		if ($this->_template == false) 
+		{
+			$filetofind = $this->_createFileName('', array('name' => 'default' . (isset($tpl) ? '_' . $tpl : $tpl)));
+			$this->_template = JPath::find($this->_path['template'], $filetofind);
+		}
 
 		if ($this->_template != false)
 		{
@@ -624,7 +668,7 @@ class JView extends JObject
 				if (isset($app))
 				{
 					$component	= preg_replace('/[^A-Z0-9_\.-]/i', '', $component);
-					$fallback	= JPATH_BASE.DS.'templates'.DS.$app->getTemplate().DS.'html'.DS.$component.DS.$this->getName();
+					$fallback	= JPATH_THEMES.DS.$app->getTemplate().DS.'html'.DS.$component.DS.$this->getName();
 					$this->_addPath('template', $fallback);
 				}
 				break;

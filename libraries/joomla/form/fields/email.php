@@ -1,6 +1,6 @@
 <?php
 /**
- * @version		$Id: hidden.php 20196 2011-01-09 02:40:25Z ian $
+ * @version		$Id: email.php 20196 2011-01-09 02:40:25Z ian $
  * @package		Joomla.Framework
  * @subpackage	Form
  * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
@@ -18,7 +18,7 @@ jimport('joomla.form.formfield');
  * @subpackage	Form
  * @since		1.6
  */
-class JFormFieldHidden extends JFormField
+class JFormFieldEMail extends JFormField
 {
 	/**
 	 * The form field type.
@@ -26,7 +26,7 @@ class JFormFieldHidden extends JFormField
 	 * @var		string
 	 * @since	1.6
 	 */
-	protected $type = 'Hidden';
+	protected $type = 'Email';
 
 	/**
 	 * Method to get the field input markup.
@@ -37,14 +37,17 @@ class JFormFieldHidden extends JFormField
 	protected function getInput()
 	{
 		// Initialize some field attributes.
-		$class		= $this->element['class'] ? ' class="'.(string) $this->element['class'].'"' : '';
+		$size		= $this->element['size'] ? ' size="'.(int) $this->element['size'].'"' : '';
+		$maxLength	= $this->element['maxlength'] ? ' maxlength="'.(int) $this->element['maxlength'].'"' : '';
+		$class		= $this->element['class'] ? ' '.(string) $this->element['class'] : '';
+		$readonly	= ((string) $this->element['readonly'] == 'true') ? ' readonly="readonly"' : '';
 		$disabled	= ((string) $this->element['disabled'] == 'true') ? ' disabled="disabled"' : '';
 
 		// Initialize JavaScript field attributes.
 		$onchange	= $this->element['onchange'] ? ' onchange="'.(string) $this->element['onchange'].'"' : '';
 
-		return '<input type="hidden" name="'.$this->name.'" id="'.$this->id.'"' .
+		return '<input type="text" name="'.$this->name.'" class="validate-email'.$class.'" id="'.$this->id.'"' .
 				' value="'.htmlspecialchars($this->value, ENT_COMPAT, 'UTF-8').'"' .
-				$class.$disabled.$onchange.' />';
+				$size.$disabled.$readonly.$onchange.$maxLength.'/>';
 	}
 }

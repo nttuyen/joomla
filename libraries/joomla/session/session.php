@@ -1,7 +1,7 @@
 <?php
 /**
- * @version		$Id: session.php 18785 2010-09-07 01:14:57Z ian $
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @version		$Id: session.php 20196 2011-01-09 02:40:25Z ian $
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -342,7 +342,7 @@ class JSession extends JObject
 	}
 
 	/**
-	 * Check wheter data exists in the session store
+	 * Check whether data exists in the session store
 	 *
 	 * @param	string	Name of variable
 	 * @param	string	Namespace to use, default to 'default'
@@ -411,7 +411,8 @@ class JSession extends JObject
 		session_start();
 
 		// Send modified header for IE 6.0 Security Policy
-		header('P3P: CP="NOI ADM DEV PSAi COM NAV OUR OTRo STP IND DEM"');
+		// Joomla! 1.6: Moved to configurable plugin due to security concerns 
+		//header('P3P: CP="NOI ADM DEV PSAi COM NAV OUR OTRo STP IND DEM"');
 
 		return true;
 	}

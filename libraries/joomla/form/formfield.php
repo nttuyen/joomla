@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: formfield.php 19066 2010-10-09 03:44:31Z chdemko $
+ * @version		$Id: formfield.php 20206 2011-01-09 17:11:35Z chdemko $
  * @package		Joomla.Framework
  * @subpackage	Form
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -166,6 +166,22 @@ abstract class JFormField
 	protected $value;
 
 	/**
+	 * The count value for generated name field
+	 *
+	 * @var		int
+	 * @since	1.6
+	 */
+	static protected $count = 0;
+
+	/**
+	 * The string used for generated fields names
+	 *
+	 * @var		int
+	 * @since	1.6
+	 */
+	static protected $generated_fieldname = '__field';
+
+	/**
 	 * Method to instantiate the form field object.
 	 *
 	 * @param	object	$form	The form to attach to the form field object.
@@ -225,6 +241,9 @@ abstract class JFormField
 				}
 
 				return $this->label;
+				break;
+			case 'title':
+				return $this->getTitle();
 				break;
 		}
 
@@ -319,9 +338,9 @@ abstract class JFormField
 		$this->group = $group;
 
 		// Set the field name and id.
-		$this->fieldname 	= $name;
-		$this->name			= $this->getName($name);
-		$this->id			= $this->getId($id, $name);
+		$this->fieldname 	= $this->getFieldName($name);
+		$this->name			= $this->getName($this->fieldname);
+		$this->id			= $this->getId($id, $this->fieldname);
 
 		// Set the field default value.
 		$this->value = $value;
@@ -382,6 +401,27 @@ abstract class JFormField
 	abstract protected function getInput();
 
 	/**
+	 * Method to get the field title.
+	 *
+	 * @return	string	The field title.
+	 * @since	1.6
+	 */
+	protected function getTitle()
+	{
+		// Initialise variables.
+		$title = '';
+
+		if ($this->hidden) {
+			return $title;
+		}
+
+		// Get the label text from the XML element, defaulting to the element name.
+		$title = $this->element['label'] ? (string) $this->element['label'] : (string) $this->element['name'];
+		$title = $this->translateLabel ? JText::_($title) : $title;
+		return $title;
+	}
+
+	/**
 	 * Method to get the field label markup.
 	 *
 	 * @return	string	The field label markup.
@@ -413,8 +453,12 @@ abstract class JFormField
 						($this->translateDescription ? JText::_($this->description) : $this->description), ENT_COMPAT, 'UTF-8').'"';
 		}
 
-		// Add the label text and closing tag.
-		$label .= '>'.$text.'</label>';
+	// Add the label text and closing tag.
+		if ($this->required) {
+			$label .= '>'.$text.'<span class="star">&#160;*</span></label>';
+		} else {
+			$label .= '>'.$text.'</label>';
+		}
 
 		return $label;
 	}
@@ -468,5 +512,23 @@ abstract class JFormField
 		}
 
 		return $name;
+	}
+	/**
+	 * Method to get the field name used.
+	 *
+	 * @param	string	$name	The field element name.
+	 *
+	 * @return	string	The field name
+	 * @since	1.6
+	 */
+	protected function getFieldName($fieldName)
+	{
+		if ($fieldName) {
+			return $fieldName;
+		}
+		else {
+			self::$count = self::$count + 1;
+			return self::$generated_fieldname . self::$count;
+		}
 	}
 }

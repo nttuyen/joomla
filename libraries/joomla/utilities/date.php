@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: date.php 18482 2010-08-16 22:40:23Z dextercowley $
+ * @version		$Id: date.php 20196 2011-01-09 02:40:25Z ian $
  * @package		Joomla.Framework
  * @subpackage	Utilities
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -388,7 +388,7 @@ class JDate extends DateTime
 	 * @return	object	The old DateTimeZone object.
 	 * @since	1.6
 	 */
-	public function setTimezone(DateTimeZone $tz)
+	public function setTimezone($tz)
 	{
 		$this->_tz = $tz;
 		return parent::setTimezone($tz);

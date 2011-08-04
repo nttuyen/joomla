@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: plugin.php 18650 2010-08-26 13:28:49Z ian $
+ * @version		$Id: plugin.php 20240 2011-01-10 05:46:24Z dextercowley $
  * @package		Joomla.Framework
  * @subpackage	Plugin
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -51,7 +51,7 @@ abstract class JPlugin extends JEvent
 	 *
 	 * @param object $subject The object to observe
 	 * @param array  $config  An optional associative array of configuration settings.
-	 * Recognized key values include 'name', 'group', 'params'
+	 * Recognized key values include 'name', 'group', 'params', 'language'
 	 * (this list is not meant to be comprehensive).
 	 * @since 1.5
 	 */
@@ -77,18 +77,8 @@ abstract class JPlugin extends JEvent
 		if (isset($config['type'])) {
 			$this->_type = $config['type'];
 		}
-		$events = array_diff(get_class_methods($this), get_class_methods('JPlugin'));
-		foreach($events as $event)
-		{
-			$method = array('event' => $event, 'handler' => array($this, 'onFireEvent'));
-			$subject->attach($method);
-		}
-		parent::__construct($subject);
-	}
 
-	public function onFireEvent()
-	{
-		$this->loadLanguage(null, JPATH_ADMINISTRATOR);
+		parent::__construct($subject);
 	}
 
 	/**

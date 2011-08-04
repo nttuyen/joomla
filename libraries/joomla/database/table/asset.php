@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: asset.php 17604 2010-06-11 06:20:59Z infograf768 $
+ * @version		$Id: asset.php 20196 2011-01-09 02:40:25Z ian $
  * @package		Joomla.Framework
  * @subpackage	Database
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -95,7 +95,6 @@ class JTableAsset extends JTableNested
 		$this->parent_id = (int) $this->parent_id;
 
 		// JTableNested does not allow parent_id = 0, override this.
-		
 		if ($this->parent_id > 0)
 		{
 			$this->_db->setQuery(

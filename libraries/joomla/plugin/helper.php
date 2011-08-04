@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: helper.php 18650 2010-08-26 13:28:49Z ian $
+ * @version		$Id: helper.php 20196 2011-01-09 02:40:25Z ian $
  * @package		Joomla.Framework
  * @subpackage	Plugin
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -185,7 +185,7 @@ abstract class JPluginHelper
 		$user	= JFactory::getUser();
 		$cache 	= JFactory::getCache('com_plugins', '');
 
-		$levels = implode(',', $user->authorisedLevels());
+		$levels = implode(',', $user->getAuthorisedViewLevels());
 
 		if (!$plugins = $cache->get($levels)) {
 			$db		= JFactory::getDbo();
