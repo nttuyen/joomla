@@ -1,5 +1,5 @@
 <?php
-class JConfig {
+class JConfig{
 	public $offline = '0';
 	public $offline_message = 'This site is down for maintenance.<br /> Please check back again soon.';
 	public $sitename = 'Hanhphuc.vn - Hơi thở cuộc sống';
@@ -45,8 +45,8 @@ class JConfig {
 	public $MetaKeys = 'Hanh phuc, cam nang cuoi, doi ban tre, phong tuc tap quan, blog tinh yeu, co dau xinh, chu re hien, hon nhan va phap luat, loi khuyen, lap ke hoach, chia se, tuan trang mat, chuyen phong the, dem tan hon, bi quyet hanh phuc, viet nam, the gioi, nguoi ta yeu, dam cuoi sao, ao cuoi, xe hoa, quay phim, chup anh, trang diem, hoa cuoi, banh cuoi, do trang suc, du lich, khach san, chan ga goi dem, noi that, ngoai that, thiep cuoi, thiep hong, nhan cuoi,  tin tuc, tu van, gia dinh, dam cuoi, cuoi hoi, dam ngo, bo trau, nap tai, xin cuoi, website dam cuoi mien phi,  ngay hanh phuc, ngay cuoi web site, album anh cuoi, happy, happiness, wedding, album, love, wedding rings, honeymoon, hoi tho cuoc song, the gioi, xa hoi, van hoa, kinh te, khoa hoc, cong nghe, vien thong, the thao, bong da, giai tri, phap luat, giao duc, suc khoe, xe may, nha dat, o to, tong hop tin tuc, bao moi, dien dan, ban doc, truc tuyen, the gioi, Viet Nam, 3g, cms, radio';
 	public $MetaTitle = '1';
 	public $MetaAuthor = '1';
-	public $sef = '0';
-	public $sef_rewrite = '0';
+	public $sef = '1';
+	public $sef_rewrite = '1';
 	public $sef_suffix = '0';
 	public $unicodeslugs = '0';
 	public $feed_limit = '10';
@@ -61,3 +61,4 @@ class JConfig {
 	public $cookie_domain = '';
 	public $cookie_path = '';
 }
+?>
