@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: default.php 14276 2010-01-18 14:20:28Z louis $
+ * @version		$Id: default.php 20196 2011-01-09 02:40:25Z ian $
  * @package		Joomla.Administrator
  * @subpackage	com_cpanel
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -15,8 +15,19 @@ defined('_JEXEC') or die;
 echo JHtml::_('sliders.start','panel-sliders',array('useCookie'=>'1'));
 
 foreach ($this->modules as $module) {
-	echo JHtml::_('sliders.panel', $module->title, 'cpanel-panel-'.$module->name);
-	echo JModuleHelper::renderModule($module);
+	$output = JModuleHelper::renderModule($module);
+	$params = new JRegistry;
+	$params->loadJSON($module->params);
+	if ($params->get('automatic_title','0')=='0') {
+		echo JHtml::_('sliders.panel', $module->title, 'cpanel-panel-'.$module->name);
+	}
+	elseif (method_exists('mod'.$module->name.'Helper','getTitle')) {
+		echo JHtml::_('sliders.panel', call_user_func_array(array('mod'.$module->name.'Helper','getTitle'), array($params)), 'cpanel-panel-'.$module->name);		
+	}
+	else {
+		echo JHtml::_('sliders.panel', JText::_('MOD_'.$module->name.'_TITLE'), 'cpanel-panel-'.$module->name);		
+	}
+	echo $output;
 }
 
 echo JHtml::_('sliders.end');
