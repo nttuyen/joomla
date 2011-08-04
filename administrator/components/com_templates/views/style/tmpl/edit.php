@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: edit.php 19073 2010-10-09 15:44:28Z chdemko $
+ * @version		$Id: edit.php 20196 2011-01-09 02:40:25Z ian $
  * @package		Joomla.Administrator
  * @subpackage	com_templates
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -26,29 +26,40 @@ $canDo = TemplatesHelper::getActions();
 	}
 </script>
 
-<form action="<?php echo JRoute::_('index.php?option=com_templates'); ?>" method="post" name="adminForm" id="style-form" class="form-validate">
+<form action="<?php echo JRoute::_('index.php?option=com_templates&layout=edit&id='.(int) $this->item->id); ?>" method="post" name="adminForm" id="style-form" class="form-validate">
 	<div class="width-60 fltlft">
 		<fieldset class="adminform">
 			<legend><?php echo JText::_('JDETAILS');?></legend>
+			<ul class="adminformlist">
+			<li><?php echo $this->form->getLabel('title'); ?>
+			<?php echo $this->form->getInput('title'); ?></li>
 
-			<?php echo $this->form->getLabel('title'); ?>
-			<?php echo $this->form->getInput('title'); ?>
-
-			<?php echo $this->form->getLabel('template'); ?>
+			<li><?php echo $this->form->getLabel('template'); ?>
 			<?php echo $this->form->getInput('template'); ?>
-
 			<?php echo $this->form->getLabel('client_id'); ?>
 			<?php echo $this->form->getInput('client_id'); ?>
-			<input type="text" size="35" value="<?php echo $this->item->client_id == 0 ? JText::_('JSITE') : JText::_('JADMINISTRATOR'); ?>	" class="readonly" readonly="readonly" />
+			<input type="text" size="35" value="<?php echo $this->item->client_id == 0 ? JText::_('JSITE') : JText::_('JADMINISTRATOR'); ?>	" class="readonly" readonly="readonly" /></li>
 
-			<?php echo $this->form->getLabel('home'); ?>
-			<?php echo $this->form->getInput('home'); ?>
-			<div class="clr"></div>
+			<li><?php echo $this->form->getLabel('home'); ?>
+			<?php echo $this->form->getInput('home'); ?></li>
 
 			<?php if ($this->item->id) : ?>
-				<?php echo $this->form->getLabel('id'); ?>
-				<span class="readonly"><?php echo $this->item->id; ?></span>
+				<li><?php echo $this->form->getLabel('id'); ?>
+				<span class="readonly"><?php echo $this->item->id; ?></span></li>
 			<?php endif; ?>
+			</ul>
+			<div class="clr"></div>
+			<?php if ($this->item->xml) : ?>
+				<?php if ($text = trim($this->item->xml->description)) : ?>
+					<label>
+						<?php echo JText::_('COM_TEMPLATES_TEMPLATE_DESCRIPTION'); ?>
+					</label>
+					<span class="readonly mod-desc"><?php echo JText::_($text); ?></span>
+				<?php endif; ?>
+			<?php else : ?>
+				<p class="error"><?php echo JText::_('COM_TEMPLATES_ERR_XML'); ?></p>
+			<?php endif; ?>
+			<div class="clr"></div>
 		</fieldset>
 		<input type="hidden" name="task" value="" />
 		<?php echo JHtml::_('form.token'); ?>
