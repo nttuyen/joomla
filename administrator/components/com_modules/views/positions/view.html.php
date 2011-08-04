@@ -5,40 +5,36 @@
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-// Check to ensure this file is included in Joomla!
+// No direct access
 defined('_JEXEC') or die;
 
 jimport('joomla.application.component.view');
 
 /**
- * HTML View class for the Modules component
- *
  * @package		Joomla.Administrator
  * @subpackage	com_modules
  * @since		1.6
  */
-class ModulesViewSelect extends JView
+class ModulesViewPositions extends JView
 {
-	protected $state;
 	protected $items;
+	protected $pagination;
+	protected $state;
 
 	/**
 	 * Display the view
 	 */
-	function display($tpl = null)
+	public function display($tpl = null)
 	{
-		$state		= $this->get('State');
-		$items		= $this->get('Items');
+		$this->items		= $this->get('Items');
+		$this->pagination	= $this->get('Pagination');
+		$this->state		= $this->get('State');
 
 		// Check for errors.
-		if (count($errors = $this->get('Errors')))
-		{
+		if (count($errors = $this->get('Errors'))) {
 			JError::raiseError(500, implode("\n", $errors));
 			return false;
 		}
-
-		$this->assignRef('state',		$state);
-		$this->assignRef('items',		$items);
 
 		parent::display($tpl);
 	}
