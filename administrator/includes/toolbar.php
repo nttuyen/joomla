@@ -1,7 +1,7 @@
 <?php
 /**
- * @version		$Id: toolbar.php 19073 2010-10-09 15:44:28Z chdemko $
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @version		$Id: toolbar.php 20224 2011-01-09 22:46:21Z infograf768 $
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -25,17 +25,18 @@ abstract class JToolBarHelper
 	 * this is due to the nature of how the css has been used to postion the title in respect to the toolbar.
 	 *
 	 * @param	string	$title	The title.
-	 * @param	string	$icon	The name of the image.
+	 * @param	string	$icon	The space-separated names of the image.
 	 * @since	1.5
 	 */
 	public static function title($title, $icon = 'generic.png')
 	{
 		// Strip the extension.
-		$icon = preg_replace('#\.[^.]*$#', '', $icon);
+		$icons = explode(' ',$icon);
+		foreach($icons as &$icon) {
+			$icon = 'icon-48-'.preg_replace('#\.[^.]*$#', '', $icon);
+		}
 
-		$html = "<div class=\"pagetitle icon-48-$icon\"><h2>\n";
-		$html .= "$title\n";
-		$html .= "</h2></div>\n";
+		$html = '<div class="pagetitle '.implode(' ', $icons).'"><h2>'.$title.'</h2></div>';
 
 		$app = JFactory::getApplication();
 		$app->set('JComponentTitle', $html);
@@ -159,7 +160,7 @@ abstract class JToolBarHelper
 	{
 		$bar = JToolBar::getInstance('toolbar');
 		// Add an upload button.
-		$bar->appendButton('Popup', 'upload', $alt, 'index.php?option=com_media&tmpl=component&task=popupUpload&directory='.$directory, 640, 520);
+		$bar->appendButton('Popup', 'upload', $alt, 'index.php?option=com_media&tmpl=component&task=popupUpload&folder='.$directory, 800, 520);
 	}
 
 	/**
@@ -489,7 +490,7 @@ abstract class JToolBarHelper
 	 * @param	string	$path		An alternative path for the configuation xml relative to JPATH_SITE.
 	 * @since	1.0
 	 */
-	public static function preferences($component, $height = '450', $width = '800', $alt = 'JToolbar_Options', $path = '', $onClose = '')
+	public static function preferences($component, $height = '550', $width = '875', $alt = 'JToolbar_Options', $path = '', $onClose = '')
 	{
 		$component = urlencode($component);
 		$path = urlencode($path);
