@@ -1,11 +1,13 @@
 <?php
 /**
- * @version		$Id: banners.php 18828 2010-09-10 11:35:07Z infograf768 $
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @version		$Id: banners.php 20196 2011-01-09 02:40:25Z ian $
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
 /**
+ * Banners component helper.
+ *
  * @package		Joomla.Administrator
  * @subpackage	com_banners
  * @since		1.6
@@ -27,7 +29,7 @@ class BannersHelper
 			'index.php?option=com_banners&view=banners',
 			$vName == 'banners'
 		);
-		
+
 		JSubMenuHelper::addEntry(
 			JText::_('COM_BANNERS_SUBMENU_CATEGORIES'),
 			'index.php?option=com_categories&extension=com_banners',
@@ -105,7 +107,7 @@ class BannersHelper
 			return false;
 		}
 
-		JTable::addIncludePath(JPATH_ROOT.'/administrator/components/com_banners/tables');
+		JTable::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . DS . 'tables');
 
 		foreach ($rows as $row) {
 			$purchase_type = $row->purchase_type;
