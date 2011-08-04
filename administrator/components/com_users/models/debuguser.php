@@ -1,13 +1,14 @@
 <?php
 /**
- * @version		$Id: debuguser.php 19047 2010-10-05 17:51:57Z eddieajau $
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @version		$Id: debuguser.php 20196 2011-01-09 02:40:25Z ian $
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
 defined('_JEXEC') or die;
 
 jimport('joomla.application.component.modellist');
+require_once JPATH_COMPONENT.'/helpers/debug.php';
 
 /**
  * Methods supporting a list of user records.
@@ -26,20 +27,9 @@ class UsersModelDebugUser extends JModelList
 	 */
 	public function getDebugActions()
 	{
-		// TODO: This should be a lot smarter and drill into the access.xml files of each component.
-		$actions = array(
-			'JACTION_LOGIN_SITE'	=> array('core.login.site',		0),
-			'JACTION_LOGIN_ADMIN'	=> array('core.login.admin',	0),
-			'JACTION_ADMIN'			=> array('core.admin',			1),
-			'JACTION_MANAGE'		=> array('core.manage',			1),
-			'JACTION_CREATE'		=> array('core.create',			null),
-			'JACTION_DELETE'		=> array('core.delete',			null),
-			'JACTION_EDIT'			=> array('core.edit',			null),
-			'JACTION_EDIT_STATE'	=> array('core.edit.state',		null),
-			'JACTION_EDIT_OWN'		=> array('core.edit.own',		null),
-		);
+		$component = $this->getState('filter.component');
 
-		return $actions;
+		return UsersHelperDebug::getDebugActions($component);
 	}
 
 	/**
@@ -89,7 +79,7 @@ class UsersModelDebugUser extends JModelList
 	 * @return	void
 	 * @since	1.6
 	 */
-	protected function populateState()
+	protected function populateState($ordering = null, $direction = null)
 	{
 		// Initialise variables.
 		$app = JFactory::getApplication('administrator');
@@ -100,20 +90,23 @@ class UsersModelDebugUser extends JModelList
 		}
 
 		// Load the filter state.
-		$search = $app->getUserStateFromRequest($this->context.'.filter.search', 'filter_search');
+		$search = $this->getUserStateFromRequest($this->context.'.filter.search', 'filter_search');
 		$this->setState('filter.search', $search);
 
-		$value = $app->getUserStateFromRequest($this->context.'.filter.user_id', 'user_id', 0, 'int');
+		$value = $this->getUserStateFromRequest($this->context.'.filter.user_id', 'user_id', 0, 'int');
 		$this->setState('filter.user_id', $value);
 
-		$levelStart = $app->getUserStateFromRequest($this->context.'.filter.level_start', 'filter_level_start', 0, 'int');
+		$levelStart = $this->getUserStateFromRequest($this->context.'.filter.level_start', 'filter_level_start', 0, 'int');
 		$this->setState('filter.level_start', $levelStart);
 
-		$value = $app->getUserStateFromRequest($this->context.'.filter.level_end', 'filter_level_end', 0, 'int');
+		$value = $this->getUserStateFromRequest($this->context.'.filter.level_end', 'filter_level_end', 0, 'int');
 		if ($value > 0 && $value < $levelStart) {
 			$value = $levelStart;
 		}
 		$this->setState('filter.level_end', $value);
+
+		$component = $this->getUserStateFromRequest($this->context.'.filter.component', 'filter_component');
+		$this->setState('filter.component', $component);
 
 		// Load the parameters.
 		$params		= JComponentHelper::getParams('com_users');
@@ -142,6 +135,7 @@ class UsersModelDebugUser extends JModelList
 		$id	.= ':'.$this->getState('filter.user_id');
 		$id	.= ':'.$this->getState('filter.level_start');
 		$id	.= ':'.$this->getState('filter.level_end');
+		$id	.= ':'.$this->getState('filter.component');
 
 		return parent::getStoreId($id);
 	}
@@ -213,10 +207,15 @@ class UsersModelDebugUser extends JModelList
 			$query->where('a.level <= '.$levelEnd);
 		}
 
+		// Filter the items over the component if set.
+		if ($this->getState('filter.component')) {
+			$component = $this->getState('filter.component');
+			$query->where('(a.name = '.$db->quote($component).' OR a.name LIKE '.$db->quote($component.'.%').')');
+		}
+
 		// Add the list ordering clause.
 		$query->order($db->getEscaped($this->getState('list.ordering', 'a.lft')).' '.$db->getEscaped($this->getState('list.direction', 'ASC')));
 
-		//echo nl2br(str_replace('#__','jos_',$query));
 		return $query;
 	}
 }
