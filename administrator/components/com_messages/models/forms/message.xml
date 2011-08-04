@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-	<!-- $Id: message.xml 15576 2010-03-25 12:43:26Z louis $ -->
+	<!-- $Id: message.xml 19909 2010-12-17 16:42:34Z infograf768 $ -->
 <form>
 	<fieldset>
 		<field
 			name="user_id_to"
-			type="user"
+			type="usermessages"
 			label="COM_MESSAGES_FIELD_USER_ID_TO_LABEL"
 			description="COM_MESSAGES_FIELD_USER_ID_TO_DESC"
 			default="0"
@@ -23,7 +23,7 @@
 			rows="10"
 			cols="80"
 			label="COM_MESSAGES_FIELD_MESSAGE_LABEL"
-			description="COM_MESSAGES_FIELD_SUBJECT_DESC"
+			description="COM_MESSAGES_FIELD_MESSAGE_DESC"
 			required="true">
 		</field>
 	</fieldset>
