@@ -1,7 +1,7 @@
 <?php
 /**
- * @version		$Id: categories.php 18157 2010-07-15 17:12:36Z eddieajau $
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @version		$Id: categories.php 20228 2011-01-10 00:52:54Z eddieajau $
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -18,11 +18,6 @@ jimport('joomla.application.component.controlleradmin');
  */
 class CategoriesControllerCategories extends JControllerAdmin
 {
-	function __construct($config)
-	{
-		parent::__construct($config);
-		$this->registerTask('unfeatured',	'featured');
-	}
 	/**
 	 * Proxy for getModel
 	 *
@@ -32,9 +27,9 @@ class CategoriesControllerCategories extends JControllerAdmin
 	 * @return	object	The model.
 	 * @since	1.6
 	 */
-	function &getModel($name = 'Category', $prefix = 'CategoriesModel')
+	function getModel($name = 'Category', $prefix = 'CategoriesModel', $config = array('ignore_request' => true))
 	{
-		$model = parent::getModel($name, $prefix, array('ignore_request' => true));
+		$model = parent::getModel($name, $prefix, $config);
 		return $model;
 	}
 
@@ -63,49 +58,6 @@ class CategoriesControllerCategories extends JControllerAdmin
 			$this->setMessage(JText::_('COM_CATEGORIES_REBUILD_FAILURE'));
 			return false;
 		}
-	}
-	
-	/**
-	 * Method to toggle the featured setting of a list of articles.
-	 * @since	1.6
-	 */
-	function featured()
-	{
-		
-		// Check for request forgeries
-		JRequest::checkToken() or jexit(JText::_('JInvalid_Token'));
-
-		// Initialise variables.
-		$user	= JFactory::getUser();
-		$ids	= JRequest::getVar('cid', array(), '', 'array');
-		$values	= array('featured' => 1, 'unfeatured' => 0);
-		$task	= $this->getTask();
-		$value	= JArrayHelper::getValue($values, $task, 0, 'int');
-		
-		// Access checks.
-		foreach ($ids as $i => $id)
-		{
-			if (!$user->authorise('core.edit.state', 'com_content.article.'.(int) $id))
-			{
-				// Prune items that you can't change.
-				unset($ids[$i]);
-				JError::raiseNotice(403, JText::_('JError_Core_Edit_State_not_permitted'));
-			}
-		}
-
-		if (empty($ids)) {
-			JError::raiseWarning(500, JText::_('JError_No_items_selected'));
-		} else {
-			// Get the model.
-			$model = $this->getModel();
-
-			// Publish the items.
-			if (!$model->featured($ids, $value)) {
-				JError::raiseWarning(500, $model->getError());
-			}
-		}
-
-		$this->setRedirect('index.php?option=com_categories&extension='.JRequest::getVar('extension'));
 	}
 
 	/**

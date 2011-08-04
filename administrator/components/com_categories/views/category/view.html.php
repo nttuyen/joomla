@@ -1,7 +1,7 @@
 <?php
 /**
- * @version		$Id: view.html.php 19110 2010-10-13 22:50:20Z chdemko $
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @version		$Id: view.html.php 20196 2011-01-09 02:40:25Z ian $
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -31,6 +31,7 @@ class CategoriesViewCategory extends JView
 		$this->form		= $this->get('Form');
 		$this->item		= $this->get('Item');
 		$this->state	= $this->get('State');
+		$this->canDo	= CategoriesHelper::getActions($this->state->get('category.component'));
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) {
@@ -53,9 +54,10 @@ class CategoriesViewCategory extends JView
 		// Initialise variables.
 		$extension	= JRequest::getCmd('extension');
 		$user		= JFactory::getUser();
+		$userId		= $user->get('id');
 
 		$isNew		= ($this->item->id == 0);
-		$checkedOut	= !($this->item->checked_out == 0 || $this->item->checked_out == $user->get('id'));
+		$checkedOut	= !($this->item->checked_out == 0 || $this->item->checked_out == $userId);
 
 		// Avoid nonsense situation.
 		if ($extension == 'com_categories') {
@@ -93,22 +95,24 @@ class CategoriesViewCategory extends JView
 			$title = JText::_('COM_CATEGORIES_CATEGORY_BASE_'.($isNew?'ADD':'EDIT').'_TITLE');
 		}
 
-		// Load specific css component 
+		// Load specific css component
 		JHtml::_('stylesheet',$component.'/administrator/categories.css', array(), true);
-		
-		// Prepare the toolbar.
-		JToolBarHelper::title($title, substr($component,4).($section?"-$section":'').'-category-'.($isNew?'add':'edit').'.png');
 
-		// If a new item, can save the item.
-		if ($isNew && $canDo->get('core.create') && !$canDo->get('core.edit')) {
+		// Prepare the toolbar.
+		JToolBarHelper::title($title, 'category-'.($isNew?'add':'edit').' '.substr($component,4).($section?"-$section":'').'-category-'.($isNew?'add':'edit'));
+
+		// For new records, check the create permission.
+		if ($isNew && $canDo->get('core.create')) {
+			JToolBarHelper::apply('category.apply', 'JTOOLBAR_APPLY');
 			JToolBarHelper::save('category.save', 'JTOOLBAR_SAVE');
+			JToolBarHelper::custom('category.save2new', 'save-new.png', 'save-new_f2.png', 'JTOOLBAR_SAVE_AND_NEW', false);
 		}
 
 		// If not checked out, can save the item.
-		if (!$checkedOut && $canDo->get('core.edit')) {
+		else if (!$checkedOut && ($canDo->get('core.edit') || ($canDo->get('core.edit.own') && $this->item->created_user_id == $userId))) {
 			JToolBarHelper::apply('category.apply', 'JTOOLBAR_APPLY');
 			JToolBarHelper::save('category.save', 'JTOOLBAR_SAVE');
-			if ($canDo->get('core.create')){
+			if ($canDo->get('core.create')) {
 				JToolBarHelper::custom('category.save2new', 'save-new.png', 'save-new_f2.png', 'JTOOLBAR_SAVE_AND_NEW', false);
 			}
 		}
@@ -136,11 +140,14 @@ class CategoriesViewCategory extends JView
 		// -remotely searching in a language defined dedicated URL: *component*_HELP_URL
 		// -locally  searching in a component help file if helpURL param exists in the component and is set to ''
 		// -remotely searching in a component URL if helpURL param exists in the component and is NOT set to ''
-		JToolBarHelper::help(
-			$ref_key,
-			JComponentHelper::getParams( $component )->exists('helpURL'),
-			$lang->hasKey($lang_help_url = strtoupper($component).'_HELP_URL') ? JText::_($lang_help_url) : null,
-			$component
-		);
+		if ($lang->hasKey($lang_help_url = strtoupper($component).'_HELP_URL')) {
+			$debug = $lang->setDebug(false);
+			$url = JText::_($lang_help_url);
+			$lang->setDebug($debug);
+		}
+		else {
+			$url = null;
+		}
+		JToolBarHelper::help($ref_key, JComponentHelper::getParams( $component )->exists('helpURL'), $url, $component);
 	}
 }

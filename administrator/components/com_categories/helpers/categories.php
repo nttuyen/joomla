@@ -1,7 +1,7 @@
 <?php
 /**
- * @version		$Id: categories.php 18805 2010-09-07 22:47:59Z eddieajau $
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @version		$Id: categories.php 20196 2011-01-09 02:40:25Z ian $
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -9,7 +9,7 @@
 defined('_JEXEC') or die;
 
 /**
- * Weblinks helper.
+ * Categories helper.
  *
  * @package		Joomla.Administrator
  * @subpackage	com_categories
@@ -89,7 +89,7 @@ class CategoriesHelper
 		}
 
 		$actions = array(
-			'core.admin', 'core.manage', 'core.create', 'core.edit', 'core.edit.state', 'core.delete'
+			'core.admin', 'core.manage', 'core.create', 'core.edit', 'core.edit.own', 'core.edit.state', 'core.delete'
 		);
 
 		foreach ($actions as $action) {
