@@ -1,7 +1,7 @@
 <?php
 /**
  * @version		$Id:mod_menu.php 2463 2006-02-18 06:05:38Z webImagery $
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -29,6 +29,7 @@ abstract class ModMenuHelper
 		$query->select('a.*, SUM(b.home) AS home');
 		$query->from('#__menu_types AS a');
 		$query->leftJoin('#__menu AS b ON b.menutype = a.menutype');
+		$query->where('(b.client_id = 0 OR b.client_id IS NULL)');
 		$query->group('a.id');
 
 		$db->setQuery($query);
@@ -62,7 +63,7 @@ abstract class ModMenuHelper
 
 		// Filter on the enabled states.
 		$query->leftJoin('#__extensions AS e ON m.component_id = e.extension_id');
-		$query->where('m.menutype = '.$db->quote('_adminmenu'));
+		$query->where('m.client_id = 1');
 		$query->where('e.enabled = 1');
 		$query->where('m.id > 1');
 
@@ -113,8 +114,8 @@ abstract class ModMenuHelper
 				}
 			}
 		}
-		
-		$result = JArrayHelper::sortObjects($result, 'text', 1, false);
+
+		$result = JArrayHelper::sortObjects($result, 'text', 1, true, $lang->getLocale());
 
 		return $result;
 	}
