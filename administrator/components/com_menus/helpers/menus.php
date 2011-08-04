@@ -1,7 +1,7 @@
 <?php
 /**
- * @version		$Id: menus.php 18607 2010-08-24 02:02:21Z ian $
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @version		$Id: menus.php 20196 2011-01-09 02:40:25Z ian $
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -70,7 +70,7 @@ class MenusHelper
 
 		return $result;
 	}
-	
+
 	/**
 	 * Gets a standard form of a link for lookups.
 	 *
@@ -159,7 +159,7 @@ class MenusHelper
 			if (is_array($published)) $published = '(' . implode(',',$published) .')';
 			$query->where('a.published IN ' . $published);
 		}
-		
+
 		$query->where('a.published != -2');
 		$query->group('a.id');
 		$query->order('a.lft ASC');

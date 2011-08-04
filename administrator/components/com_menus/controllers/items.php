@@ -1,7 +1,7 @@
 <?php
 /**
- * @version		$Id: items.php 18212 2010-07-22 06:02:54Z eddieajau $
- * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @version		$Id: items.php 20228 2011-01-10 00:52:54Z eddieajau $
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -28,10 +28,9 @@ class MenusControllerItems extends JControllerAdmin
 	 * Proxy for getModel
 	 * @since	1.6
 	 */
-	function &getModel($name = 'Item', $prefix = 'MenusModel')
+	function getModel($name = 'Item', $prefix = 'MenusModel', $config = array())
 	{
-		$model = parent::getModel($name, $prefix, array('ignore_request' => true));
-		return $model;
+		return parent::getModel($name, $prefix, array('ignore_request' => true));
 	}
 
 	/**
@@ -89,7 +88,7 @@ class MenusControllerItems extends JControllerAdmin
 	function setDefault()
 	{
 		// Check for request forgeries
-		JRequest::checkToken() or die(JText::_('JINVALID_TOKEN'));
+		JRequest::checkToken('default') or die(JText::_('JINVALID_TOKEN'));
 
 		// Get items to publish from the request.
 		$cid	= JRequest::getVar('cid', array(), '', 'array');

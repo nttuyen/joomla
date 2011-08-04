@@ -1,0 +1,1 @@
+ALTER TABLE `jos_menu` ADD COLUMN `client_id` TINYINT(4) NOT NULL DEFAULT 0  AFTER `language` ;

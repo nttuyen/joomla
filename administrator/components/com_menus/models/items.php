@@ -62,19 +62,19 @@ class MenusModelItems extends JModelList
 	{
 		$app = JFactory::getApplication('administrator');
 
-		$search = $this->getUserStateFromRequest($this->context.'.search', 'filter_search');
+		$search = $app->getUserStateFromRequest($this->context.'.search', 'filter_search');
 		$this->setState('filter.search', $search);
 
-		$published = $this->getUserStateFromRequest($this->context.'.published', 'filter_published', '');
+		$published = $app->getUserStateFromRequest($this->context.'.published', 'filter_published', '');
 		$this->setState('filter.published', $published);
 
-		$access = $this->getUserStateFromRequest($this->context.'.filter.access', 'filter_access', 0, 'int');
+		$access = $app->getUserStateFromRequest($this->context.'.filter.access', 'filter_access', 0, 'int');
 		$this->setState('filter.access', $access);
 
-		$parentId = $this->getUserStateFromRequest($this->context.'.filter.parent_id', 'filter_parent_id', 0, 'int');
+		$parentId = $app->getUserStateFromRequest($this->context.'.filter.parent_id', 'filter_parent_id', 0, 'int');
 		$this->setState('filter.parent_id',	$parentId);
 
-		$level = $this->getUserStateFromRequest($this->context.'.filter.level', 'filter_level', 0, 'int');
+		$level = $app->getUserStateFromRequest($this->context.'.filter.level', 'filter_level', 0, 'int');
 		$this->setState('filter.level', $level);
 
 		$menuType = JRequest::getVar('menutype',null);
@@ -94,7 +94,7 @@ class MenusModelItems extends JModelList
 
 		$this->setState('filter.menutype', $menuType);
 
-		$language = $this->getUserStateFromRequest($this->context.'.filter.language', 'filter_language', '');
+		$language = $app->getUserStateFromRequest($this->context.'.filter.language', 'filter_language', '');
 		$this->setState('filter.language', $language);
 
 		// Component parameters.
